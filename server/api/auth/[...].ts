@@ -61,12 +61,11 @@ export default NuxtAuthHandler({
               // If the icon is animated, use gif, if not, use webp else use nothing
               guildsSanitized!.push({
                 name,
-                icon:
-                  icon && icon.startsWith("a_")
-                    ? `https://cdn.discordapp.com/icons/${id}/${icon}.gif`
-                    : icon && !icon.startsWith("a_")
-                    ? `https://cdn.discordapp.com/icons/${id}/${icon}.webp`
-                    : null,
+                icon: icon?.startsWith("a_")
+                  ? `https://cdn.discordapp.com/icons/${id}/${icon}.gif`
+                  : icon && !icon.startsWith("a_")
+                  ? `https://cdn.discordapp.com/icons/${id}/${icon}.webp`
+                  : null,
                 owner,
               });
             })
@@ -118,16 +117,16 @@ export default NuxtAuthHandler({
         profile.connections = connectionSanitized;
 
         // Remove unneeded data from the profile
-        const {
-          banner,
-          banner_color,
-          public_flags,
-          avatar_decoration,
-          avatar,
-          ...profileSanitized
-        } = profile;
+        const _profile = { ...profile };
+        [
+          "banner",
+          "banner_color",
+          "public_flags",
+          "avatar_decoration",
+          "avatar",
+        ].forEach((key) => delete _profile[key]);
 
-        return profileSanitized;
+        return _profile;
       },
     }),
   ],
@@ -137,7 +136,7 @@ export default NuxtAuthHandler({
   callbacks: {
     async jwt({ account, token, user }) {
       if (account) {
-        token = { ...user };
+        return { ...user };
       }
 
       return token;

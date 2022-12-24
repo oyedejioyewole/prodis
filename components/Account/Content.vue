@@ -2,25 +2,23 @@
 const session = useState<{ user: User }>("session");
 const modal = useState<Modal>("modal");
 
-const getNitroStatus = (sessionPremiumType: number) => {
-  return sessionPremiumType === 0
+const getNitroStatus = (sessionPremiumType: number) =>
+  sessionPremiumType === 0
     ? "basic"
     : sessionPremiumType === 1
     ? "nitro-classic"
     : sessionPremiumType === 2
     ? "nitro"
     : "nitro-basic";
-};
 
-const getUserFlag = (sessionUserFlag?: number) => {
-  return sessionUserFlag
+const getUserFlag = (sessionUserFlag?: number) =>
+  sessionUserFlag
     ? [
         { value: 1 << 6, name: "hypesquad-house-bravery" },
         { value: 1 << 7, name: "hypesquad-house-brilliance" },
         { value: 1 << 8, name: "hypesquad-house-balance" },
       ].find((flag) => flag.value === sessionUserFlag)
     : null;
-};
 
 const userFlag = getUserFlag(session.value.user.flags);
 const nitroStatus = getNitroStatus(session.value.user.premium_type);

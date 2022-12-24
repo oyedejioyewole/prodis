@@ -21,7 +21,9 @@ export const useModalValue = (
     };
 
     modal.value.type = type;
-  } else if (
+    return;
+  }
+  if (
     (type === "security" && "accountVerified" in payload) ||
     (type === "account" && "premiumType" in payload) ||
     type === "information"

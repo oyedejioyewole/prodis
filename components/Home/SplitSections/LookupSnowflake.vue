@@ -12,11 +12,10 @@ const validationError = ref<{
   message?: string;
 }>({ hasOccured: false, message: undefined });
 
-const validateDiscordSnowflake = (value: string): boolean | string => {
-  return discordSnowflakeRegex.test(value)
+const validateDiscordSnowflake = (value: string): boolean | string =>
+  discordSnowflakeRegex.test(value)
     ? true
     : "Please enter a valid Discord snowflake";
-};
 
 const lookupDiscordAccount = () => {
   // Write your code here ...

@@ -19,28 +19,27 @@ const houseIdentifier = (house?: HypeSquadHouses | string) => {
     .join(" ");
 };
 
-const nitroStatus = (premiumSubscription: PremiumTypes) => {
-  return premiumSubscription === "basic"
+const nitroStatus = (premiumSubscription: PremiumTypes) =>
+  premiumSubscription === "basic"
     ? "Discord (Normal)"
     : premiumSubscription === "nitro"
     ? "Discord (Nitro Premium)"
     : premiumSubscription === "nitro-basic"
     ? "Discord (Nitro 1st tier)"
     : "Discord (Nitro 2ns tier)";
-};
 
 const house = ref<HypeSquadHouses | string | null>("");
 const localeSet = ref<string[]>([]);
 
 if ("locale" in modal.value.payload && modal.value.payload.locale) {
   for (let index = 0; index < 2; index++) {
-    index > 0
-      ? localeSet.value.push(
-          await useLocale("convert", modal.value.payload.locale)
-        )
-      : localeSet.value.push(
-          await useLocale("flag", modal.value.payload.locale)
-        );
+    if (index > 0) {
+      localeSet.value.push(
+        await useLocale("convert", modal.value.payload.locale)
+      );
+    } else {
+      localeSet.value.push(await useLocale("flag", modal.value.payload.locale));
+    }
   }
 }
 
