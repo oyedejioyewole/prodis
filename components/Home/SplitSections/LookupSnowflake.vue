@@ -1,12 +1,12 @@
 <script setup lang="ts">
-const {
-  public: {
-    project: { secret },
-  },
-} = useRuntimeConfig();
+import * as secure from "securejs";
+
+const profileRequest = useState<LookupRequest>("profileRequest");
 
 const discordSnowflakeRegex = /^([0-9]{17,19})$/;
-const discordSnowflake = ref<string | undefined>(undefined);
+const discordSnowflake = ref<string>();
+const discordSnowflakeEncrypted = ref<string>();
+
 const validationError = ref<{
   hasOccured: boolean;
   message?: string;
@@ -17,8 +17,44 @@ const validateDiscordSnowflake = (value: string): boolean | string =>
     ? true
     : "Please enter a valid Discord snowflake";
 
-const lookupDiscordAccount = () => {
-  // Write your code here ...
+const encryptSnowflake = (snowflake: string) => {
+  const {
+    public: {
+      project: { secret },
+    },
+  } = useRuntimeConfig();
+  discordSnowflakeEncrypted.value = secure.encrypt(snowflake, secret);
+};
+
+const lookupDiscordAccount = async () => {
+  profileRequest.value = { loading: true };
+
+  const { data, error } = await useFetch("/api/lookup", {
+    method: "POST",
+    body: {
+      hashedSnowflake: discordSnowflakeEncrypted.value,
+    },
+  });
+
+  if (error.value) {
+    if (error.value?.response) {
+      profileRequest.value = {
+        error: error.value.response._data,
+        loading: false,
+      };
+    } else if (!error.value?.response) {
+      profileRequest.value = {
+        error: "Oops, couldn't peform request",
+        loading: false,
+      };
+    }
+    return;
+  }
+
+  profileRequest.value = {
+    data: data.value as FilteredResponse,
+    loading: false,
+  };
 };
 
 watch(discordSnowflake, (value) => {
@@ -31,6 +67,7 @@ watch(discordSnowflake, (value) => {
           hasOccured: false,
         };
       }
+      encryptSnowflake(discordSnowflake.value as string);
     } else {
       validationError.value = {
         hasOccured: true,

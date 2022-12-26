@@ -56,20 +56,22 @@ export default NuxtAuthHandler({
         >("/users/@me/guilds", options).catch(() => null);
 
         // Grab only the important data from the guilds (name, icon, owner)
-        guilds!.length > 0 && guilds
-          ? guilds!.forEach(({ name, icon, owner, id }) => {
-              // If the icon is animated, use gif, if not, use webp else use nothing
-              guildsSanitized!.push({
-                name,
-                icon: icon?.startsWith("a_")
-                  ? `https://cdn.discordapp.com/icons/${id}/${icon}.gif`
-                  : icon && !icon.startsWith("a_")
-                  ? `https://cdn.discordapp.com/icons/${id}/${icon}.webp`
-                  : null,
-                owner,
-              });
-            })
-          : (guildsSanitized = null);
+        if (guilds!.length > 0 && guilds) {
+          guilds!.forEach(({ name, icon, owner, id }) => {
+            // If the icon is animated, use gif, if not, use webp else use nothing
+            guildsSanitized!.push({
+              name,
+              icon: icon?.startsWith("a_")
+                ? `https://cdn.discordapp.com/icons/${id}/${icon}.gif`
+                : icon && !icon.startsWith("a_")
+                ? `https://cdn.discordapp.com/icons/${id}/${icon}.webp`
+                : null,
+              owner,
+            });
+          });
+        } else {
+          guildsSanitized = null;
+        }
 
         let connectionSanitized: Array<{
           name: string;
@@ -78,20 +80,19 @@ export default NuxtAuthHandler({
         }> | null = [];
 
         // Grab the connections of the user
-        const connections = await $fetch<
-          Array<{
-            name: string;
-            type: string;
-            verified: boolean;
-          }>
-        >("/users/@me/connections", options).catch(() => null);
+        const connections = await $fetch<Connections>(
+          "/users/@me/connections",
+          options
+        ).catch(() => null);
 
         // Grab only the important data from the connections (name, type, verified)
-        connections!.length > 0 && connections
-          ? connections!.forEach(({ name, type, verified }) => {
-              connectionSanitized!.push({ name, type, verified });
-            })
-          : (connectionSanitized = null);
+        if (connections!.length > 0 && connections) {
+          connections!.forEach(({ name, type, verified }) => {
+            connectionSanitized!.push({ name, type, verified });
+          });
+        } else {
+          connectionSanitized = null;
+        }
 
         // Prepare credentials to revoke access_token
         const {
@@ -124,7 +125,9 @@ export default NuxtAuthHandler({
           "public_flags",
           "avatar_decoration",
           "avatar",
-        ].forEach((key) => delete _profile[key]);
+        ].forEach((key) => {
+          if (key in _profile) delete _profile[key];
+        });
 
         return _profile;
       },

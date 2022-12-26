@@ -11,16 +11,7 @@ const getNitroStatus = (sessionPremiumType: number) =>
     ? "nitro"
     : "nitro-basic";
 
-const getUserFlag = (sessionUserFlag?: number) =>
-  sessionUserFlag
-    ? [
-        { value: 1 << 6, name: "hypesquad-house-bravery" },
-        { value: 1 << 7, name: "hypesquad-house-brilliance" },
-        { value: 1 << 8, name: "hypesquad-house-balance" },
-      ].find((flag) => flag.value === sessionUserFlag)
-    : null;
-
-const userFlag = getUserFlag(session.value.user.flags);
+const userFlag = useProfileBadge(session.value.user.flags);
 const nitroStatus = getNitroStatus(session.value.user.premium_type);
 const _locale = await useLocale("flag", session.value.user.locale);
 

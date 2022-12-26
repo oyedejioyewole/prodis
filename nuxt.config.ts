@@ -13,6 +13,10 @@ export default defineNuxtConfig({
           ? config.get("discord.secret")
           : process.env.DISCORD_CLIENT_SECRET,
       baseURL: "https://discord.com/api",
+      botToken:
+        process.env.NODE_ENV === "development"
+          ? config.get("discord.botToken")
+          : process.env.DISCORD_BOT_TOKEN,
     },
     project: {
       secret:
