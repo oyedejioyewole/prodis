@@ -28,7 +28,7 @@ export default NuxtAuthHandler({
           const defaultAvatarNumber = parseInt(profile.discriminator) % 5;
           profile.image_url = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarNumber}.png`;
         } else {
-          const format = profile.avatar.startsWith("a_") ? "gif" : "png";
+          const format = profile.avatar.startsWith("a_") ? "gif" : "webp";
           profile.image_url = `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.${format}`;
         }
 

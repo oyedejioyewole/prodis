@@ -56,7 +56,7 @@ const openModal = (type: ModalTypes) => {
     <img
       :src="session.user.image_url"
       alt="Your avatar on Discord"
-      class="rounded-full"
+      class="rounded-2xl"
     />
 
     <!-- Username and discriminator -->
