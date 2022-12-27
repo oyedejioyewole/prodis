@@ -15,8 +15,6 @@ if ("username" in response.value) {
     memberOfWhichHypesquadHouse.value = hypesquadBadge.name as HypeSquadHouses;
   else memberOfWhichHypesquadHouse.value = "not-a-member";
 }
-
-console.log(response.value);
 </script>
 
 <template>
