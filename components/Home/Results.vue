@@ -13,9 +13,10 @@ try {
 const memberOfWhichHypesquadHouse = ref<HypeSquadHouses | "not-a-member">();
 if ("username" in response.value) {
   const hypesquadBadge = useProfileBadge(response.value.public_flags);
-  if (hypesquadBadge)
-    memberOfWhichHypesquadHouse.value = hypesquadBadge.name as HypeSquadHouses;
-  else memberOfWhichHypesquadHouse.value = "not-a-member";
+  hypesquadBadge
+    ? (memberOfWhichHypesquadHouse.value =
+        hypesquadBadge.name as HypeSquadHouses)
+    : (memberOfWhichHypesquadHouse.value = "not-a-member");
 }
 
 const openModal = () => {
