@@ -2,6 +2,8 @@
 const { payload } = defineProps<{ payload: string }>();
 
 const response = ref<FilteredResponse | string | LookupError>();
+const modal = useState<Modal>("modal");
+
 try {
   response.value = JSON.parse(payload);
 } catch (error) {
@@ -15,10 +17,21 @@ if ("username" in response.value) {
     memberOfWhichHypesquadHouse.value = hypesquadBadge.name as HypeSquadHouses;
   else memberOfWhichHypesquadHouse.value = "not-a-member";
 }
+
+const openModal = () => {
+  useModalValue("information:navigation", {});
+  modal.value.isOpen = true;
+};
 </script>
 
 <template>
   <main v-if="'username' in response">
+    <svg
+      class="w-8 h-8 absolute right-8 top-8 fill-black/70 cursor-pointer hover:fill-black/50 transition"
+      @click="openModal"
+    >
+      <use xlink:href="~/assets/bootstrap-icons.svg#info-circle" />
+    </svg>
     <img
       :src="response.image"
       :alt="`${response.username}'s avatar`"

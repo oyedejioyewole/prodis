@@ -39,7 +39,6 @@ interface AccountInformation {
 }
 
 type PremiumTypes = "nitro-classic" | "basic" | "nitro" | "nitro-basic";
-type ModalTypes = "account" | "security" | "guild" | "information";
 type HypeSquadHouses =
   | "hypesquad-house-bravery"
   | "hypesquad-house-balance"

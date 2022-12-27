@@ -33,8 +33,8 @@ const openModal = (type: ModalTypes) => {
       premiumType: nitroStatus,
       locale: session.value.user.locale,
     });
-  } else if (type === "information") {
-    useModalValue("information", {});
+  } else if (type === "information:navigation") {
+    useModalValue("information:navigation", {});
   }
 
   if (!modal.value.payload) return;
@@ -46,8 +46,8 @@ const openModal = (type: ModalTypes) => {
   <main aria-label="Main Content">
     <!-- Info icon -->
     <svg
-      class="w-10 h-10 absolute right-10 top-10 fill-black/70 cursor-pointer hover:fill-black/50 transition"
-      @click="openModal('information')"
+      class="w-8 h-8 absolute right-10 top-10 fill-black/70 cursor-pointer hover:fill-black/50 transition"
+      @click="openModal('information:navigation')"
     >
       <use xlink:href="~/assets/bootstrap-icons.svg#info-circle" />
     </svg>

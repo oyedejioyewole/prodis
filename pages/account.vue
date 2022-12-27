@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import Color from "color";
+import getColorPair from "random-color-pair";
 
 definePageMeta({ middleware: "auth" });
 
 const session = useState<{ user: User }>("session");
-const modal = useState<Modal>("modal", () => ({
-  isOpen: false,
-  payload: {},
-}));
+const modal = useState<Modal>("modal");
 
 const accentColor = Color(session.value.user.accent_color).rgb().alpha(0.5);
 
@@ -21,11 +19,23 @@ const cleanupModal = () => {
 };
 
 const navigateBack = (event: Event) => {
-  const element = event.target as HTMLElement;
-  if (element.id === "clickable-area") {
+  if ((event.target as HTMLElement).id === "clickable-area") {
     navigateTo("/");
   }
 };
+
+// Use this to create a gradient for the background if the accent_color doesn't exist
+const alternateBackgroundGradient = ref<Array<Color>>([]);
+
+if (!("accent_color" in session.value.user)) {
+  const [foreground, background]: string = getColorPair();
+  const firstBackgroundColor = new Color(foreground).alpha(0.5);
+  const secondBackgroundColor = new Color(background).alpha(0.5);
+  alternateBackgroundGradient.value.push(
+    firstBackgroundColor,
+    secondBackgroundColor
+  );
+}
 </script>
 
 <template>
@@ -34,7 +44,11 @@ const navigateBack = (event: Event) => {
   </Head>
   <main
     class="min-h-screen bg-no-repeat grid place-items-center overflow-y-hidden cursor-pointer"
-    :style="`background-image: linear-gradient(to bottom right, ${accentColor}, #ba83e2)`"
+    :style="
+      alternateBackgroundGradient.length === 0
+        ? `background-image: linear-gradient(to bottom right, ${accentColor}, #ba83e2)`
+        : `background-image: linear-gradient(to bottom right, ${alternateBackgroundGradient[0]}, ${alternateBackgroundGradient[1]})`
+    "
     @click="navigateBack"
     id="clickable-area"
   >

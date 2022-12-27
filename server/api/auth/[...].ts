@@ -125,7 +125,9 @@ export default NuxtAuthHandler({
           "public_flags",
           "avatar_decoration",
           "avatar",
+          "accent_color",
         ].forEach((key) => {
+          if (key === "accent_color" && key) return;
           if (key in _profile) delete _profile[key];
         });
 

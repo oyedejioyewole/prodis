@@ -157,7 +157,7 @@ if ("hypesquadHouse" in modal.value.payload) {
       <h2 class="text-lg text-black/70">This account has enabled 2FA</h2>
     </div>
   </main>
-  <main v-else-if="modal.type === 'information'">
+  <main v-else-if="modal.type === 'information:navigation'">
     <NuxtIcon name="egg" class="text-9xl text-black/70" />
     <h1 class="text-2xl">You've discover an egg!</h1>
     <p>Click on the background to go back to the homepage</p>
