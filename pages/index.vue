@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import getColorPair from "random-color-pair";
 import Color from "color";
-import { profile } from "console";
 
 const [foreground, background]: string = getColorPair();
 const firstBackgroundColor = new Color(foreground).alpha(0.5);
@@ -13,8 +12,7 @@ const profileRequest = useState<LookupRequest>("profileRequest", () => ({
   loading: false,
 }));
 
-const reset = (event: Event) => {
-  console.log(event);
+const reset = () => {
   if (profileRequest.value.data) profileRequest.value.data = undefined;
   if (profileRequest.value.error) profileRequest.value.error = undefined;
 };
@@ -48,7 +46,7 @@ const reset = (event: Event) => {
           ? profileRequest.error
           : JSON.stringify(profileRequest.error)
       "
-      class="mx-auto flex flex-col items-center justify-center my-36 rounded-2xl gap-x-10 2xl:w-1/4 w-1/2 backdrop-blur-lg bg-white/60 py-36 z-10 cursor-default select-none"
+      class="mx-auto flex flex-col items-center justify-center md:my-36 my-1 rounded-2xl 2xl:w-1/4 md:w-1/2 w-[90%] backdrop-blur-lg bg-white/60 py-36 z-10 cursor-default select-none"
     />
     <HomeContent
       class="w-[90%] mx-auto md:min-h-[90vh] flex flex-col justify-center items-center my-36 md:my-0"
