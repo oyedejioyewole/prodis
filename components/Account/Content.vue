@@ -45,12 +45,10 @@ const openModal = (type: ModalTypes) => {
 <template>
   <main aria-label="Main Content">
     <!-- Info icon -->
-    <svg
+    <Tip
       class="w-8 h-8 absolute right-10 top-10 fill-black/70 cursor-pointer hover:fill-black/50 transition"
-      @click="openModal('information:navigation')"
-    >
-      <use xlink:href="~/assets/bootstrap-icons.svg#info-circle" />
-    </svg>
+    />
+
     <!-- Profile picture -->
     <!-- or use the default avatar if there is no picture -->
     <img

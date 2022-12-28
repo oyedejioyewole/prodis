@@ -42,7 +42,8 @@ type PremiumTypes = "nitro-classic" | "basic" | "nitro" | "nitro-basic";
 type HypeSquadHouses =
   | "hypesquad-house-bravery"
   | "hypesquad-house-balance"
-  | "hypesquad-house-brilliance";
+  | "hypesquad-house-brilliance"
+  | "not-a-member";
 type PayloadOptions = Guild | Setting | AccountInformation;
 
 type Guilds = Array<{
