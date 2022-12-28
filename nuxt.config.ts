@@ -48,8 +48,19 @@ export default defineNuxtConfig({
           rel: "stylesheet",
           href: "https://api.fonts.coollabs.io/css2?family=Vollkorn:wght@600&Quicksand&display=swap",
         },
+        { rel: "icon", href: "/logo.svg", type: "image/svg+xml" },
       ],
       titleTemplate: "%s - Prodis",
+      htmlAttrs: {
+        lang: "en",
+      },
+      meta: [
+        {
+          name: "description",
+          content: "Lookup an account using the Discord API",
+        },
+        { name: "author", content: "OyewoleOyedeji" },
+      ],
     },
   },
 });

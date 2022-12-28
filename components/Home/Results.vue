@@ -10,14 +10,24 @@ try {
 }
 
 const memberOfWhichHypesquadHouse = ref<HypeSquadHouses>();
+const title = ref<"Profile" | "Error">();
 
-// Check if response.value is a valid object
 if (typeof response.value === "object" && "username" in response.value) {
+  title.value = "Profile";
   const hypesquadBadge = useProfileBadge(response.value.public_flags);
   if (hypesquadBadge) {
     memberOfWhichHypesquadHouse.value = hypesquadBadge.name as HypeSquadHouses;
   } else memberOfWhichHypesquadHouse.value = "not-a-member";
 }
+if (
+  (typeof response.value === "object" && "statusCode" in response.value) ||
+  typeof response.value === "string"
+)
+  title.value = "Error";
+
+useHead({
+  title: title.value,
+});
 </script>
 
 <template>
