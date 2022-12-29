@@ -15,7 +15,7 @@
 
 ## Setup
 
-I would prefer you use `pnpm` for this workspace, so the following command/s will be biased 😀
+I would prefer you use `pnpm` for this workspace, so the following commands will be biased 😀
 
 ```bash
 pnpm install # or pnpm i (I know you're lazy to type it out)
