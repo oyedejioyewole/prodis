@@ -6,7 +6,7 @@
 
 1. Discord application (which happens to also be a bot)
    1. You'll need the `CLIENT_ID`, `CLIENT_SECRET` & `BOT_TOKEN` which you can get from <https://discord.com/developers>
-2. A `SECRET` and `PUBLIC_SECRET` which can be generated with the following command ``
+2. A `SECRET` and `PUBLIC_SECRET` which can be generated with the following command
    1. Just make sure you have OpenSSL installed
 
 ## Setup
