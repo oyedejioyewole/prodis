@@ -4,6 +4,8 @@
 
 ![Project preview](preview.png)
 
+<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/OyewoleOyedeji/prodis?color=%235865f2&label=Repository%20size&style=for-the-badge">
+
 ## Pre-requisites
 
 1. Discord application (which happens to also be a bot)
