@@ -15,9 +15,9 @@ const title = ref<"Profile" | "Error">();
 if (typeof response.value === "object" && "username" in response.value) {
   title.value = "Profile";
   const hypesquadBadge = useProfileBadge(response.value.public_flags);
-  if (hypesquadBadge) {
-    memberOfWhichHypesquadHouse.value = hypesquadBadge.name as HypeSquadHouses;
-  } else memberOfWhichHypesquadHouse.value = "not-a-member";
+  memberOfWhichHypesquadHouse.value = hypesquadBadge
+    ? (hypesquadBadge.name as HypeSquadHouses)
+    : "not-a-member";
 }
 if (
   (typeof response.value === "object" && "statusCode" in response.value) ||
