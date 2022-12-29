@@ -87,7 +87,7 @@ watch(discordSnowflake, (value) => {
     <!-- Frosty search icon -->
     <NuxtIcon
       name="snowflake-search"
-      class="2xl:text-9xl text-8xl text-black/70"
+      class="2xl:text-9xl text-8xl text-black/70 dark:text-white/70"
       id="snowflake-search-icon"
     />
 
@@ -99,7 +99,7 @@ watch(discordSnowflake, (value) => {
       <input
         id="snowflake"
         type="text"
-        class="form-input focus:ring focus:ring-offset-2 outline:none focus:ring-black/50 w-3/4 my-5 p-5 rounded-2xl bg-white/50 border-none transition-all text-center overflow-x-hidden"
+        class="form-input focus:ring focus:ring-offset-2 outline:none focus:ring-black/50 dark:focus:ring-white/50 w-3/4 my-5 p-5 rounded-2xl bg-white/50 border-none transition-all text-center overflow-x-hidden"
         placeholder="Hint: a set of 17-19 numbers"
         required
         v-model="discordSnowflake"
@@ -109,10 +109,10 @@ watch(discordSnowflake, (value) => {
       </p>
       <button
         type="submit"
-        class="p-5 bg-black/50 rounded-tl-2xl rounded-br-2xl focus:ring focus:ring-offset-2 outline-none focus:ring-black transition disabled:cursor-not-allowed disabled:opacity-70 text-white border-2 border-black/10 flex gap-2 items-center group"
+        class="p-5 bg-black/50 dark:bg-transparent rounded-tl-2xl rounded-br-2xl focus:ring focus:ring-offset-2 outline-none focus:ring-black transition disabled:cursor-not-allowed disabled:opacity-70 text-white border-2 border-black/10 dark:border-white/50 flex gap-2 items-center group"
         :class="
           !validationError.hasOccured && discordSnowflake
-            ? 'hover:bg-transparent  hover:text-black hover:border-black/50'
+            ? 'hover:bg-transparent  hover:text-black hover:border-black/50 dark:hover:bg-white/70 dark:hover:border-white/10'
             : ''
         "
         :disabled="

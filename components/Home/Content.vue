@@ -13,12 +13,12 @@
     >
       <!-- Use a snowflake ❄️ -->
       <HomeSplitSectionsLookupSnowflake
-        class="md:w-1/2 py-10 bg-white/40 2xl:py-36 rounded-2xl w-full"
+        class="md:w-1/2 py-10 bg-white/40 dark:bg-black/50 2xl:py-36 rounded-2xl w-full"
       />
 
       <!-- Use my account -->
       <HomeSplitSectionsAccount
-        class="md:w-1/2 bg-white/40 2xl:py-44 py-[4.5rem] rounded-2xl flex flex-col items-center w-full"
+        class="md:w-1/2 bg-white/40 dark:bg-black/50 2xl:py-44 py-[4.5rem] rounded-2xl flex flex-col items-center w-full"
       />
     </div>
   </main>
