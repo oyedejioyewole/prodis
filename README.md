@@ -1,4 +1,6 @@
-<div style="display: flex; gap: 1rem; align-items: center; justify-content: center;"><img src="public/logo.svg" width=64 /><h1>Prodis</h1></div>
+<img src="public/logo.svg" width=128 align="right" />
+
+# Prodis
 
 ![Project preview](preview.png)
 
