@@ -104,12 +104,15 @@ watch(discordSnowflake, (value) => {
         required
         v-model="discordSnowflake"
       />
-      <p class="text-red-600 mb-4" v-if="validationError.hasOccured">
+      <p
+        class="text-red-600 dark:text-red-300 mb-4"
+        v-if="validationError.hasOccured"
+      >
         {{ validationError.message }}
       </p>
       <button
         type="submit"
-        class="p-5 bg-black/50 dark:bg-transparent rounded-tl-2xl rounded-br-2xl focus:ring focus:ring-offset-2 outline-none focus:ring-black transition disabled:cursor-not-allowed disabled:opacity-70 text-white border-2 border-black/10 dark:border-white/50 flex gap-2 items-center group"
+        class="p-5 bg-black/50 dark:bg-transparent rounded-tl-2xl rounded-br-2xl focus:ring focus:ring-offset-2 outline-none focus:ring-black dark:focus:ring-white/70 transition disabled:cursor-not-allowed disabled:opacity-70 text-white border-2 border-black/10 dark:border-white/50 flex gap-2 items-center group"
         :class="
           !validationError.hasOccured && discordSnowflake
             ? 'hover:bg-transparent  hover:text-black hover:border-black/50 dark:hover:bg-white/70 dark:hover:border-white/10'

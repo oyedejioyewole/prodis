@@ -12,7 +12,7 @@ const { signIn, status } = useSession();
       <use xlink:href="~/assets/bootstrap-icons.svg#discord" />
     </svg>
     <button
-      class="p-5 rounded-tl-2xl rounded-br-2xl my-5 bg-black/50 dark:bg-transparent text-white focus:ring focus:ring-black/50 outline-none focus:ring-offset-2 transition flex gap-2 items-center group hover:bg-transparent border-2 border-black/10 dark:border-white/50 hover:text-black hover:border-black/50 dark:hover:bg-white/70 dark:hover:border-white/10"
+      class="p-5 rounded-tl-2xl rounded-br-2xl my-5 bg-black/50 dark:bg-transparent text-white focus:ring focus:ring-black/50 dark:focus:ring-white/70 outline-none focus:ring-offset-2 transition flex gap-2 items-center group hover:bg-transparent border-2 border-black/10 dark:border-white/50 hover:text-black hover:border-black/50 dark:hover:bg-white/70 dark:hover:border-white/10"
       v-if="status === 'unauthenticated'"
       @click="signIn('discord', { callbackUrl: '/account' })"
     >
