@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.2.0",
-    "@sidebase/nuxt-auth": "^0.3.2",
+    "@sidebase/nuxt-auth": "^0.4.0",
     "@tailwindcss/forms": "^0.5.3",
     "nuxt": "3.0.0"
   },
