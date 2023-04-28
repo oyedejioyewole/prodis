@@ -1,114 +1,64 @@
 <script setup lang="ts">
-const { payload } = defineProps<{ payload: string }>();
+import type { DiscordUser, RequestMetadata } from "~/project";
 
-const response = ref<FilteredResponse | string | LookupError>();
+const requestMetadata = useState<RequestMetadata>("metadata");
 
-try {
-  response.value = JSON.parse(payload);
-} catch (error) {
-  response.value = payload;
-}
-
-const memberOfWhichHypesquadHouse = ref<HypeSquadHouses>();
-const title = ref<"Profile" | "Error">();
-
-if (typeof response.value === "object" && "username" in response.value) {
-  title.value = "Profile";
-  const hypesquadBadge = useProfileBadge(response.value.public_flags);
-  memberOfWhichHypesquadHouse.value = hypesquadBadge
-    ? (hypesquadBadge.name as HypeSquadHouses)
-    : "not-a-member";
-}
-if (
-  (typeof response.value === "object" && "statusCode" in response.value) ||
-  typeof response.value === "string"
-)
-  title.value = "Error";
-
-useHead({
-  title: title.value,
-});
+const downloadLookedUpInformation = async (payload: DiscordUser) => {
+  const { saveAs } = await import("file-saver");
+  saveAs(
+    new Blob([JSON.stringify(payload)], { type: "application/json" }),
+    `${payload.username}-${payload.discriminator}.json`,
+    { autoBom: true }
+  );
+};
 </script>
 
 <template>
-  <main v-if="typeof response === 'object' && 'username' in response">
-    <!-- Info icon -->
-    <Tip
-      class="w-8 h-8 absolute right-8 top-8 fill-black/70 cursor-pointer hover:fill-black/50 transition"
+  <section
+    v-if="
+      requestMetadata.global.response &&
+      'username' in requestMetadata.global.response
+    "
+  >
+    <NuxtImg
+      :src="requestMetadata.global.response.image"
+      quality="100"
+      loading="lazy"
+      class="rounded-2xl"
     />
 
-    <!-- Profile avatar -->
-    <img
-      :src="response.image"
-      :alt="`${response.username}'s avatar`"
-      class="rounded-2xl w-36 h-36"
-    />
+    <div class="flex flex-col gap-y-5">
+      <!-- Username and discriminator -->
+      <h1 class="font-serif text-2xl dark:text-white">
+        {{ requestMetadata.global.response.username }}#{{
+          requestMetadata.global.response.discriminator
+        }}
+      </h1>
 
-    <!-- Profile username and discriminator -->
-    <h1 class="text-2xl my-5 text-center text-black/70">
-      {{ response.username }}#<span class="font-serif">{{
-        response.discriminator
-      }}</span>
-    </h1>
+      <div class="flex flex-col gap-y-2">
+        <UIBadges
+          :badge-number="requestMetadata.global.response.public_flags"
+          type="display"
+        />
+        <h2 class="dark:text-white">
+          Has been a member since
+          {{ requestMetadata.global.response.createdAt }}
+        </h2>
 
-    <div
-      v-if="memberOfWhichHypesquadHouse !== 'not-a-member'"
-      class="flex items-center gap-x-3"
-    >
-      <h2 class="p-3 bg-white/60 text-2xl rounded-2xl text-black/70">Badges</h2>
-      <!-- Hypesquad Badge -->
-      <NuxtIcon
-        name="houses/bravery"
-        class="text-6xl text-black/70"
-        v-if="memberOfWhichHypesquadHouse === 'hypesquad-house-bravery'"
-      />
-      <NuxtIcon
-        name="houses/brilliance"
-        class="text-6xl text-black/70"
-        v-else-if="memberOfWhichHypesquadHouse === 'hypesquad-house-brilliance'"
-      />
-      <NuxtIcon
-        name="houses/balance"
-        class="text-6xl text-black/70 h-[50px] w-[50px]"
-        v-else-if="memberOfWhichHypesquadHouse === 'hypesquad-house-balance'"
-      />
+        <a
+          class="inline-flex items-center gap-x-2 cursor-pointer group w-fit dark:text-white"
+          @click="
+            downloadLookedUpInformation(
+              requestMetadata.global.response.original
+            )
+          "
+        >
+          <UIIcon name="save" type="normal" />
+          <span class="group-hover:opacity-100 opacity-0 transition"
+            >Save (JSON)</span
+          >
+        </a>
+      </div>
     </div>
-  </main>
-  <main v-else-if="typeof response === 'object' && 'statusCode' in response">
-    <Tip
-      class="w-8 h-8 absolute right-4 top-6 fill-black/70 cursor-pointer hover:fill-black/50 transition"
-    />
-    <!-- Oops, an error occured -->
-    <NuxtIcon name="error" class="text-9xl text-black/70" />
-    <h1 class="text-xl text-black/70">{{ response.statusMessage }}</h1>
-  </main>
-  <main v-else-if="typeof response === 'string'">
-    <!-- Info icon -->
-    <Tip
-      class="w-8 h-8 absolute right-8 top-8 fill-black/70 cursor-pointer hover:fill-black/50 transition"
-    />
-
-    <!-- Error icon -->
-    <svg
-      viewBox="0 0 115.421 103.599"
-      xmlns="http://www.w3.org/2000/svg"
-      class="fill-black/70 w-28 h-28"
-    >
-      <g>
-        <path
-          d="M57.649 66.386a4.492 4.492 0 118.985 0 4.492 4.492 0 01-8.985 0zm.445-26.977a4.066 4.066 0 118.086 0l-1.572 15.755a2.484 2.484 0 01-4.942 0z"
-        />
-        <path
-          d="M72.348 28.259l-4.137-4.24 3.212-3.137 2.794 2.862 3.998-.05A12.983 12.983 0 0191.351 36.83l-.045 3.999 2.857 2.794a12.983 12.983 0 010 18.571l-2.862 2.794.05 3.999a12.983 12.983 0 01-13.136 13.135l-3.998-.045-2.794 2.858a12.983 12.983 0 01-18.572 0l-2.794-2.862-3.998.05a12.983 12.983 0 01-13.136-13.136l.045-3.999-2.857-2.794a12.983 12.983 0 010-18.571l2.861-2.794-.049-3.999a12.983 12.983 0 0113.136-13.135l3.998.045 2.794-2.858a12.983 12.983 0 0118.572 0l-3.212 3.136a8.49 8.49 0 00-12.148 0l-4.133 4.24-5.93-.071a8.49 8.49 0 00-8.585 8.59l.072 5.92-4.24 4.138a8.49 8.49 0 000 12.147l4.24 4.133-.072 5.93a8.49 8.49 0 008.59 8.585l5.92-.072 4.138 4.24a8.49 8.49 0 0012.148 0l4.133-4.24 5.93.072a8.49 8.49 0 008.584-8.59l-.071-5.92 4.24-4.138a8.49 8.49 0 000-12.147l-4.24-4.133.071-5.93a8.49 8.49 0 00-8.589-8.585zM102.05 103.6a.634.634 0 01-.633-.635v-1.64l-.82.82a.634.634 0 01-.896-.897l1.716-1.715v-1.378l-.82.82a.634.634 0 01-.896-.897l1.716-1.716v-1.809l-1.568.904-.627 2.346a.634.634 0 11-1.225-.33l.3-1.118-1.192.687-.629 2.346a.634.634 0 11-1.224-.33l.3-1.118-1.42.819a.634.634 0 01-.634-1.098l1.42-.82-1.12-.3a.634.634 0 11.329-1.225l2.343.628 1.192-.687-1.118-.3a.634.634 0 11.327-1.226l2.346.628 1.566-.904-1.568-.904-2.344.627a.634.634 0 11-.327-1.224l1.12-.301-1.193-.687-2.345.627a.634.634 0 01-.328-1.225l1.12-.3-1.42-.82a.634.634 0 11.634-1.097l1.42.819-.3-1.12a.634.634 0 011.224-.327l.628 2.345 1.192.687-.3-1.12a.634.634 0 011.226-.327l.627 2.345 1.568.904v-1.81L99.7 88.832a.634.634 0 11.897-.898l.819.82v-1.377L99.7 85.662a.634.634 0 11.897-.898l.819.82v-1.64a.634.634 0 011.268 0v1.64l.82-.82a.634.634 0 11.897.898l-1.717 1.715v1.377l.82-.82a.634.634 0 11.897.898l-1.717 1.715v1.81l1.567-.904.628-2.346a.634.634 0 111.225.33l-.3 1.118 1.192-.687.628-2.346a.634.634 0 111.225.33l-.3 1.118 1.42-.82a.634.634 0 01.635 1.099l-1.42.819 1.12.3a.634.634 0 11-.33 1.225l-2.344-.627-1.192.687 1.12.3a.634.634 0 11-.33 1.225l-2.343-.627-1.567.904 1.567.904 2.345-.628a.634.634 0 01.328 1.225l-1.12.3 1.192.688 2.345-.628a.634.634 0 01.328 1.225l-1.12.3 1.42.82a.634.634 0 01-.633 1.098l-1.42-.82.299 1.12a.634.634 0 11-1.225.328l-.628-2.345-1.192-.687.3 1.12a.634.634 0 01-1.225.327l-.628-2.344-1.567-.905v1.81l1.717 1.715a.634.634 0 01-.897.898l-.82-.82v1.377l1.717 1.715a.634.634 0 01-.897.898l-.82-.82v1.64a.634.634 0 01-.634.633zM8.874 57.68a.634.634 0 01-.634-.634v-1.64l-.82.821a.634.634 0 01-.896-.898l1.716-1.715v-1.377l-.82.82a.634.634 0 01-.896-.898l1.716-1.715v-1.81l-1.568.904-.627 2.346a.634.634 0 11-1.225-.33l.3-1.118-1.192.687L3.3 53.47a.634.634 0 11-1.225-.33l.3-1.118-1.42.82a.634.634 0 01-.633-1.099l1.42-.82-1.121-.3a.634.634 0 11.33-1.225l2.343.628 1.192-.687-1.119-.3a.634.634 0 11.328-1.226l2.345.628 1.566-.904-1.567-.904-2.344.628a.634.634 0 11-.328-1.225l1.12-.3-1.192-.688-2.346.627a.634.634 0 01-.327-1.224l1.12-.301-1.42-.82a.634.634 0 11.634-1.097l1.42.819-.3-1.12a.634.634 0 011.224-.327l.628 2.345 1.192.687-.3-1.12a.634.634 0 011.226-.327l.627 2.345 1.568.904v-1.81l-1.716-1.715a.634.634 0 11.896-.898l.82.82v-1.377l-1.716-1.715a.634.634 0 11.896-.898l.82.82v-1.64a.634.634 0 011.268 0v1.64l.82-.82a.634.634 0 11.896.898l-1.716 1.715v1.377l.82-.82a.634.634 0 11.896.898l-1.716 1.715v1.81l1.567-.904.627-2.346a.634.634 0 111.225.33l-.299 1.118 1.192-.687.628-2.346a.634.634 0 111.225.33l-.3 1.118 1.42-.82a.634.634 0 01.635 1.099l-1.42.819 1.12.3a.634.634 0 11-.33 1.225l-2.344-.627-1.192.687 1.12.3a.634.634 0 11-.33 1.226l-2.343-.628-1.567.904 1.567.904 2.344-.628a.634.634 0 01.329 1.225l-1.12.3 1.192.688 2.345-.628a.634.634 0 01.328 1.225l-1.12.3 1.42.82a.634.634 0 01-.633 1.098l-1.42-.819.299 1.12a.634.634 0 11-1.225.327l-.628-2.345-1.192-.687.3 1.12a.634.634 0 01-1.226.327l-.627-2.344-1.567-.905v1.81l1.716 1.715a.634.634 0 01-.896.898l-.82-.82v1.377l1.716 1.715a.634.634 0 01-.896.898l-.82-.82v1.64a.634.634 0 01-.634.633z"
-        />
-        <g>
-          <path d="M103.028 13.291a.886.886 0 100 1.772.886.886 0 000-1.772z" />
-          <path
-            d="M103.028 28.354a.886.886 0 01-.886-.886v-2.291l-1.145 1.146a.887.887 0 01-1.253-1.254l2.398-2.398v-2.676l-3.638-2.183-2.39 1.378-.876 3.279a.886.886 0 11-1.712-.46l.42-1.564-1.985 1.145a.886.886 0 01-.886-1.535l1.985-1.145-1.565-.42a.886.886 0 11.457-1.711l3.279.877 2.48-1.432V12.13l-2.48-1.432-3.279.878a.886.886 0 11-.459-1.712l1.567-.42-1.985-1.145a.886.886 0 01.886-1.535l1.985 1.145-.42-1.565a.886.886 0 111.712-.457l.877 3.277 2.389 1.378 3.638-2.183V5.683l-2.398-2.397a.887.887 0 111.253-1.255l1.145 1.146V.887a.886.886 0 011.772 0v2.29l1.147-1.146a.887.887 0 111.253 1.255l-2.4 2.397V8.36l3.638 2.183 2.39-1.378.876-3.279a.886.886 0 111.712.461l-.418 1.563 1.985-1.145a.886.886 0 01.886 1.535l-1.985 1.145 1.565.42a.886.886 0 11-.461 1.712l-3.275-.878-2.48 1.432v4.094l2.48 1.432 3.277-.877a.886.886 0 11.459 1.711l-1.565.42 1.985 1.145a.886.886 0 01-.886 1.535l-1.985-1.145.418 1.565a.886.886 0 11-1.712.457l-.877-3.277-2.389-1.378-3.638 2.183v2.676l2.4 2.398a.887.887 0 01-1.253 1.254l-1.147-1.146v2.291a.886.886 0 01-.886.886zm3.544-12.02V12.02l-3.544-2.126-3.544 2.126v4.314l3.544 2.126z"
-          />
-        </g>
-      </g>
-    </svg>
-    <h1 class="text-xl text-black/70">{{ response }}</h1>
-  </main>
+  </section>
 </template>

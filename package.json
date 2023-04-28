@@ -5,27 +5,39 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare && cp node_modules/bootstrap-icons/bootstrap-icons.svg assets/"
+    "postinstall": "nuxt prepare",
+    "typecheck": "vue-tsc --noEmit --watch --strict"
   },
   "devDependencies": {
-    "@nuxtjs/tailwindcss": "^6.2.0",
-    "@sidebase/nuxt-auth": "^0.3.2",
+    "@nuxt/content": "^2.6.0",
+    "@nuxt/devtools": "^0.4.2",
+    "@nuxt/image-edge": "1.0.0-28020728.5df24eb",
+    "@nuxtjs/color-mode": "^3.2.0",
+    "@nuxtjs/tailwindcss": "^6.6.7",
+    "@nuxtjs/turnstile": "^0.3.0",
+    "@sidebase/nuxt-session": "^0.2.7",
     "@tailwindcss/forms": "^0.5.3",
-    "nuxt": "3.0.0"
+    "nuxt": "3.4.2",
+    "nuxt-fonty": "^1.0.0",
+    "nuxt-headlessui": "^1.1.4",
+    "nuxt-security": "^0.13.0",
+    "sass": "^1.62.1",
+    "typescript": "^5.0.4",
+    "vue-tsc": "1.0.24"
   },
   "dependencies": {
-    "@headlessui/vue": "^1.7.7",
-    "bootstrap-icons": "^1.10.3",
-    "color": "^4.2.3",
-    "config": "^3.3.8",
+    "@nuxtjs/html-validator": "^1.2.5",
+    "bootstrap-icons": "^1.10.5",
     "country-code-emoji": "^2.3.0",
+    "file-saver": "^2.0.5",
+    "floating-vue": "2.0.0-beta.20",
+    "jose": "^4.14.3",
     "locale-code": "^2.0.2",
-    "nuxt-icons": "^3.0.0",
-    "random-color-pair": "^1.0.5",
-    "securejs": "^1.1.2"
+    "nanoid": "^4.0.2",
+    "nuxt-icons": "^3.2.1"
   },
   "optionalDependencies": {
-    "@types/color": "^3.0.3",
-    "@types/config": "^3.3.0"
+    "@types/node": "^18.16.1",
+    "@types/file-saver": "^2.0.5"
   }
 }

@@ -1,0 +1,34 @@
+<script setup lang="ts">
+import type { ValidationConfirmed } from "~/project";
+
+const emit = defineEmits<{
+  (event: "validationConfirmed", payload: ValidationConfirmed): void;
+}>();
+defineProps<{ type: "text" }>();
+
+const dirtyInput = ref("");
+const { name } = useRoute();
+
+watch(dirtyInput, (_new) => {
+  emit("validationConfirmed", { isAllowed: false });
+
+  if (_new)
+    if (name === "index" && /^([0-9]{17,19})$/.test(_new))
+      emit("validationConfirmed", {
+        isAllowed: true,
+        data: _new,
+      });
+    else if (name === "account" && _new.length > 0)
+      emit("validationConfirmed", { isAllowed: true, data: _new });
+});
+</script>
+
+<template>
+  <input
+    class="p-3 border-0 border-b dark:border-b-2 outline-none border-blurple caret-blurple bg-transparent dark:caret-white appearance-none dark:placeholder:text-white dark:text-white transition-[border]"
+    :class="{ 'border-b-2': dirtyInput.length > 0 }"
+    autocomplete="off"
+    :type="type"
+    v-model="dirtyInput"
+  />
+</template>

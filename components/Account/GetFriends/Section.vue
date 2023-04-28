@@ -1,0 +1,54 @@
+<script setup lang="ts">
+import type { RequestMetadata, Modal } from "~/project";
+
+const requestMetadata = useState<RequestMetadata>("metadata");
+
+const openPrivacyPolicy = async () =>
+  (useState<Modal>("modal").value.isOpen = true);
+</script>
+
+<template>
+  <section>
+    <h1
+      class="text-3xl 2xl:text-4xl font-serif inline-flex justify-between items-center"
+    >
+      My Friends
+      <UIIcon
+        :name="$colorMode.value === 'dark' ? 'book-fill' : 'book'"
+        type="large"
+        @click="openPrivacyPolicy"
+        class="cursor-pointer"
+      />
+    </h1>
+    <NuxtErrorBoundary>
+      <AccountGetFriendsSearchForm />
+      <LazyUILoading v-if="requestMetadata.friends.pending" />
+      <AccountGetFriendsResults
+        v-else-if="
+          !requestMetadata.friends.pending && requestMetadata.friends.response
+        "
+        class="flex flex-col gap-y-5 h-[17.5rem] overflow-y-scroll"
+      />
+
+      <template #error="{ error }">
+        <AccountGetFriendsSearchForm
+          @clear-errors="error.value = null"
+          class="mb-10"
+        />
+
+        <div class="flex flex-col items-center">
+          <NuxtIcon name="error" class="text-9xl text-blurple" />
+          <h1 class="text-lg dark:text-white text-center font-bold">
+            {{
+              (error.value.message as string).includes("Unauthorized")
+                ? "Oops, looks like you've got an inactive token 😅"
+                : (error.value.message as string).includes("Failed to fetch")
+                ? "Oops, there was an error sending the request 🤪"
+                : error.value.message
+            }}
+          </h1>
+        </div>
+      </template>
+    </NuxtErrorBoundary>
+  </section>
+</template>

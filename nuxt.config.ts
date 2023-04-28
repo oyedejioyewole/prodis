@@ -1,58 +1,38 @@
-import config from "config";
-
 export default defineNuxtConfig({
-  modules: ["@sidebase/nuxt-auth", "@nuxtjs/tailwindcss", "nuxt-icons"],
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "nuxt-icons",
+    "nuxt-fonty",
+    "nuxt-headlessui",
+    "nuxt-security",
+    "@nuxt/image-edge",
+    "@nuxtjs/color-mode",
+    "@sidebase/nuxt-session",
+    "@nuxtjs/html-validator",
+    "@nuxt/content",
+  ],
   runtimeConfig: {
-    discord: {
-      id:
-        process.env.NODE_ENV === "development"
-          ? config.get("discord.id")
-          : process.env.DISCORD_CLIENT_ID,
-      secret:
-        process.env.NODE_ENV === "development"
-          ? config.get("discord.secret")
-          : process.env.DISCORD_CLIENT_SECRET,
-      baseURL: "https://discord.com/api",
-      botToken:
-        process.env.NODE_ENV === "development"
-          ? config.get("discord.botToken")
-          : process.env.DISCORD_BOT_TOKEN,
-    },
-    project: {
-      secret:
-        process.env.NODE_ENV === "development"
-          ? config.get("project.secret")
-          : process.env.SECRET,
-    },
     public: {
-      project: {
-        secret:
-          process.env.NODE_ENV === "development"
-            ? config.get("project.public.secret")
-            : process.env.PUBLIC_SECRET,
+      discord: {
+        baseURL: "https://discord.com/api",
+        id: process.env.DISCORD_CLIENT_ID,
+        redirectUrl: process.env.DISCORD_REDIRECT_URL,
       },
     },
-  },
-  auth: {
-    origin:
-      process.env.NODE_ENV === "development"
-        ? "http://localhost:3000"
-        : "https://prodis.vercel.app",
+    discord: {
+      secret: process.env.DISCORD_CLIENT_SECRET,
+      botToken: process.env.DISCORD_BOT_TOKEN,
+    },
+    jwtSigningKey: process.env.JWT_SIGNING_KEY,
   },
   app: {
     head: {
       link: [
-        { rel: "preconnect", href: "https://api.fonts.coollabs.io" },
-        { rel: "preconnect", href: "https://fonts.gstatic.com" },
-        {
-          rel: "stylesheet",
-          href: "https://api.fonts.coollabs.io/css2?family=Vollkorn:wght@600&Quicksand&display=swap",
-        },
-        { rel: "icon", href: "/logo.svg", type: "image/svg+xml" },
+        { rel: "icon", href: "/favicon.ico", type: "image/vnd.microsoft.icon" },
       ],
       titleTemplate: "%s - Prodis",
       htmlAttrs: {
-        lang: "en",
+        lang: "en-US",
       },
       meta: [
         {
@@ -62,5 +42,27 @@ export default defineNuxtConfig({
         { name: "author", content: "OyewoleOyedeji" },
       ],
     },
+    rootTag: "main",
+  },
+  fonty: {
+    autoImport: true,
+  },
+  devtools: {},
+  typescript: {
+    shim: false,
+    strict: true,
+  },
+  security: {
+    headers: {
+      crossOriginEmbedderPolicy:
+        process.env.NODE_ENV === "development" ? "unsafe-none" : "require-corp",
+    },
+    csrf: true,
+  },
+  image: {
+    domains: ["cdn.discordapp.com"],
+  },
+  colorMode: {
+    classSuffix: "",
   },
 });

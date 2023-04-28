@@ -1,60 +1,77 @@
 <script setup lang="ts">
-import Color from "color";
-import getColorPair from "random-color-pair";
+import type { APICallbackProcessedResponse, RequestMetadata } from "~/project";
 
-definePageMeta({ middleware: "auth" });
+useHead({
+  title: "Account",
+});
 
-const session = useState<{ user: User }>("session");
-const modal = useState<Modal>("modal");
+const { csrf } = useCsrf();
+const requestMetadata = useState<RequestMetadata>("metadata");
+const { session } = await useSession();
 
-const accentColor = Color(session.value.user.accent_color).rgb().alpha(0.5);
-
-const cleanupModal = () => {
-  modal.value.isOpen = false;
-
-  setTimeout(() => {
-    modal.value.type = undefined;
-    modal.value.payload = {};
-  }, 1000);
-};
-
-const navigateBack = (event: Event) => {
-  if ((event.target as HTMLElement).id === "clickable-area") {
-    navigateTo("/");
+watch(session, (_new) => {
+  if (_new && "processed" in _new) {
+    requestMetadata.value.global = {
+      pending: false,
+      response: _new.processed as APICallbackProcessedResponse,
+    };
   }
+});
+
+const discordOAuthURLComponents = {
+  client_id: useRuntimeConfig().public.discord.id,
+  redirect_uri: encodeURIComponent(
+    useRuntimeConfig().public.discord.redirectUrl
+  ),
+  response_type: "code",
+  scope: encodeURIComponent("identify connections email guilds"),
+  state: encodeURIComponent(csrf as string),
 };
 
-// Use this to create a gradient for the background if the accent_color doesn't exist
-const alternateBackgroundGradient = ref<Array<Color>>([]);
-
-if (!("accent_color" in session.value.user)) {
-  const [foreground, background]: string = getColorPair();
-  const firstBackgroundColor = new Color(foreground).alpha(0.5);
-  const secondBackgroundColor = new Color(background).alpha(0.5);
-  alternateBackgroundGradient.value.push(
-    firstBackgroundColor,
-    secondBackgroundColor
-  );
-}
+const discordOAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${discordOAuthURLComponents.client_id}&redirect_uri=${discordOAuthURLComponents.redirect_uri}&response_type=${discordOAuthURLComponents.response_type}&scope=${discordOAuthURLComponents.scope}&state=${discordOAuthURLComponents.state}`;
 </script>
 
 <template>
-  <Head>
-    <Title>Account</Title>
-  </Head>
-  <main
-    class="min-h-screen bg-no-repeat grid place-items-center overflow-y-hidden cursor-pointer"
-    :style="
-      alternateBackgroundGradient.length === 0
-        ? `background-image: linear-gradient(to bottom right, ${accentColor}, #ba83e2)`
-        : `background-image: linear-gradient(to bottom right, ${alternateBackgroundGradient[0]}, ${alternateBackgroundGradient[1]})`
-    "
-    @click="navigateBack"
-    id="clickable-area"
-  >
-    <AccountContent
-      class="mx-auto flex flex-col items-center justify-center my-36 rounded-2xl gap-x-10 2xl:w-1/4 w-1/2 backdrop-blur-lg bg-white/60 py-36 z-10 cursor-default select-none"
+  <main class="flex min-h-screen py-10 gap-x-10">
+    <section
+      class="flex-auto flex flex-col gap-y-4 justify-center"
+      :class="{
+        'items-center': !(
+          requestMetadata.global.response &&
+          'profile' in requestMetadata.global.response
+        ),
+      }"
+    >
+      <NuxtErrorBoundary>
+        <!-- v-else-if Results -->
+        <LazyAccountResults
+          v-if="
+            !requestMetadata.global.pending &&
+            requestMetadata.global.response &&
+            'profile' in requestMetadata.global.response
+          "
+        />
+        <section v-else class="contents">
+          <h1 class="text-4xl font-serif dark:text-white">
+            Whenever you're ready
+          </h1>
+
+          <!-- Login button -->
+          <NuxtLink :to="discordOAuthUrl" class="w-fit">
+            <UIButton type="normal" class="px-10 py-5 text-lg">
+              Login <UIIcon name="door-open-fill" type="normal" />
+            </UIButton>
+          </NuxtLink>
+        </section>
+
+        <template #error="{ error }">
+          <h1>{{ error.value.message }}</h1>
+        </template>
+      </NuxtErrorBoundary>
+    </section>
+    <AccountGetFriendsSection
+      class="flex-none flex flex-col gap-y-10 w-[40%] 2xl:w-1/4 border-black/40 dark:border-white/30 border-2 rounded-lg px-10 dark:text-white border-dashed justify-center overflow-y-scroll h-fit my-auto py-20"
     />
+    <UIModal content="guide" />
   </main>
-  <ModalWrapper @close-modal="cleanupModal" />
 </template>

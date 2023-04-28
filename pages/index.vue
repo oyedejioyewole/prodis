@@ -1,64 +1,42 @@
 <script setup lang="ts">
-import getColorPair from "random-color-pair";
-import Color from "color";
+import type { RequestMetadata } from "~/project";
 
-const [foreground, background]: string = getColorPair();
-const firstBackgroundColor = new Color(foreground).alpha(0.5);
-const secondBackgroundColor = new Color(background).alpha(0.5);
+const requestMetadata = useState<RequestMetadata>("metadata");
 
-const dimmedBackgroundBarColor = new Color(background).alpha(0.5);
-
-const modal = useState<Modal>("modal");
-
-const profileRequest = useState<LookupRequest>("profileRequest", () => ({
-  loading: false,
-}));
-
-const reset = (event: Event) => {
-  if ((event.target as HTMLElement).id === "clickable-area") {
-    if (profileRequest.value.data) profileRequest.value.data = undefined;
-    if (profileRequest.value.error) profileRequest.value.error = undefined;
-  }
-};
-
-const closeModal = () => (modal.value.isOpen = false);
+useHead({
+  title: "Home",
+});
 </script>
 
 <template>
-  <Head>
-    <Title>Home</Title>
-  </Head>
-  <main
-    class="min-h-screen grid place-items-center cursor-pointer"
-    :style="`background-image: linear-gradient(to bottom right, ${firstBackgroundColor} , ${secondBackgroundColor})`"
-    id="clickable-area"
-    @click="reset"
-  >
-    <div
-      class="h-2 w-full animate-pulse absolute top-0 transition cursor-default"
-      :class="profileRequest.loading ? '' : 'hidden'"
-      :style="`background-image: linear-gradient(to right, ${foreground}, ${dimmedBackgroundBarColor})`"
-    ></div>
+  <main class="min-h-screen flex flex-col gap-y-20 items-center justify-center">
+    <NuxtErrorBoundary>
+      <HomeSearchForm />
+      <LazyUILoading v-if="requestMetadata.global.pending" />
+      <LazyHomeResults
+        v-else-if="
+          !requestMetadata.global.pending && requestMetadata.global.response
+        "
+        class="flex gap-x-10 border-blurple border dark:border-2 p-10 rounded-2xl items-center"
+      />
 
-    <HomeResults
-      v-if="
-        (('data' in profileRequest && profileRequest.data) ||
-          ('error' in profileRequest && profileRequest.error)) &&
-        !profileRequest.loading
-      "
-      :payload="
-        'data' in profileRequest
-          ? JSON.stringify(profileRequest.data)
-          : typeof profileRequest.error === 'string'
-          ? profileRequest.error
-          : JSON.stringify(profileRequest.error)
-      "
-      class="mx-auto flex flex-col items-center justify-center md:my-36 my-1 rounded-2xl 2xl:w-1/4 md:w-1/2 w-[90%] backdrop-blur-lg bg-white/60 py-36 z-10 cursor-default select-none"
-    />
-    <HomeContent
-      class="w-[90%] mx-auto md:min-h-[90vh] flex flex-col justify-center items-center my-36 md:my-0 cursor-default"
-      v-else
-    />
+      <template #error="{ error }">
+        <div class="contents">
+          <HomeSearchForm @clear-errors="error.value = null" />
+          <div class="flex flex-col items-center">
+            <NuxtIcon name="error" class="text-9xl text-blurple" />
+            <h1 class="text-lg dark:text-white font-bold">
+              {{
+                (error.value.message as string).includes("Not Found")
+                  ? "Oops, the account doesn't exist 😅"
+                  : (error.value.message as string).includes("Failed to fetch")
+                  ? "Oops, there was an error sending the request 🤪"
+                  : error.value.message
+              }}
+            </h1>
+          </div>
+        </div>
+      </template>
+    </NuxtErrorBoundary>
   </main>
-  <ModalWrapper @close-modal="closeModal" />
 </template>

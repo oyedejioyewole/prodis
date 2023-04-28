@@ -1,5 +1,3 @@
 {
-  "tailwindCSS.experimental.configFile": "tailwind.config.cjs",
-  "cSpell.enableFiletypes": ["!javascript", "!typescript", "!vue"],
-  "cSpell.words": ["Fireship", "Prodis"]
+  "tailwindCSS.experimental.configFile": "tailwind.config.cjs"
 }
