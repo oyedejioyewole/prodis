@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { APICallbackProcessedResponse, RequestMetadata } from "~/project";
+import type { RequestMetadata } from "~/project";
 
 useHead({
   title: "Account",
@@ -13,7 +13,7 @@ watch(session, (_new) => {
   if (_new && "processed" in _new) {
     requestMetadata.value.global = {
       pending: false,
-      response: _new.processed as APICallbackProcessedResponse,
+      response: _new.processed,
     };
   }
 });

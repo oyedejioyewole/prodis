@@ -28,7 +28,7 @@ const toggleTheme = () => {
   <nav>
     <!-- Logo -->
     <NuxtLink to="/">
-      <NuxtIcon name="logo" filled class="text-7xl" />
+      <LazySvgoLogo filled class="w-12 aspect-square" />
     </NuxtLink>
 
     <!-- Navigation links -->

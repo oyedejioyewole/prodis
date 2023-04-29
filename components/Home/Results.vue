@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import type { DiscordUser, RequestMetadata } from "~/project";
+import type { RequestMetadata, APILookupResponse } from "~/project";
 
 const requestMetadata = useState<RequestMetadata>("metadata");
 
-const downloadLookedUpInformation = async (payload: DiscordUser) => {
+const downloadInformation = async (payload: APILookupResponse["download"]) => {
   const { saveAs } = await import("file-saver");
   saveAs(
     new Blob([JSON.stringify(payload)], { type: "application/json" }),
-    `${payload.username}-${payload.discriminator}.json`,
+    `${payload.user}.json`,
     { autoBom: true }
   );
 };
@@ -37,7 +37,7 @@ const downloadLookedUpInformation = async (payload: DiscordUser) => {
 
       <div class="flex flex-col gap-y-2">
         <UIBadges
-          :badge-number="requestMetadata.global.response.public_flags"
+          :badges="requestMetadata.global.response.badges"
           type="display"
         />
         <h2 class="dark:text-white">
@@ -47,11 +47,7 @@ const downloadLookedUpInformation = async (payload: DiscordUser) => {
 
         <a
           class="inline-flex items-center gap-x-2 cursor-pointer group w-fit dark:text-white"
-          @click="
-            downloadLookedUpInformation(
-              requestMetadata.global.response.original
-            )
-          "
+          @click="downloadInformation(requestMetadata.global.response.download)"
         >
           <UIIcon name="save" type="normal" />
           <span class="group-hover:opacity-100 opacity-0 transition"

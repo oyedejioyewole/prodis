@@ -1,20 +1,29 @@
-type AccountBadges =
+declare module "locale-code" {
+  function getLanguageCode(code: string): string;
+  function getLanguageName(code: string): string;
+  function getLanguageNativeName(code: string): string;
+  function validateLanguageCode(code: string): boolean;
+  function getLanguages(codes: string[]): string[];
+  function getCountryCode(code: string): string;
+  function getCountryName(code: string): string;
+  function validateCountryName(code: string): boolean;
+  function validate(code: string): boolean;
+}
+
+type AccountBadgesKeys =
   | "staff"
-  | "partner"
-  | "hypesquad"
-  | "bug-hunter-1"
-  | "hypesquad-online-house-1"
-  | "hypesquad-online-house-2"
-  | "hypesquad-online-house-3"
-  | "premium-early-supporter"
-  | "team-pseudo-user"
-  | "bug-hunter-2"
+  | "partnered-server-owner"
+  | "hypesquad-events"
+  | "bug-hunter-level-1"
+  | "house-of-bravery"
+  | "house-of-brilliance"
+  | "house-of-balance"
+  | "early-supporter"
+  | "bug-hunter-level-2"
   | "verified-bot"
-  | "verified-developer"
-  | "certified-moderator"
-  | "bot-http-interactions"
-  | "active-developer"
-  | "none";
+  | "early-verified-bot-developer"
+  | "moderator-programs-alumni"
+  | "active-developer";
 
 type ConnectionTypes =
   | "battlenet"
@@ -37,51 +46,51 @@ type ConnectionTypes =
   | "xbox"
   | "youtube";
 
-type LookedUpFriend = Omit<APILookupResponse, "original"> &
-  DiscordRelationship["user"];
+type NitroStatus = "none" | "nitro" | "nitro-basic";
+
+type Badges = ReturnType<typeof import("server/utils/helpers")["getBadges"]>;
 
 type APICallbackProcessedResponse = {
   profile: Pick<DiscordUser, "verified"> & {
     twoFactorAuthenticationStatus: "enabled" | "disabled";
-    badges: number;
+    badges: Badges;
+    locale: string;
+    nitroStatus: NitroStatus;
     createdAt: string;
-    original: DiscordUser;
+    download: DiscordUser;
   };
   guilds: {
-    sanitized: {
-      [Property in "name" | "icon" | "owner" | "id"]: DiscordGuild[Property];
-    }[];
-    AccountConnectionValues;
-    original: DiscordGuild[];
+    sanitized: Array<Pick<DiscordGuild, "name" | "icon" | "owner" | "id">>;
+    download: DiscordGuild[];
   };
   connections: {
-    sanitized: {
-      [Property in
-        | "name"
-        | "type"
-        | "verified"
-        | "friend_sync"
-        | "visibility"
-        | "revoked"]: DiscordConnection[Property];
-    }[];
-    original: DiscordConnection[];
+    sanitized: Array<
+      Pick<
+        DiscordConnection,
+        "name" | "type" | "verified" | "friend_sync" | "visibility" | "revoked"
+      >
+    >;
+    download: DiscordConnection[];
   };
 };
 
-type APIFriendsResponse = Omit<APILookupResponse, "original"> &
-  Pick<DiscordRelationship, "nickname"> & {
-    original: LookedUpFriend;
+type APIFriendsResponse = Omit<APILookupResponse, "download"> &
+  Pick<DiscordRelationship, "nickname"> &
+  Pick<DiscordRelationship, "user"> & {
+    download: Omit<APILookupResponse, "download">;
   };
 
-type APILookupResponse = {
-  [Property in
-    | "discriminator"
-    | "public_flags"
-    | "username"]: DiscordAPILookupResponse[Property];
-} & {
+type APILookupResponse = Pick<DiscordUser, "username" | "discriminator"> & {
   image: string;
+  badges: Badges;
   createdAt: string;
-  original: DiscordUser;
+  download: Omit<
+    DiscordUser,
+    "public_flags" | "flags" | "avatar" | "username" | "discriminator"
+  > &
+    Pick<APILookupResponse, "image" | "badges" | "createdAt"> & {
+      user: string;
+    };
 };
 
 type DiscordConnection = {
@@ -164,18 +173,15 @@ type DiscordRelationship = {
   id: string;
   type: number;
   nickname?: string;
-  user: {
-    [Property in
-      | "discriminator"
-      | "public_flags"
-      | "username"
-      | "id"
-      | "avatar"]: DiscordUser[Property];
-  } & Partial<{
-    avatar_decoration: string;
-    global_name: string;
-    display_name: string;
-  }>;
+  user: Pick<
+    DiscordUser,
+    "discriminator" | "public_flags" | "username" | "id" | "avatar"
+  > &
+    Partial<{
+      avatar_decoration: string;
+      global_name: string;
+      display_name: string;
+    }>;
 };
 
 type RequestMetadata = {
@@ -208,7 +214,8 @@ export {
   APILookupResponse,
   APIFriendsResponse,
   APICallbackProcessedResponse,
-  AccountBadges,
+  AccountBadgesKeys,
+  Badges,
+  NitroStatus,
   Modal,
-  LookedUpFriend,
 };

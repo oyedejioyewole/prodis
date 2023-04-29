@@ -16,11 +16,11 @@
     "@nuxtjs/tailwindcss": "^6.6.7",
     "@nuxtjs/turnstile": "^0.3.0",
     "@sidebase/nuxt-session": "^0.2.7",
-    "@tailwindcss/forms": "^0.5.3",
     "nuxt": "3.4.2",
     "nuxt-fonty": "^1.0.0",
     "nuxt-headlessui": "^1.1.4",
     "nuxt-security": "^0.13.0",
+    "nuxt-svgo": "^2.0.1",
     "sass": "^1.62.1",
     "typescript": "^5.0.4",
     "vue-tsc": "1.0.24"
@@ -33,11 +33,10 @@
     "floating-vue": "2.0.0-beta.20",
     "jose": "^4.14.3",
     "locale-code": "^2.0.2",
-    "nanoid": "^4.0.2",
-    "nuxt-icons": "^3.2.1"
+    "nanoid": "^4.0.2"
   },
   "optionalDependencies": {
-    "@types/node": "^18.16.1",
-    "@types/file-saver": "^2.0.5"
+    "@types/file-saver": "^2.0.5",
+    "@types/node": "^18.16.1"
   }
 }

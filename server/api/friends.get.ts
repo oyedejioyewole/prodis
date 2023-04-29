@@ -57,25 +57,37 @@ export default defineEventHandler(async (event) => {
           jwtSigningKey
         );
 
-        const { createdAt, discriminator, image, public_flags, username } =
-          await $fetch<APILookupResponse>("/api/lookup", {
-            headers: {
-              "x-token": jwt,
-            },
-          });
+        const profile = await $fetch<APILookupResponse>("/api/lookup", {
+          headers: {
+            "x-token": jwt,
+          },
+        });
+
+        const { createdAt, discriminator, image, username, badges, download } =
+          {
+            ...profile,
+          };
 
         const lookedUpProfile = {
+          badges,
           createdAt,
           discriminator,
           image,
-          public_flags,
           username,
         };
 
+        for (const property of [
+          "discriminator",
+          "username",
+          "avatar",
+          "public_flags",
+        ])
+          delete relationship.user[property as keyof typeof relationship.user];
+
         return {
           ...lookedUpProfile,
-          original: { ...lookedUpProfile, ...relationship.user },
           nickname: relationship.nickname,
+          download: { ...download, ...relationship.user },
         };
       })
     );

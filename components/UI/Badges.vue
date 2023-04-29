@@ -1,10 +1,10 @@
 <script setup lang="ts">
-const props = defineProps<{
-  badgeNumber: number;
+import type { Badges } from "~/project";
+
+defineProps<{
+  badges: Badges;
   type: "display" | "tooltip";
 }>();
-
-const badge = useBadge(props.badgeNumber);
 </script>
 
 <template>
@@ -18,33 +18,58 @@ const badge = useBadge(props.badgeNumber);
     >
 
     <!-- Badges: START -->
-    <NuxtIcon
-      name="badges/house-of-bravery"
-      class="text-white"
-      :class="{
-        'text-5xl': type === 'display',
-        'text-2xl': type === 'tooltip',
-      }"
-      v-if="badge === 'hypesquad-online-house-1'"
-    />
-    <NuxtIcon
-      name="badges/house-of-brilliance"
-      class="dark:text-white"
-      :class="{
-        'text-5xl': type === 'display',
-        'text-2xl': type === 'tooltip',
-      }"
-      v-else-if="badge === 'hypesquad-online-house-2'"
-    />
-    <NuxtIcon
-      name="badges/house-of-balance"
-      class="dark:text-white"
-      :class="{
-        'text-4xl': type === 'display',
-        'text-2xl': type === 'tooltip',
-      }"
-      v-else-if="badge === 'hypesquad-online-house-3'"
-    />
+    <div class="flex gap-x-2 items-center" v-if="Array.isArray(badges)">
+      <div v-for="(badge, index) of badges" :key="index">
+        <LazySvgoBadgesActiveDeveloper
+          class="w-6 fill-[#2EA967]"
+          v-if="badge === 'active-developer'"
+        />
+        <LazySvgoBadgesBugHunterLevel1
+          class="w-6"
+          v-else-if="badge === 'bug-hunter-level-1'"
+        />
+        <LazySvgoBadgesBugHunterLevel2
+          class="w-6"
+          v-else-if="badge === 'bug-hunter-level-2'"
+        />
+        <LazySvgoBadgesEarlySupporter
+          class="w-8"
+          v-else-if="badge === 'early-supporter'"
+        />
+        <LazySvgoBadgesEarlyVerifiedBotDeveloper
+          class="w-8"
+          v-else-if="badge === 'early-verified-bot-developer'"
+        />
+        <LazySvgoBadgesHypesquadHouseOfBalance
+          class="w-8 fill-[#45ddc0]"
+          v-else-if="badge === 'house-of-balance'"
+        />
+        <LazySvgoBadgesHypesquadHouseOfBravery
+          class="w-6 fill-[#9c84ef]"
+          v-else-if="badge === 'house-of-bravery'"
+        />
+        <LazySvgoBadgesHypesquadHouseOfBrilliance
+          class="w-8 fill-[#f47b67]"
+          v-else-if="badge === 'house-of-brilliance'"
+        />
+        <LazySvgoBadgesHypesquadEvents
+          class="w-6"
+          v-else-if="badge === 'hypesquad-events'"
+        />
+        <LazySvgoBadgesModeratorProgramAlumni
+          class="w-6 fill-blurple"
+          v-else-if="badge === 'moderator-programs-alumni'"
+        />
+        <LazySvgoBadgesPartneredServerOwner
+          class="w-6 fill-[#4087ED]"
+          v-else-if="badge === 'partnered-server-owner'"
+        />
+        <LazySvgoBadgesStaff
+          class="w-6 fill-[#7289DA]"
+          v-else-if="badge === 'staff'"
+        />
+      </div>
+    </div>
     <h3 v-else class="text-lg dark:text-white">
       This account has no badges 🤪
     </h3>

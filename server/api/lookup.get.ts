@@ -1,4 +1,4 @@
-import type { DiscordUser } from "~/project";
+import type { DiscordUser, Badges } from "~/project";
 
 export default defineEventHandler(async (event) => {
   const headers = getHeaders(event);
@@ -47,16 +47,19 @@ export default defineEventHandler(async (event) => {
   } = useRuntimeConfig();
 
   // Fetch the user's profile
-  const profile = await $fetch<DiscordUser>(`/users/${snowflake}`, {
-    headers: { Authorization: `Bot ${botToken}` },
-    baseURL,
-    onResponseError: ({ response: { statusText, status } }) => {
-      throw createError({
-        statusCode: status,
-        message: statusText,
-      });
-    },
-  });
+  const [profile, { getBadges }] = await Promise.all([
+    $fetch<DiscordUser>(`/users/${snowflake}`, {
+      headers: { Authorization: `Bot ${botToken}` },
+      baseURL,
+      onResponseError: ({ response: { statusText, status } }) => {
+        throw createError({
+          statusCode: status,
+          message: statusText,
+        });
+      },
+    }),
+    import("../utils/helpers"),
+  ]);
 
   // Get the account creation date from user id
   const timestamp = converterUserIDOrSnowflakeIntoDate(BigInt(snowflake));
@@ -74,12 +77,34 @@ export default defineEventHandler(async (event) => {
   // Select only the needed fields
   const { username, discriminator, public_flags } = { ...profile };
 
+  const badges = public_flags ? getBadges(public_flags) : "none";
+  const user = `${profile.username}#${profile.discriminator}`;
+
+  for (const property of [
+    "public_flags",
+    "flags",
+    "avatar",
+    "username",
+    "discriminator",
+  ]) {
+    delete profile[property as keyof typeof profile];
+  }
+
   return {
     username,
     discriminator,
-    public_flags,
+    badges: badges as Badges,
     image,
     createdAt,
-    original: profile,
+    download: {
+      ...(profile as Omit<
+        DiscordUser,
+        "username" | "discriminator" | "public_flags" | "flags" | "avatar"
+      >),
+      badges: badges as Badges,
+      image,
+      user,
+      createdAt,
+    },
   };
 });

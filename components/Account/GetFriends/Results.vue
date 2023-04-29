@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { LookedUpFriend, RequestMetadata } from "~/project";
+import type { APIFriendsResponse, RequestMetadata } from "~/project";
 
 const requestMetadata = useState<RequestMetadata>("metadata");
 
-const createFileDownloadFromFriend = async (friend: LookedUpFriend) => {
+const downloadInformation = async (friend: APIFriendsResponse["download"]) => {
   const { saveAs } = await import("file-saver");
   saveAs(
     new Blob([JSON.stringify(friend)], { type: "application/json" }),
@@ -36,19 +36,20 @@ const createFileDownloadFromFriend = async (friend: LookedUpFriend) => {
             class="rounded-2xl"
             width="50"
             height="50"
+            :title="`${friend.username}'s profile picture'`"
           />
           <h3 class="text-lg">
             {{ friend.username }}#{{ friend.discriminator }}
           </h3>
         </div>
         <template #popper>
-          <UIBadges :badge-number="friend.public_flags" type="tooltip" />
+          <UIBadges :badges="friend.badges" type="tooltip" />
         </template>
       </VTooltip>
 
       <span
         class="inline-flex items-center gap-x-2 group cursor-pointer"
-        @click="createFileDownloadFromFriend(friend.original)"
+        @click="downloadInformation(friend.download)"
       >
         <h4 class="opacity-0 group-hover:opacity-100 transition">Save</h4>
         <UIIcon

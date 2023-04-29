@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" baseProfile="basic">
+    <path fill="#7b83eb" d="M14 38h19a6 6 0 006-6V17H3v10c0 6.075 4.925 11 11 11z" />
+    <circle cx="19.5" cy="26.5" r="2" />
+    <path fill="#a7adeb" d="M35 33h-5a6 6 0 01-6-6v-3a2 2 0 012-2h13a2 2 0 012 2v3a6 6 0 01-6 6z" />
+    <path fill="#7b83eb" d="M33 30h-2a1 1 0 010-2h2a1 1 0 010 2zM38 30h-1a1 1 0 010-2h1a1 1 0 010 2z" />
+    <linearGradient id="prefix__a" x1="-3.917" x2="9.226" y1="21.42" y2="42.453" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#fed100" />
+        <stop offset="1" stop-color="#e36001" />
+    </linearGradient>
+    <path fill="url(#prefix__a)" d="M8 32.98V40l-2.5 1.9L3 40v-8.81C4.11 32.32 5.64 33 7.5 33c.17 0 .33-.01.5-.02z" />
+    <linearGradient id="prefix__b" x1="-6.038" x2="16.488" y1="37.685" y2="18.784" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#c3cdd9" />
+        <stop offset="1" stop-color="#9fa7b0" />
+    </linearGradient>
+    <path fill="url(#prefix__b)" d="M17 18v1l-3.6 9c-1 3-3.159 5-5.9 5-4 0-6.5-3.147-6.5-7 0-8 16-8 16-8z" />
+    <radialGradient id="prefix__c" cx="17.605" cy="10.804" r="24.57" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#fafafb" />
+        <stop offset="1" stop-color="#c8cdd1" />
+    </radialGradient>
+    <path fill="url(#prefix__c)"
+        d="M15 19l-3 8c-1 3-3.259 5-6 5-4 0-6-3.147-6-7C0 17 8 8 20.5 8c8.739 0 16.2 3.737 19.146 9L15 19z" />
+    <linearGradient id="prefix__d" x1="16.75" x2="34.71" y1="12.52" y2="12.52" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#fed100" />
+        <stop offset="1" stop-color="#e36001" />
+    </linearGradient>
+    <path fill="url(#prefix__d)"
+        d="M34.71 17h-3.96c-2.24-4.65-7.29-7.8-14-8.71.77-.13 1.57-.21 2.39-.25 7.83.44 13.13 4.03 15.57 8.96z" />
+    <path fill="#5059c9" d="M48 19H15s4.587-4 16.5-4S48 19 48 19z" />
+    <ellipse cx="5.083" cy="25" fill="#5059c9" rx="3.917" ry="4.5" />
+    <linearGradient id="prefix__e" x1="-2.063" x2="6.651" y1="14.497" y2="28.442" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#fed100" />
+        <stop offset="1" stop-color="#e36001" />
+    </linearGradient>
+    <ellipse cx="4.5" cy="25" fill="url(#prefix__e)" rx="2.5" ry="3" />
+</svg>

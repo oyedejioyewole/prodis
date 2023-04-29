@@ -1,3 +1,5 @@
+import type { AccountBadgesKeys } from "~/project";
+
 /**
  * Using the Discord ID (snowflake), it calculates
  * the number representation of the account creation date
@@ -98,4 +100,53 @@ export const formatDate = (date: number) => {
   };
 
   return `${day.body}${day.suffix} ${month}, ${year}`;
+};
+
+/**
+ * Takes a badge number and performs bitwise operations to get the badges
+ * @param badgeNumber e.g. 128, 130
+ * @returns ['house-of-briliance'], ['house-of-brilliance', 'partnered-server-owner']
+ */
+export const getBadges = (badgeNumber: number) => {
+  const availableBadges = {
+    staff: 1 << 0,
+    "partnered-server-owner": 1 << 1,
+    "hypesquad-events": 1 << 2,
+    "bug-hunter-1": 1 << 3,
+    "house-of-bravery": 1 << 6,
+    "house-of-brilliance": 1 << 7,
+    "house-of-balance": 1 << 8,
+    "early-supporter": 1 << 9,
+    "bug-hunter-2": 1 << 14,
+    "verified-bot": 1 << 16,
+    "early-verified-bot-developer": 1 << 17,
+    "moderator-programs-alumni": 1 << 18,
+    "active-developer": 1 << 22,
+  };
+
+  const badges = Object.keys(availableBadges).filter((key) => {
+    return (
+      (badgeNumber & availableBadges[key as keyof typeof availableBadges]) !== 0
+    );
+  });
+
+  return badges.length > 0 ? (badges as AccountBadgesKeys[]) : "none";
+};
+
+/**
+ * Takes a locale string and returns the language name and flag
+ * @param locale e.g. en-UK
+ * @returns English 🇬🇧
+ */
+export const getLocale = async (locale: string) => {
+  const [
+    {
+      default: { getLanguageName, getCountryCode },
+    },
+    { countryCodeEmoji },
+  ] = await Promise.all([import("locale-code"), import("country-code-emoji")]);
+
+  return `${getLanguageName(locale)} ${countryCodeEmoji(
+    getCountryCode(locale)
+  )}`;
 };

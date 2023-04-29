@@ -1,4 +1,10 @@
-import type { DiscordUser, DiscordGuild, DiscordConnection } from "~/project";
+import type {
+  DiscordUser,
+  DiscordGuild,
+  DiscordConnection,
+  Badges,
+  NitroStatus,
+} from "~/project";
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
@@ -74,15 +80,29 @@ export default defineEventHandler(async (event) => {
     "Content-Type": "application/x-www-form-urlencoded",
   };
 
-  await $fetch("/oauth2/token/revoke", {
-    method: "POST",
-    ...options,
-    body: new URLSearchParams({ token: access_token }),
-  });
+  const [{ getBadges, getLocale }] = await Promise.all([
+    import("../utils/helpers"),
+    $fetch("/oauth2/token/revoke", {
+      method: "POST",
+      ...options,
+      body: new URLSearchParams({ token: access_token }),
+    }),
+  ]);
+
+  const badges = profile.public_flags
+    ? getBadges(profile.public_flags)
+    : "none";
+  const nitroStatus = profile.premium_type
+    ? profile.premium_type === 2
+      ? "nitro"
+      : profile.premium_type === 3
+      ? "nitro-basic"
+      : "none"
+    : "none";
 
   const processed = {
     profile: {
-      badges: profile.flags,
+      badges: badges as Badges,
       verified: profile.verified,
       twoFactorAuthenticationStatus: profile.mfa_enabled
         ? "enabled"
@@ -93,7 +113,9 @@ export default defineEventHandler(async (event) => {
         );
         return formatDate(timestamp);
       })(),
-      original: profile,
+      locale: profile.locale ? await getLocale(profile.locale) : undefined,
+      nitroStatus: nitroStatus as NitroStatus,
+      download: profile,
     },
     guilds: {
       sanitized: guilds.map(({ name, icon, owner, id }) => ({
@@ -105,26 +127,25 @@ export default defineEventHandler(async (event) => {
           : undefined,
         owner,
       })),
-      original: guilds,
+      download: guilds,
     },
     connections: {
-      sanitized: [
-        ...connections.map(
-          ({ name, type, verified, friend_sync, visibility, revoked }) => ({
-            name,
-            type,
-            verified,
-            friend_sync,
-            visibility,
-            revoked,
-          })
-        ),
-      ],
-      original: connections,
+      sanitized: connections.map(
+        ({ name, type, verified, friend_sync, visibility, revoked }) => ({
+          name,
+          type,
+          verified,
+          friend_sync,
+          visibility,
+          revoked,
+        })
+      ),
+
+      download: connections,
     },
   };
 
   event.context.session.processed = processed;
 
-  return sendRedirect(event, "/account?status=done");
+  return sendRedirect(event, "/account");
 });

@@ -1,7 +1,7 @@
 export default defineNuxtConfig({
   modules: [
     "@nuxtjs/tailwindcss",
-    "nuxt-icons",
+    "nuxt-svgo",
     "nuxt-fonty",
     "nuxt-headlessui",
     "nuxt-security",
@@ -64,5 +64,8 @@ export default defineNuxtConfig({
   },
   colorMode: {
     classSuffix: "",
+  },
+  svgo: {
+    simpleAutoImport: true,
   },
 });
