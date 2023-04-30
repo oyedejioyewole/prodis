@@ -75,7 +75,7 @@ const getAccountRelationships = async (token: string) => {
     class="flex flex-col gap-y-4"
   >
     <label for="discord-token-form" class="sr-only">Active Discord token</label>
-    <div class="flex items-center">
+    <div class="flex items-center gap-x-2">
       <UIIcon name="tags-fill" type="large" class="text-blurple" />
       <UIInput
         type="text"

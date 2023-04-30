@@ -9,17 +9,21 @@ const openPrivacyPolicy = async () =>
 
 <template>
   <aside>
-    <h1
+    <h2
       class="text-3xl 2xl:text-4xl font-serif inline-flex justify-between items-center"
     >
       My Friends
-      <UIIcon
-        :name="$colorMode.value === 'dark' ? 'book-fill' : 'book'"
-        type="large"
+      <button
+        type="button"
+        class="focus:outline-none focus-visible:outline-black/50 dark:focus-visible:outline-white/50 focus-visible:outline-offset-4 rounded-lg"
         @click="openPrivacyPolicy"
-        class="cursor-pointer"
-      />
-    </h1>
+      >
+        <UIIcon
+          :name="$colorMode.value === 'dark' ? 'book-fill' : 'book'"
+          type="large"
+        />
+      </button>
+    </h2>
     <NuxtErrorBoundary>
       <AccountGetFriendsSearchForm />
       <LazyUILoading v-if="requestMetadata.friends.pending" />

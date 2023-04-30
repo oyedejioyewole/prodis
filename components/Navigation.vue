@@ -31,6 +31,7 @@ const toggleTheme = () => {
       to="/"
       class="focus:outline-none dark:focus-visible:outline-white/50 focus-visible:outline-black/50 focus-visible:outline-offset-4 rounded-lg"
     >
+      <span class="sr-only">Prodis</span>
       <LazySvgoLogo filled class="w-12 aspect-square" />
     </NuxtLink>
 
@@ -59,7 +60,9 @@ const toggleTheme = () => {
     <button
       class="focus:outline-none focus-visible:outline-black/50 dark:focus-visible:outline-white/50 focus-visible:outline-offset-4 rounded-lg"
       @click="toggleTheme"
+      type="button"
     >
+      <span class="sr-only">Toggle theme</span>
       <UIIcon
         :name="
           currentThemeCount === 0

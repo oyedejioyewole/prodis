@@ -26,7 +26,7 @@ watch(dirtyInput, (_new) => {
 <template>
   <input
     autocomplete="off"
-    class="p-3 border-0 border-b dark:border-b-2 outline-none border-blurple caret-blurple bg-transparent dark:caret-white appearance-none dark:placeholder:text-white dark:text-white transition-[border]"
+    class="p-3 border-0 border-b dark:border-b-2 border-blurple caret-blurple bg-transparent dark:caret-white appearance-none dark:placeholder:text-white dark:text-white transition-[border] focus-visible:outline-blurple/50 focus:outline-none focus:rounded-lg focus-visible:outline-offset-4"
     :class="{ 'border-b-2': dirtyInput.length > 0 }"
     :id="labelId"
     :type="type"

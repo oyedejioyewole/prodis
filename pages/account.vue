@@ -32,7 +32,7 @@ const discordOAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${di
 </script>
 
 <template>
-  <main class="flex min-h-screen py-10 gap-x-10">
+  <section class="flex min-h-screen py-10 gap-x-10">
     <!-- Account section -->
     <section
       class="flex-auto flex flex-col gap-y-4 justify-center"
@@ -54,7 +54,7 @@ const discordOAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${di
         />
 
         <!-- Default (if any) -->
-        <section v-else class="contents">
+        <div v-else class="contents">
           <h1 class="text-4xl font-serif dark:text-white">
             Whenever you're ready
           </h1>
@@ -67,7 +67,7 @@ const discordOAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${di
           >
             Login <UIIcon name="door-open-fill" type="normal" />
           </UIButton>
-        </section>
+        </div>
 
         <template #error="{ error }">
           <h1>{{ error.value.message }}</h1>
@@ -80,5 +80,5 @@ const discordOAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${di
       class="flex-none flex flex-col gap-y-10 w-[40%] 2xl:w-1/4 border-black/40 dark:border-white/30 border-2 rounded-lg px-10 dark:text-white border-dashed justify-center overflow-y-scroll h-fit my-auto py-20"
     />
     <UIModal content="guide" />
-  </main>
+  </section>
 </template>
