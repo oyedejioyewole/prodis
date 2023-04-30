@@ -8,7 +8,7 @@ const openPrivacyPolicy = async () =>
 </script>
 
 <template>
-  <section>
+  <aside>
     <h1
       class="text-3xl 2xl:text-4xl font-serif inline-flex justify-between items-center"
     >
@@ -36,8 +36,8 @@ const openPrivacyPolicy = async () =>
           class="mb-10"
         />
 
-        <div class="flex flex-col items-center">
-          <NuxtIcon name="error" class="text-9xl text-blurple" />
+        <div class="flex flex-col gap-y-2 items-center">
+          <LazySvgoError class="w-32 fill-blurple" />
           <h1 class="text-lg dark:text-white text-center font-bold">
             {{
               (error.value.message as string).includes("Unauthorized")
@@ -50,5 +50,5 @@ const openPrivacyPolicy = async () =>
         </div>
       </template>
     </NuxtErrorBoundary>
-  </section>
+  </aside>
 </template>

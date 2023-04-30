@@ -27,47 +27,50 @@ const toggleTheme = () => {
 <template>
   <nav>
     <!-- Logo -->
-    <NuxtLink to="/">
+    <NuxtLink
+      to="/"
+      class="focus:outline-none dark:focus-visible:outline-white/50 focus-visible:outline-black/50 focus-visible:outline-offset-4 rounded-lg"
+    >
       <LazySvgoLogo filled class="w-12 aspect-square" />
     </NuxtLink>
 
     <!-- Navigation links -->
     <div
-      class="flex gap-x-4 items-center bg-blurple/30 dark:bg-blurple p-3 rounded-lg"
+      class="flex gap-x-4 items-center bg-blurple/30 dark:bg-blurple p-3 rounded-lg transition"
     >
-      <NuxtLink
-        to="/"
-        class="flex gap-x-2 items-center px-3 py-1 rounded-lg"
-        :class="{ 'bg-white/30': $route.name === 'index' }"
+      <UIButton
+        :type="$route.name === 'index' ? 'menu-active' : 'menu-inactive'"
+        @click="navigateTo('/')"
       >
         Search
         <UIIcon name="search" type="normal" />
-      </NuxtLink>
+      </UIButton>
 
-      <NuxtLink to="/account">
-        <UIButton
-          :type="$route.name === 'account' ? 'menu-active' : 'menu-inactive'"
-          class="hover:bg-white/30"
-        >
-          Use Account
-          <UIIcon name="person-badge" type="normal" />
-        </UIButton>
-      </NuxtLink>
+      <UIButton
+        :type="$route.name === 'account' ? 'menu-active' : 'menu-inactive'"
+        @click="navigateTo('/account')"
+      >
+        Use Account
+        <UIIcon name="person-badge" type="normal" />
+      </UIButton>
     </div>
 
     <!-- Toggle theme -->
-
-    <UIIcon
-      :name="
-        currentThemeCount === 0
-          ? 'display-fill'
-          : currentThemeCount === 1
-          ? 'brightness-high-fill'
-          : 'moon-stars-fill'
-      "
+    <button
+      class="focus:outline-none focus-visible:outline-black/50 dark:focus-visible:outline-white/50 focus-visible:outline-offset-4 rounded-lg"
       @click="toggleTheme"
-      class="cursor-pointer dark:text-white"
-      type="normal"
-    />
+    >
+      <UIIcon
+        :name="
+          currentThemeCount === 0
+            ? 'display-fill'
+            : currentThemeCount === 1
+            ? 'brightness-high-fill'
+            : 'moon-stars-fill'
+        "
+        class="cursor-pointer dark:text-white"
+        type="normal"
+      />
+    </button>
   </nav>
 </template>

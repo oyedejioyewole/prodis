@@ -5,7 +5,10 @@ defineProps<{ content: "guide" }>();
 
 const modal = useState<Modal>("modal");
 
-const closeModal = () => (modal.value.isOpen = false);
+const closeModal = () => {
+  modal.value.isOpen = false;
+  useHead({ title: "Account" });
+};
 </script>
 
 <template>

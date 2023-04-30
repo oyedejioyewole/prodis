@@ -75,7 +75,9 @@ export default defineEventHandler(async (event) => {
       }.png`;
 
   // Select only the needed fields
-  const { username, discriminator, public_flags } = { ...profile };
+  const { username, discriminator, public_flags, bot, premium_type } = {
+    ...profile,
+  };
 
   const badges = public_flags ? getBadges(public_flags) : "none";
   const user = `${profile.username}#${profile.discriminator}`;
@@ -93,6 +95,7 @@ export default defineEventHandler(async (event) => {
   return {
     username,
     discriminator,
+    bot,
     badges: badges as Badges,
     image,
     createdAt,
@@ -105,6 +108,7 @@ export default defineEventHandler(async (event) => {
       image,
       user,
       createdAt,
+      bot,
     },
   };
 });

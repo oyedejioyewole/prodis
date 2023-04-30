@@ -51,7 +51,7 @@ type NitroStatus = "none" | "nitro" | "nitro-basic";
 type Badges = ReturnType<typeof import("server/utils/helpers")["getBadges"]>;
 
 type APICallbackProcessedResponse = {
-  profile: Pick<DiscordUser, "verified"> & {
+  profile: Pick<DiscordUser, "verified" | "bot"> & {
     twoFactorAuthenticationStatus: "enabled" | "disabled";
     badges: Badges;
     locale: string;
@@ -75,12 +75,14 @@ type APICallbackProcessedResponse = {
 };
 
 type APIFriendsResponse = Omit<APILookupResponse, "download"> &
-  Pick<DiscordRelationship, "nickname"> &
-  Pick<DiscordRelationship, "user"> & {
+  Pick<DiscordRelationship, "nickname" | "user"> & {
     download: Omit<APILookupResponse, "download">;
   };
 
-type APILookupResponse = Pick<DiscordUser, "username" | "discriminator"> & {
+type APILookupResponse = Pick<
+  DiscordUser,
+  "username" | "discriminator" | "bot"
+> & {
   image: string;
   badges: Badges;
   createdAt: string;

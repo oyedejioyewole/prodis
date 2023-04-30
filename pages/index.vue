@@ -9,7 +9,9 @@ useHead({
 </script>
 
 <template>
-  <main class="min-h-screen flex flex-col gap-y-20 items-center justify-center">
+  <section
+    class="min-h-screen flex flex-col gap-y-20 items-center justify-center"
+  >
     <NuxtErrorBoundary>
       <HomeSearchForm />
       <LazyUILoading v-if="requestMetadata.global.pending" />
@@ -21,22 +23,23 @@ useHead({
       />
 
       <template #error="{ error }">
-        <div class="contents">
-          <HomeSearchForm @clear-errors="error.value = null" />
-          <div class="flex flex-col items-center">
-            <NuxtIcon name="error" class="text-9xl text-blurple" />
-            <h1 class="text-lg dark:text-white font-bold">
-              {{
-                (error.value.message as string).includes("Not Found")
-                  ? "Oops, the account doesn't exist 😅"
-                  : (error.value.message as string).includes("Failed to fetch")
-                  ? "Oops, there was an error sending the request 🤪"
-                  : error.value.message
-              }}
-            </h1>
-          </div>
+        <HomeSearchForm
+          @clear-errors="error.value = null"
+          id="error-search-form"
+        />
+        <div class="flex flex-col items-center">
+          <LazySvgoError class="w-32 fill-blurple" />
+          <h1 class="text-lg dark:text-white font-bold">
+            {{
+              (error.value.message as string).includes("Not Found")
+                ? "Oops, the account doesn't exist 😅"
+                : (error.value.message as string).includes("Failed to fetch")
+                ? "Oops, there was an error sending the request 🤪"
+                : error.value.message
+            }}
+          </h1>
         </div>
       </template>
     </NuxtErrorBoundary>
-  </main>
+  </section>
 </template>

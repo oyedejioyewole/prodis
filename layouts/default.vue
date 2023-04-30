@@ -1,5 +1,5 @@
 <template>
-  <main class="w-[90%] mx-auto py-5">
+  <div class="w-[90%] mx-auto py-5">
     <!-- Navigation -->
     <Navigation class="flex justify-between items-center" />
 
@@ -8,5 +8,5 @@
 
     <!-- Footer -->
     <Footer />
-  </main>
+  </div>
 </template>

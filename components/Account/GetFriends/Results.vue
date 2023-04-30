@@ -14,7 +14,7 @@ const downloadInformation = async (friend: APIFriendsResponse["download"]) => {
 </script>
 
 <template>
-  <section>
+  <div>
     <div
       v-if="
         requestMetadata.friends.response &&
@@ -43,7 +43,11 @@ const downloadInformation = async (friend: APIFriendsResponse["download"]) => {
           </h3>
         </div>
         <template #popper>
-          <UIBadges :badges="friend.badges" type="tooltip" />
+          <UIBadges
+            :badges="friend.badges"
+            type="tooltip"
+            :bot="friend.bot ?? false"
+          />
         </template>
       </VTooltip>
 
@@ -66,5 +70,5 @@ const downloadInformation = async (friend: APIFriendsResponse["download"]) => {
     >
       {{ requestMetadata.friends.response }}
     </div>
-  </section>
+  </div>
 </template>

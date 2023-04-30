@@ -33,6 +33,7 @@ const discordOAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${di
 
 <template>
   <main class="flex min-h-screen py-10 gap-x-10">
+    <!-- Account section -->
     <section
       class="flex-auto flex flex-col gap-y-4 justify-center"
       :class="{
@@ -43,7 +44,7 @@ const discordOAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${di
       }"
     >
       <NuxtErrorBoundary>
-        <!-- v-else-if Results -->
+        <!--  Results (if any) -->
         <LazyAccountResults
           v-if="
             !requestMetadata.global.pending &&
@@ -51,17 +52,21 @@ const discordOAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${di
             'profile' in requestMetadata.global.response
           "
         />
+
+        <!-- Default (if any) -->
         <section v-else class="contents">
           <h1 class="text-4xl font-serif dark:text-white">
             Whenever you're ready
           </h1>
 
           <!-- Login button -->
-          <NuxtLink :to="discordOAuthUrl" class="w-fit">
-            <UIButton type="normal" class="px-10 py-5 text-lg">
-              Login <UIIcon name="door-open-fill" type="normal" />
-            </UIButton>
-          </NuxtLink>
+          <UIButton
+            type="normal"
+            class="px-10 py-5 text-lg"
+            @click="navigateTo(discordOAuthUrl, { external: true })"
+          >
+            Login <UIIcon name="door-open-fill" type="normal" />
+          </UIButton>
         </section>
 
         <template #error="{ error }">
@@ -69,6 +74,8 @@ const discordOAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${di
         </template>
       </NuxtErrorBoundary>
     </section>
+
+    <!-- Get Friends section -->
     <AccountGetFriendsSection
       class="flex-none flex flex-col gap-y-10 w-[40%] 2xl:w-1/4 border-black/40 dark:border-white/30 border-2 rounded-lg px-10 dark:text-white border-dashed justify-center overflow-y-scroll h-fit my-auto py-20"
     />

@@ -59,7 +59,7 @@ const downloadInformation = async (
 </script>
 
 <template>
-  <section
+  <div
     v-if="
       requestMetadata.global.response &&
       'profile' in requestMetadata.global.response
@@ -68,13 +68,14 @@ const downloadInformation = async (
     <div class="flex flex-col gap-y-6">
       <!-- 1st section (Account information)  -->
       <div
-        class="flex flex-col bg-black/10 p-10 rounded-2xl relative dark:text-white"
+        class="flex flex-col bg-black/10 dark:bg-white/10 p-10 rounded-2xl relative dark:text-white"
       >
         <!-- START -->
         <h1 class="font-serif text-3xl 2xl:text-4xl">Account Information</h1>
 
         <UIBadges
           :badges="requestMetadata.global.response.profile.badges"
+          :bot="requestMetadata.global.response.profile.bot ?? false"
           type="display"
           class="w-fit"
         />
@@ -157,7 +158,7 @@ const downloadInformation = async (
       </div>
 
       <!-- 2nd section (Guilds) -->
-      <div class="flex flex-col gap-y-4 2xl:gap-y-2">
+      <div class="flex flex-col gap-y-4 2xl:gap-y-2 p-10">
         <!-- START -->
         <h1
           class="text-3xl 2xl:text-4xl font-serif dark:text-white inline-flex items-center justify-between"
@@ -168,7 +169,7 @@ const downloadInformation = async (
             @click="downloadInformation('guilds')"
           >
             Save (JSON)
-            <UIIcon name="save" type="normal" class="mr-10" />
+            <UIIcon name="save" type="normal" />
           </span>
         </h1>
         <div
@@ -197,7 +198,7 @@ const downloadInformation = async (
       </div>
 
       <!-- 3rd section (Connections) -->
-      <div class="flex flex-col gap-y-4 2xl:gap-y-2">
+      <div class="flex flex-col gap-y-4 2xl:gap-y-2 p-10">
         <!-- START -->
         <h1
           class="text-3xl 2xl:text-4xl font-serif dark:text-white inline-flex items-center justify-between"
@@ -208,7 +209,7 @@ const downloadInformation = async (
             @click="downloadInformation('connections')"
           >
             Save (JSON)
-            <UIIcon name="save" type="normal" class="mr-10" />
+            <UIIcon name="save" type="normal" />
           </span>
         </h1>
         <div
@@ -258,5 +259,5 @@ const downloadInformation = async (
         <!-- END -->
       </div>
     </div>
-  </section>
+  </div>
 </template>

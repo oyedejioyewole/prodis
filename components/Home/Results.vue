@@ -14,7 +14,7 @@ const downloadInformation = async (payload: APILookupResponse["download"]) => {
 </script>
 
 <template>
-  <section
+  <div
     v-if="
       requestMetadata.global.response &&
       'username' in requestMetadata.global.response
@@ -39,6 +39,7 @@ const downloadInformation = async (payload: APILookupResponse["download"]) => {
         <UIBadges
           :badges="requestMetadata.global.response.badges"
           type="display"
+          :bot="requestMetadata.global.response.bot ?? false"
         />
         <h2 class="dark:text-white">
           Has been a member since
@@ -56,5 +57,5 @@ const downloadInformation = async (payload: APILookupResponse["download"]) => {
         </a>
       </div>
     </div>
-  </section>
+  </div>
 </template>

@@ -65,7 +65,7 @@ const searchForAccount = async (snowflake: string) => {
 </script>
 
 <template>
-  <section>
+  <div>
     <h1 class="font-serif text-4xl text-center dark:text-white">
       Enter the snowflake (ID)
     </h1>
@@ -83,12 +83,13 @@ const searchForAccount = async (snowflake: string) => {
             type="text"
             placeholder="Snowflake ID"
             @validation-confirmed="handleValidationResults"
+            label-id="snowflake-form"
           />
         </div>
-        <UIButton type="normal" :disabled="!formData.isAllowed"
+        <UIButton type="normal" :disabled="!formData.isAllowed" action="submit"
           >Let's Go 🎉</UIButton
         >
       </div>
     </form>
-  </section>
+  </div>
 </template>

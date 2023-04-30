@@ -74,6 +74,7 @@ const getAccountRelationships = async (token: string) => {
     @submit.prevent="getAccountRelationships(formData.data ?? '')"
     class="flex flex-col gap-y-4"
   >
+    <label for="discord-token-form" class="sr-only">Active Discord token</label>
     <div class="flex items-center">
       <UIIcon name="tags-fill" type="large" class="text-blurple" />
       <UIInput
@@ -81,9 +82,10 @@ const getAccountRelationships = async (token: string) => {
         class="w-full"
         placeholder="Active Discord token"
         @validation-confirmed="handleValidationResults"
+        label-id="discord-token-form"
       />
     </div>
-    <UIButton type="normal" :disabled="!formData.isAllowed"
+    <UIButton type="normal" :disabled="!formData.isAllowed" action="submit"
       >Let's Go 🎉</UIButton
     >
   </form>

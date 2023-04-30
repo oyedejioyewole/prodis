@@ -4,6 +4,7 @@ import type { Badges } from "~/project";
 defineProps<{
   badges: Badges;
   type: "display" | "tooltip";
+  bot: boolean;
 }>();
 </script>
 
@@ -68,6 +69,18 @@ defineProps<{
           class="w-6 fill-[#7289DA]"
           v-else-if="badge === 'staff'"
         />
+        <h1
+          class="dark:text-white inline-flex items-center gap-x-1 bg-blurple px-3 py-1 rounded-xl"
+          v-else-if="bot"
+        >
+          Bot
+          <UIIcon
+            name="patch-check"
+            class="dark:text-white"
+            type="normal"
+            v-if="badge === 'verified-bot'"
+          />
+        </h1>
       </div>
     </div>
     <h3 v-else class="text-lg dark:text-white">

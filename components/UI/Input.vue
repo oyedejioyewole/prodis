@@ -4,7 +4,7 @@ import type { ValidationConfirmed } from "~/project";
 const emit = defineEmits<{
   (event: "validationConfirmed", payload: ValidationConfirmed): void;
 }>();
-defineProps<{ type: "text" }>();
+defineProps<{ type: "text"; labelId: string }>();
 
 const dirtyInput = ref("");
 const { name } = useRoute();
@@ -25,9 +25,10 @@ watch(dirtyInput, (_new) => {
 
 <template>
   <input
+    autocomplete="off"
     class="p-3 border-0 border-b dark:border-b-2 outline-none border-blurple caret-blurple bg-transparent dark:caret-white appearance-none dark:placeholder:text-white dark:text-white transition-[border]"
     :class="{ 'border-b-2': dirtyInput.length > 0 }"
-    autocomplete="off"
+    :id="labelId"
     :type="type"
     v-model="dirtyInput"
   />

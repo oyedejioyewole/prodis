@@ -1,4 +1,4 @@
-import type { APILookupResponse, DiscordRelationship } from "~/project";
+import type { APILookupResponse, DiscordRelationship, Badges } from "~/project";
 
 export default defineEventHandler(async (event) => {
   const headers = getHeaders(event);
@@ -63,17 +63,25 @@ export default defineEventHandler(async (event) => {
           },
         });
 
-        const { createdAt, discriminator, image, username, badges, download } =
-          {
-            ...profile,
-          };
-
-        const lookedUpProfile = {
-          badges,
+        const {
           createdAt,
           discriminator,
           image,
           username,
+          badges,
+          download,
+          bot,
+        } = {
+          ...profile,
+        };
+
+        const lookedUpProfile = {
+          badges: badges as Badges,
+          createdAt,
+          discriminator,
+          image,
+          username,
+          bot,
         };
 
         for (const property of [
@@ -87,7 +95,7 @@ export default defineEventHandler(async (event) => {
         return {
           ...lookedUpProfile,
           nickname: relationship.nickname,
-          download: { ...download, ...relationship.user },
+          download: { ...download, ...relationship.user, bot },
         };
       })
     );
