@@ -66,7 +66,7 @@ export default defineNuxtConfig({
     classSuffix: "",
   },
   svgo: {
-    simpleAutoImport: true,
+    defaultImport: "component",
   },
   session: {
     api: {
