@@ -1,3 +1,5 @@
+const driver = process.env.NODE_ENV === "development" ? "redis" : "vercelKV";
+
 export default defineNuxtConfig({
   modules: [
     "@nuxtjs/tailwindcss",
@@ -76,7 +78,7 @@ export default defineNuxtConfig({
       cookieSameSite: "strict",
       idLength: 128,
       storageOptions: {
-        driver: "redis",
+        driver,
         options: {
           url: process.env.KV_URL,
           base: "session",
@@ -88,7 +90,7 @@ export default defineNuxtConfig({
   nitro: {
     devStorage: {
       keys: {
-        driver: "redis",
+        driver,
         url: process.env.KV_URL,
         base: "keys",
         ttl: 600,
