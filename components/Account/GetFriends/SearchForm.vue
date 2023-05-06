@@ -25,46 +25,65 @@ const getAccountRelationships = async (token: string) => {
     pending: true,
   };
 
-  const { data: jwtToken, error: jwtSigningError } = await useCsrfFetch(
-    "/api/sign",
-    {
-      method: "POST",
-      body: {
-        payload: {
-          token,
-        },
-      },
-      key: "jwt-token",
-    }
+  const { data, error: publicKeyRequestError } = await useFetch(
+    "/api/public-key",
+    { key: "session-public-key" }
   );
 
-  if (jwtToken.value) {
-    const { data, error } = await useFetch("/api/friends", {
-      headers: {
-        "x-token": jwtToken.value,
-      },
-      key: nanoid(jwtToken.value.length),
-    });
+  if (data.value?.publicKey) {
+    const { importSPKI, CompactEncrypt } = await import("jose");
 
-    if (data.value) {
-      console.log(data.value);
-      requestMetadata.value.friends = {
-        pending: false,
-        response: data.value,
-      };
-    } else if (error.value) {
+    const key = await importSPKI(data.value.publicKey, "RSA-OAEP");
+    const jwe = await new CompactEncrypt(
+      new TextEncoder().encode(JSON.stringify({ token }))
+    )
+      .setProtectedHeader({ alg: "RSA-OAEP", enc: "A256GCM" })
+      .encrypt(key);
+
+    const { data: jwtToken, error: jwtSigningError } = await useCsrfFetch(
+      "/api/sign",
+      {
+        method: "POST",
+        body: {
+          payload: jwe,
+        },
+        key: "jwt-token",
+      }
+    );
+
+    if (jwtToken.value) {
+      const { data, error } = await useFetch("/api/friends", {
+        headers: {
+          "x-token": jwtToken.value,
+        },
+        key: nanoid(jwtToken.value.length),
+      });
+
+      if (data.value) {
+        requestMetadata.value.friends = {
+          pending: false,
+          response: data.value,
+        };
+      } else if (error.value) {
+        requestMetadata.value.friends = {
+          pending: false,
+          response: undefined,
+        };
+        throw createError(error.value.message);
+      }
+    } else if (jwtSigningError.value) {
       requestMetadata.value.friends = {
         pending: false,
         response: undefined,
       };
-      throw createError(error.value.message);
+      throw createError(jwtSigningError.value.message);
     }
-  } else if (jwtSigningError.value) {
+  } else if (publicKeyRequestError.value) {
     requestMetadata.value.friends = {
       pending: false,
       response: undefined,
     };
-    throw createError(jwtSigningError.value.message);
+    throw createError(publicKeyRequestError.value.message);
   }
 };
 </script>

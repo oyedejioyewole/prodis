@@ -68,4 +68,31 @@ export default defineNuxtConfig({
   svgo: {
     simpleAutoImport: true,
   },
+  session: {
+    api: {
+      methods: ["get"],
+    },
+    session: {
+      cookieSameSite: "strict",
+      idLength: 128,
+      storageOptions: {
+        driver: "redis",
+        options: {
+          url: process.env.KV_URL,
+          base: "session",
+          ttl: 600,
+        },
+      },
+    },
+  },
+  nitro: {
+    devStorage: {
+      keys: {
+        driver: "redis",
+        url: process.env.KV_URL,
+        base: "keys",
+        ttl: 600,
+      },
+    },
+  },
 });

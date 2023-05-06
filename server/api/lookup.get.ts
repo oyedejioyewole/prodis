@@ -75,7 +75,7 @@ export default defineEventHandler(async (event) => {
       }.png`;
 
   // Select only the needed fields
-  const { username, discriminator, public_flags, bot, premium_type } = {
+  const { username, discriminator, public_flags, bot } = {
     ...profile,
   };
 

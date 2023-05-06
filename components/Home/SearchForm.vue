@@ -19,47 +19,66 @@ const searchForAccount = async (snowflake: string) => {
     pending: true,
   };
 
-  const { data: jwtToken, error: jwtSigningError } = await useCsrfFetch(
-    "/api/sign",
-    {
-      method: "POST",
-      body: {
-        payload: {
-          snowflake,
-        },
-      },
-      key: "jwt-token",
-    }
+  const { data, error: publicKeyRequestError } = await useFetch(
+    "/api/public-key",
+    { key: "session-public-key" }
   );
 
-  if (jwtToken.value) {
-    const { data, error } = await useFetch("/api/lookup", {
-      headers: {
-        "x-token": jwtToken.value,
-      },
-      key: "discord-account-lookup",
-    });
+  if (data.value?.publicKey) {
+    const { importSPKI, CompactEncrypt } = await import("jose");
 
-    if (data.value) {
-      requestMetadata.value.global = {
-        pending: false,
-        response: data.value,
-      };
-    } else if (error.value) {
+    const key = await importSPKI(data.value.publicKey, "RSA-OAEP-256");
+    const jwe = await new CompactEncrypt(
+      new TextEncoder().encode(JSON.stringify({ snowflake }))
+    )
+      .setProtectedHeader({ alg: "RSA-OAEP-256", enc: "A256GCM" })
+      .encrypt(key);
+
+    const { data: jwtToken, error: jwtSigningError } = await useCsrfFetch(
+      "/api/sign",
+      {
+        method: "POST",
+        body: {
+          payload: jwe,
+        },
+        key: "jwt-token",
+      }
+    );
+
+    if (jwtToken.value) {
+      const { data, error } = await useFetch("/api/lookup", {
+        headers: {
+          "x-token": jwtToken.value,
+        },
+        key: "discord-account-lookup",
+      });
+
+      if (data.value) {
+        requestMetadata.value.global = {
+          pending: false,
+          response: data.value,
+        };
+      } else if (error.value) {
+        requestMetadata.value.global = {
+          pending: false,
+          response: undefined,
+        };
+        throw createError(error.value.message);
+      }
+    } else if (jwtSigningError.value) {
       requestMetadata.value.global = {
         pending: false,
         response: undefined,
       };
-      throw createError(error.value.message);
+      throw createError(jwtSigningError.value.message);
     }
-  }
-
-  if (jwtSigningError.value) {
+    return;
+  } else if (publicKeyRequestError.value) {
     requestMetadata.value.global = {
       pending: false,
       response: undefined,
     };
-    throw createError(jwtSigningError.value.message);
+    throw createError(publicKeyRequestError.value.message);
   }
 };
 </script>

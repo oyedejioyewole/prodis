@@ -1,19 +1,42 @@
 export default defineEventHandler(async (event) => {
-  const body = await readBody<{ payload: {} }>(event);
+  const body = await readBody<{ payload: string }>(event);
 
   if (!body)
     throw createError({
       statusCode: 400,
       message: "Oops, body is empty",
     });
-
-  if (!body.payload)
+  else if (!body.payload)
     throw createError({
       statusCode: 400,
       message: "Oops, body doesn't have the required parameters",
     });
 
+  const sessionId = event.context.sessionId;
+  const storage = useStorage("keys");
+  const keysAlreadyExists = await storage.hasItem(sessionId);
+
+  if (!keysAlreadyExists) {
+    throw createError({
+      statusCode: 400,
+      message: "Oops, no keys were saved for this session",
+    });
+  }
+
+  const { privateKey } = (await storage.getItem(sessionId)) as {
+    privateKey: string;
+    publicKey: string;
+  };
+
+  const { compactDecrypt, importPKCS8 } = await import("jose");
+
+  const key = await importPKCS8(privateKey, "RSA-OAEP");
+  const { plaintext } = await compactDecrypt(body.payload, key);
+
   const { jwtSigningKey } = useRuntimeConfig();
 
-  return await createJWT(body.payload, jwtSigningKey);
+  return await createJWT(
+    { ...JSON.parse(plaintext.toString()) },
+    jwtSigningKey
+  );
 });

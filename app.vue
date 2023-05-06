@@ -2,6 +2,12 @@
 import "bootstrap-icons/font/bootstrap-icons.css";
 import type { Modal, RequestMetadata } from "./project";
 
+useHead({
+  bodyAttrs: {
+    class: "dark:bg-black",
+  },
+});
+
 useFont([
   {
     family: "Quicksand",
@@ -16,12 +22,6 @@ useFont([
     display: "swap",
   },
 ]);
-
-useHead({
-  bodyAttrs: {
-    class: "dark:bg-black",
-  },
-});
 
 useState<RequestMetadata>("metadata", () => ({
   friends: { pending: false },

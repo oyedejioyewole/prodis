@@ -3,24 +3,23 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "typecheck": "vue-tsc --noEmit --watch --strict"
   },
   "devDependencies": {
     "@nuxt/content": "^2.6.0",
-    "@nuxt/devtools": "^0.4.3",
-    "@nuxt/image-edge": "1.0.0-28020728.5df24eb",
+    "@nuxt/devtools": "^0.4.5",
+    "@nuxt/image-edge": "1.0.0-28050764.aaee7ac",
     "@nuxtjs/color-mode": "^3.2.0",
     "@nuxtjs/tailwindcss": "^6.6.7",
     "@nuxtjs/turnstile": "^0.3.0",
     "@sidebase/nuxt-session": "^0.2.7",
-    "nuxt": "3.4.2",
+    "nuxt": "3.4.3",
     "nuxt-fonty": "^1.0.0",
     "nuxt-headlessui": "^1.1.4",
     "nuxt-security": "^0.13.0",
-    "nuxt-svgo": "^2.0.1",
+    "nuxt-svgo": "^3.1.0",
     "sass": "^1.62.1",
     "typescript": "^5.0.4"
   },
@@ -30,12 +29,12 @@
     "country-code-emoji": "^2.3.0",
     "file-saver": "^2.0.5",
     "floating-vue": "2.0.0-beta.20",
-    "jose": "^4.14.3",
+    "jose": "^4.14.4",
     "locale-code": "^2.0.2",
     "nanoid": "^4.0.2"
   },
   "optionalDependencies": {
     "@types/file-saver": "^2.0.5",
-    "@types/node": "^18.16.3"
+    "@types/node": "^20.1.0"
   }
 }
