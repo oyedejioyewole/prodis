@@ -1,4 +1,14 @@
-const driver = process.env.NODE_ENV === "development" ? "redis" : "vercelKV";
+const redis = {
+  driver:
+    process.env.NODE_ENV === "development"
+      ? "redis"
+      : ("vercelKV" as "redis" | "vercelKV"),
+  url:
+    process.env.NODE_ENV === "development"
+      ? process.env.KV_URL
+      : process.env.KV_REST_API_URL,
+  ttl: 600,
+};
 
 export default defineNuxtConfig({
   modules: [
@@ -78,11 +88,11 @@ export default defineNuxtConfig({
       cookieSameSite: "strict",
       idLength: 128,
       storageOptions: {
-        driver,
+        driver: redis.driver,
         options: {
-          url: process.env.KV_URL,
+          url: redis.url,
           base: "session",
-          ttl: 600,
+          ttl: redis.ttl,
         },
       },
     },
@@ -90,18 +100,14 @@ export default defineNuxtConfig({
   nitro: {
     devStorage: {
       keys: {
-        driver,
-        url: process.env.KV_URL,
+        ...redis,
         base: "keys",
-        ttl: 600,
       },
     },
     storage: {
       keys: {
-        driver,
-        url: process.env.KV_URL,
+        ...redis,
         base: "keys",
-        ttl: 600,
       },
     },
   },
