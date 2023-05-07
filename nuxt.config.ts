@@ -1,12 +1,5 @@
-const redis = {
-  driver:
-    process.env.NODE_ENV === "development"
-      ? "redis"
-      : ("vercelKV" as "redis" | "vercelKV"),
-  url:
-    process.env.NODE_ENV === "development"
-      ? process.env.KV_URL
-      : process.env.KV_REST_API_URL,
+const redisOptions = {
+  url: process.env.KV_URL,
   ttl: 600,
 };
 
@@ -49,7 +42,8 @@ export default defineNuxtConfig({
       meta: [
         {
           name: "description",
-          content: "Lookup an account using the Discord API",
+          content:
+            "Find more information about your Discord account or an account using their ID",
         },
         { name: "author", content: "OyewoleOyedeji" },
       ],
@@ -88,11 +82,10 @@ export default defineNuxtConfig({
       cookieSameSite: "strict",
       idLength: 128,
       storageOptions: {
-        driver: redis.driver,
+        driver: "redis",
         options: {
-          url: redis.url,
           base: "session",
-          ttl: redis.ttl,
+          ...redisOptions,
         },
       },
     },
@@ -100,14 +93,16 @@ export default defineNuxtConfig({
   nitro: {
     devStorage: {
       keys: {
-        ...redis,
+        driver: "redis",
         base: "keys",
+        ...redisOptions,
       },
     },
     storage: {
       keys: {
-        ...redis,
+        driver: "redis",
         base: "keys",
+        ...redisOptions,
       },
     },
   },

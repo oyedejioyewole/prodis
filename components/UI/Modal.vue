@@ -51,8 +51,8 @@ const closeModal = () => {
   </HeadlessTransitionRoot>
 </template>
 
-<style lang="scss">
-div#guide {
+<style lang="scss" scoped>
+div:deep(#guide) {
   @apply flex flex-col gap-y-5;
 
   @for $heading-number from 1 through 6 {
