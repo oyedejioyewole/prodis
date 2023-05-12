@@ -1,21 +1,22 @@
 import type { DiscordUser, Badges } from "~/project";
 
 export default defineEventHandler(async (event) => {
+  // Prepartion
   const headers = getHeaders(event);
-
   const jwtPayload = headers["x-token"];
 
+  // Validation of API route parameters
   if (!jwtPayload)
     throw createError({
       statusCode: 400,
       message: "Oops, couldn't find any JWT attached to the request",
     });
 
-  const { jwtSigningKey } = useRuntimeConfig();
+  const { secret } = useRuntimeConfig();
 
   const processedJWT = await verifyJWT<{ snowflake: string }>(
     jwtPayload,
-    jwtSigningKey
+    secret
   );
 
   if ("error" in processedJWT)
@@ -31,8 +32,7 @@ export default defineEventHandler(async (event) => {
 
   const { snowflake } = processedJWT;
 
-  const snowflakeRegex = /^[0-9]{17,19}$/;
-  if (!snowflakeRegex.test(snowflake)) {
+  if (!/^[0-9]{17,19}$/.test(snowflake)) {
     throw createError({
       statusCode: 406,
       message: "Oops, provided snowflake is invalid",
@@ -46,27 +46,24 @@ export default defineEventHandler(async (event) => {
     discord: { botToken },
   } = useRuntimeConfig();
 
-  // Fetch the user's profile
-  const [profile, { getBadges }] = await Promise.all([
-    $fetch<DiscordUser>(`/users/${snowflake}`, {
-      headers: { Authorization: `Bot ${botToken}` },
-      baseURL,
-      onResponseError: ({ response: { statusText, status } }) => {
-        throw createError({
-          statusCode: status,
-          message: statusText,
-        });
-      },
-    }),
-    import("../utils/helpers"),
-  ]);
+  // Fetch the snowflakes profile
+  const profile = await $fetch<DiscordUser>(`/users/${snowflake}`, {
+    headers: { Authorization: `Bot ${botToken}` },
+    baseURL,
+    onResponseError: ({ response: { statusText, status } }) => {
+      throw createError({
+        statusCode: status,
+        message: statusText,
+      });
+    },
+  });
 
   // Get the account creation date from user id
   const timestamp = converterUserIDOrSnowflakeIntoDate(BigInt(snowflake));
   const createdAt = formatDate(timestamp);
 
   // Make an avatar URL
-  const image = profile.avatar
+  const avatarURL = profile.avatar
     ? `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.${
         profile.avatar.startsWith("a_") ? "gif" : "webp"
       }`
@@ -88,27 +85,29 @@ export default defineEventHandler(async (event) => {
     "avatar",
     "username",
     "discriminator",
-  ]) {
+  ])
     delete profile[property as keyof typeof profile];
-  }
+
+  const sanitizedProfile = Object.fromEntries(
+    Object.entries(profile).filter(([_, value]) => value)
+  );
 
   return {
-    username,
-    discriminator,
-    bot,
+    avatarURL,
     badges: badges as Badges,
-    image,
+    bot,
     createdAt,
+    discriminator,
     download: {
-      ...(profile as Omit<
-        DiscordUser,
-        "username" | "discriminator" | "public_flags" | "flags" | "avatar"
-      >),
       badges: badges as Badges,
-      image,
-      user,
+      bot: bot
+        ? "This account is a bot account"
+        : "This account is not a bot account",
       createdAt,
-      bot,
+      avatarURL,
+      ...sanitizedProfile,
+      user,
     },
+    username,
   };
 });

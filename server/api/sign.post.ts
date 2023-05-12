@@ -33,10 +33,7 @@ export default defineEventHandler(async (event) => {
   const key = await importPKCS8(privateKey, "RSA-OAEP");
   const { plaintext } = await compactDecrypt(body.payload, key);
 
-  const { jwtSigningKey } = useRuntimeConfig();
+  const { secret } = useRuntimeConfig();
 
-  return await createJWT(
-    { ...JSON.parse(plaintext.toString()) },
-    jwtSigningKey
-  );
+  return await createJWT({ ...JSON.parse(plaintext.toString()) }, secret);
 });

@@ -30,7 +30,6 @@ DISCORD_BOT_TOKEN *         // your bot token
 DISCORD_CLIENT_ID *         // your application ID (or snowflake)
 DISCORD_CLIENT_SECRET *     // your application secret
 DISCORD_REDIRECT_URL *      // route to redirect to after authorizing the application
-JWT_SIGNING_KEY *           // random key used for signing JWTs used
 KV_URL *                    // your redis key-value database URL
 TURNSTILE_SECRET_KEY        // the ID for your Turnstile protected site
 TURNSTILE_SITE_KEY          // the secret for your Turnstile protected site
@@ -105,7 +104,6 @@ You can make an issue if you have other ways of securing the data and whatnot
 ### Notes
 
 1. I suggest you use `pnpm` for this project (I can't assure you things will go well with `npm, yarn or your-own-depedency-manager`)
-2. You should probably use a key length >= 128 for the `JWT_SIGNING_KEY`
-3. The `redirectURL` configured for this project is at `/api/callback`
+2. The `redirectURL` configured for this project is at `/api/callback`
 
 Copyright © 2023 [OyewoleOyedeji](https://github.com/OyewoleOyedeji)

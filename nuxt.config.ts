@@ -1,3 +1,5 @@
+import { nanoid } from "nanoid";
+
 const redisOptions = {
   url: process.env.KV_URL,
   ttl: 600,
@@ -28,7 +30,7 @@ export default defineNuxtConfig({
       secret: process.env.DISCORD_CLIENT_SECRET,
       botToken: process.env.DISCORD_BOT_TOKEN,
     },
-    jwtSigningKey: process.env.JWT_SIGNING_KEY,
+    secret: nanoid(128),
   },
   app: {
     head: {

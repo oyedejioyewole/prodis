@@ -1,16 +1,8 @@
 <script setup lang="ts">
 import type { APIFriendsResponse, RequestMetadata } from "~/project";
+import { useDownload } from "~/composables/useDownload";
 
 const requestMetadata = useState<RequestMetadata>("metadata");
-
-const downloadInformation = async (friend: APIFriendsResponse["download"]) => {
-  const { saveAs } = await import("file-saver");
-  saveAs(
-    new Blob([JSON.stringify(friend)], { type: "application/json" }),
-    `${friend.username}-${friend.discriminator}.json`,
-    { autoBom: true }
-  );
-};
 </script>
 
 <template>
@@ -29,14 +21,14 @@ const downloadInformation = async (friend: APIFriendsResponse["download"]) => {
       <VTooltip :boundary="$refs[`friend-${index}`]">
         <div class="flex gap-x-3 items-center">
           <NuxtImg
-            :src="friend.image"
+            :src="friend.avatarURL"
             quality="100"
             loading="lazy"
             alt="Profile picture"
             class="rounded-2xl"
             width="50"
             height="50"
-            :title="`${friend.username}'s profile picture'`"
+            :title="`${friend.username}'s profile picture`"
           />
           <h3 class="text-lg">
             {{ friend.username }}#{{ friend.discriminator }}
@@ -53,7 +45,12 @@ const downloadInformation = async (friend: APIFriendsResponse["download"]) => {
 
       <span
         class="inline-flex items-center gap-x-2 group cursor-pointer"
-        @click="downloadInformation(friend.download)"
+        @click="
+          useDownload<APIFriendsResponse['download']>(
+            friend.download,
+            friend.download.user
+          )
+        "
       >
         <h4 class="opacity-0 group-hover:opacity-100 transition">Save</h4>
         <UIIcon

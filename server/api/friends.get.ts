@@ -15,13 +15,10 @@ export default defineEventHandler(async (event) => {
     public: {
       discord: { baseURL },
     },
-    jwtSigningKey,
+    secret,
   } = useRuntimeConfig();
 
-  const processedJWT = await verifyJWT<{ token: string }>(
-    jwtPayload,
-    jwtSigningKey
-  );
+  const processedJWT = await verifyJWT<{ token: string }>(jwtPayload, secret);
 
   if ("error" in processedJWT)
     throw createError({ statusCode: 403, message: processedJWT.message });
@@ -52,10 +49,7 @@ export default defineEventHandler(async (event) => {
   if (relationships.length > 0) {
     return await Promise.all(
       relationships.map(async (relationship) => {
-        const jwt = await createJWT(
-          { snowflake: relationship.id },
-          jwtSigningKey
-        );
+        const jwt = await createJWT({ snowflake: relationship.id }, secret);
 
         const profile = await $fetch<APILookupResponse>("/api/lookup", {
           headers: {
@@ -66,7 +60,7 @@ export default defineEventHandler(async (event) => {
         const {
           createdAt,
           discriminator,
-          image,
+          avatarURL,
           username,
           badges,
           download,
@@ -79,7 +73,7 @@ export default defineEventHandler(async (event) => {
           badges: badges as Badges,
           createdAt,
           discriminator,
-          image,
+          avatarURL,
           username,
           bot,
         };
@@ -92,10 +86,14 @@ export default defineEventHandler(async (event) => {
         ])
           delete relationship.user[property as keyof typeof relationship.user];
 
+        const sanitizedRelationship = Object.fromEntries(
+          Object.entries(relationship.user).filter(([_, value]) => value)
+        );
+
         return {
           ...lookedUpProfile,
-          nickname: relationship.nickname,
-          download: { ...download, ...relationship.user, bot },
+          download: { ...sanitizedRelationship, ...download },
+          nickname: relationship.nickname ?? undefined,
         };
       })
     );

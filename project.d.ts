@@ -76,21 +76,24 @@ type APICallbackProcessedResponse = {
 
 type APIFriendsResponse = Omit<APILookupResponse, "download"> &
   Pick<DiscordRelationship, "nickname" | "user"> & {
-    download: Omit<APILookupResponse, "download">;
+    download: Omit<
+      APILookupResponse,
+      "download" | "username" | "discriminator"
+    > & { user: string };
   };
 
 type APILookupResponse = Pick<
   DiscordUser,
   "username" | "discriminator" | "bot"
 > & {
-  image: string;
+  avatarURL: string;
   badges: Badges;
   createdAt: string;
   download: Omit<
     DiscordUser,
     "public_flags" | "flags" | "avatar" | "username" | "discriminator"
   > &
-    Pick<APILookupResponse, "image" | "badges" | "createdAt"> & {
+    Pick<APILookupResponse, "avatarURL" | "badges" | "createdAt"> & {
       user: string;
     };
 };
