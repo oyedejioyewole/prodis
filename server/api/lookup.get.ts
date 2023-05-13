@@ -1,5 +1,3 @@
-import type { DiscordUser, Badges } from "~/project";
-
 export default defineEventHandler(async (event) => {
   // Prepartion
   const headers = getHeaders(event);

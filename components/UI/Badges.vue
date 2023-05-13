@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { Badges } from "~/project";
-
 defineProps<{
   badges: Badges;
   type: "display" | "tooltip";

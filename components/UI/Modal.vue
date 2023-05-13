@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { Modal } from "~/project";
-
 defineProps<{ content: "guide" }>();
 
 const modal = useState<Modal>("modal");

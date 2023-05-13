@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RequestMetadata, Modal } from "~/project";
+import type { RequestMetadata } from "~/project";
 
 const requestMetadata = useState<RequestMetadata>("metadata");
 
@@ -18,6 +18,7 @@ const openPrivacyPolicy = async () =>
         class="focus:outline-none focus-visible:outline-black/50 dark:focus-visible:outline-white/50 focus-visible:outline-offset-4 rounded-lg"
         @click="openPrivacyPolicy"
       >
+        <span class="sr-only">Open the Guide</span>
         <UIIcon
           :name="$colorMode.value === 'dark' ? 'book-fill' : 'book'"
           type="large"

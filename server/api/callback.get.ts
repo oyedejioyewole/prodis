@@ -1,11 +1,3 @@
-import type {
-  DiscordUser,
-  DiscordGuild,
-  DiscordConnection,
-  Badges,
-  NitroStatus,
-} from "~/project";
-
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
 
@@ -80,8 +72,8 @@ export default defineEventHandler(async (event) => {
     "Content-Type": "application/x-www-form-urlencoded",
   };
 
-  const [{ getBadges, getLocale }] = await Promise.all([
-    import("../utils/helpers"),
+  const [{ setSessionAfterCallback }] = await Promise.all([
+    import("../utils/internals"),
     $fetch("/oauth2/token/revoke", {
       method: "POST",
       ...options,
@@ -89,63 +81,11 @@ export default defineEventHandler(async (event) => {
     }),
   ]);
 
-  const badges = profile.public_flags
-    ? getBadges(profile.public_flags)
-    : "none";
-  const nitroStatus = profile.premium_type
-    ? profile.premium_type === 2
-      ? "nitro"
-      : profile.premium_type === 3
-      ? "nitro-basic"
-      : "none"
-    : "none";
-
-  const processed = {
-    profile: {
-      badges: badges as Badges,
-      verified: profile.verified,
-      twoFactorAuthenticationStatus: profile.mfa_enabled
-        ? "enabled"
-        : "disabled",
-      createdAt: (() => {
-        const timestamp = converterUserIDOrSnowflakeIntoDate(
-          BigInt(profile.id)
-        );
-        return formatDate(timestamp);
-      })(),
-      locale: profile.locale ? await getLocale(profile.locale) : undefined,
-      nitroStatus: nitroStatus as NitroStatus,
-      download: profile,
-    },
-    guilds: {
-      sanitized: guilds.map(({ name, icon, owner, id }) => ({
-        name,
-        icon: icon
-          ? icon.startsWith("a_")
-            ? `https://cdn.discordapp.com/icons/${id}/${icon}.gif`
-            : `https://cdn.discordapp.com/icons/${id}/${icon}.webp`
-          : undefined,
-        owner,
-      })),
-      download: guilds,
-    },
-    connections: {
-      sanitized: connections.map(
-        ({ name, type, verified, friend_sync, visibility, revoked }) => ({
-          name,
-          type,
-          verified,
-          friend_sync,
-          visibility,
-          revoked,
-        })
-      ),
-
-      download: connections,
-    },
-  };
-
-  event.context.session.processed = processed;
+  event.context.session.processed = await setSessionAfterCallback(
+    profile,
+    guilds,
+    connections
+  );
 
   return sendRedirect(event, "/account");
 });

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RequestMetadata, ValidationConfirmed } from "~/project";
+import type { RequestMetadata } from "~/project";
 
 const formData = ref<ValidationConfirmed>({ isAllowed: false });
 

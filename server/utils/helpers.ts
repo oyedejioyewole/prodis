@@ -1,5 +1,3 @@
-import type { AccountBadgesKeys } from "~/project";
-
 /**
  * Using the Discord ID (snowflake), it calculates
  * the number representation of the account creation date

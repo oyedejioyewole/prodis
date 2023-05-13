@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import "bootstrap-icons/font/bootstrap-icons.css";
-import type { Modal, RequestMetadata } from "./project";
+import type { RequestMetadata } from "./project";
+const { isMobile } = useDevice();
+
+if (isMobile) await navigateTo("/unsupported");
 
 useHead({
   bodyAttrs: {

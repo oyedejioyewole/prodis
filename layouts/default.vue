@@ -5,8 +5,5 @@
 
     <!-- Content -->
     <slot />
-
-    <!-- Footer -->
-    <Footer />
   </div>
 </template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { RequestMetadata, APILookupResponse } from "~/project";
 import { useDownload } from "~/composables/useDownload";
+import type { RequestMetadata } from "~/project";
 
 const requestMetadata = useState<RequestMetadata>("metadata");
 </script>
@@ -46,7 +46,7 @@ const requestMetadata = useState<RequestMetadata>("metadata");
         <a
           class="inline-flex items-center gap-x-2 cursor-pointer group w-fit dark:text-white"
           @click="
-            useDownload<APILookupResponse['download']>(
+            useDownload(
               requestMetadata.global.response.download,
               requestMetadata.global.response.download.user
             )

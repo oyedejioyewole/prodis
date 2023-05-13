@@ -28,7 +28,11 @@ const discordOAuthURLComponents = {
   state: encodeURIComponent(csrf as string),
 };
 
-const discordOAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${discordOAuthURLComponents.client_id}&redirect_uri=${discordOAuthURLComponents.redirect_uri}&response_type=${discordOAuthURLComponents.response_type}&scope=${discordOAuthURLComponents.scope}&state=${discordOAuthURLComponents.state}`;
+const navigateToDiscord = async () =>
+  await navigateTo(
+    `https://discord.com/api/oauth2/authorize?client_id=${discordOAuthURLComponents.client_id}&redirect_uri=${discordOAuthURLComponents.redirect_uri}&response_type=${discordOAuthURLComponents.response_type}&scope=${discordOAuthURLComponents.scope}&state=${discordOAuthURLComponents.state}`,
+    { external: true }
+  );
 </script>
 
 <template>
@@ -63,7 +67,7 @@ const discordOAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${di
           <UIButton
             type="normal"
             class="px-10 py-5 text-lg"
-            @click="navigateTo(discordOAuthUrl, { external: true })"
+            @click="navigateToDiscord()"
           >
             Login <UIIcon name="door-open-fill" type="normal" />
           </UIButton>

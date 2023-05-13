@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { APIFriendsResponse, RequestMetadata } from "~/project";
+import type { RequestMetadata } from "~/project";
 import { useDownload } from "~/composables/useDownload";
 
 const requestMetadata = useState<RequestMetadata>("metadata");
@@ -10,8 +10,7 @@ const requestMetadata = useState<RequestMetadata>("metadata");
     <div
       v-if="
         requestMetadata.friends.response &&
-        Array.isArray(requestMetadata.friends.response) &&
-        Array.length > 0
+        Array.isArray(requestMetadata.friends.response)
       "
       v-for="(friend, index) of requestMetadata.friends.response"
       :key="index"
@@ -45,12 +44,7 @@ const requestMetadata = useState<RequestMetadata>("metadata");
 
       <span
         class="inline-flex items-center gap-x-2 group cursor-pointer"
-        @click="
-          useDownload<APIFriendsResponse['download']>(
-            friend.download,
-            friend.download.user
-          )
-        "
+        @click="useDownload(friend.download, friend.download.user)"
       >
         <h4 class="opacity-0 group-hover:opacity-100 transition">Save</h4>
         <UIIcon

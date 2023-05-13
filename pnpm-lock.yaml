@@ -47,6 +47,9 @@ devDependencies:
   '@nuxtjs/color-mode':
     specifier: ^3.2.0
     version: 3.2.0
+  '@nuxtjs/device':
+    specifier: ^3.1.0
+    version: 3.1.0
   '@nuxtjs/tailwindcss':
     specifier: ^6.6.8
     version: 6.6.8(webpack@5.82.1)
@@ -1276,6 +1279,16 @@ packages:
       '@nuxt/kit': 3.4.3
       lodash.template: 4.5.0
       pathe: 1.1.0
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
+    dev: true
+
+  /@nuxtjs/device@3.1.0:
+    resolution: {integrity: sha512-jXWCVuPmzsGpn86GTA9/TOmfWulf9h3r2g6o5LpoZk4P1a9McMlpbDiaMPmyG5erfCj6H+XoZ6HBPCN9DtoCDA==}
+    dependencies:
+      '@nuxt/kit': 3.4.3
+      defu: 6.1.2
     transitivePeerDependencies:
       - rollup
       - supports-color

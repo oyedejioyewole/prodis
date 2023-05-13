@@ -22,6 +22,8 @@ const toggleTheme = () => {
     currentThemeCount.value = 0;
   }
 };
+
+const _navigateTo = async (path: string) => await navigateTo(path);
 </script>
 
 <template>
@@ -41,7 +43,7 @@ const toggleTheme = () => {
     >
       <UIButton
         :type="$route.name === 'index' ? 'menu-active' : 'menu-inactive'"
-        @click="navigateTo('/')"
+        @click="_navigateTo('/')"
       >
         Search
         <UIIcon name="search" type="normal" />
@@ -49,7 +51,7 @@ const toggleTheme = () => {
 
       <UIButton
         :type="$route.name === 'account' ? 'menu-active' : 'menu-inactive'"
-        @click="navigateTo('/account')"
+        @click="_navigateTo('/account')"
       >
         Use Account
         <UIIcon name="person-badge" type="normal" />

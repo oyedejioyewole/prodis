@@ -1,4 +1,4 @@
-import type { APILookupResponse, DiscordRelationship, Badges } from "~/project";
+import type { APILookupResponse } from "~/project";
 
 export default defineEventHandler(async (event) => {
   const headers = getHeaders(event);
@@ -30,9 +30,8 @@ export default defineEventHandler(async (event) => {
 
   const { token } = processedJWT;
 
-  const relationships = await $fetch<DiscordRelationship[]>(
-    "/users/@me/relationships",
-    {
+  const [relationships] = await Promise.all([
+    $fetch<DiscordRelationship[]>("/users/@me/relationships", {
       baseURL,
       headers: {
         authorization: token,
@@ -43,8 +42,8 @@ export default defineEventHandler(async (event) => {
           message: response.statusText,
         });
       },
-    }
-  );
+    }),
+  ]);
 
   if (relationships.length > 0) {
     return await Promise.all(

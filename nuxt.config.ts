@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     "@sidebase/nuxt-session",
     "@nuxtjs/html-validator",
     "@nuxt/content",
+    "@nuxtjs/device",
   ],
   runtimeConfig: {
     public: {
@@ -41,14 +42,6 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: "en-US",
       },
-      meta: [
-        {
-          name: "description",
-          content:
-            "Find more information about your Discord account or an account using their ID",
-        },
-        { name: "author", content: "OyewoleOyedeji" },
-      ],
     },
     rootTag: "main",
   },
@@ -108,4 +101,5 @@ export default defineNuxtConfig({
       },
     },
   },
+  css: ["bootstrap-icons/font/bootstrap-icons.css"],
 });

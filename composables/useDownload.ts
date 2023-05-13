@@ -1,5 +1,5 @@
-export const useDownload = async <T>(
-  payload: T,
+export const useDownload = async (
+  payload: unknown,
   name: string,
   extension = ".json"
 ) => {

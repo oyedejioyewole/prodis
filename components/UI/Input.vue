@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { ValidationConfirmed } from "~/project";
-
 const emit = defineEmits<{
   (event: "validationConfirmed", payload: ValidationConfirmed): void;
 }>();
