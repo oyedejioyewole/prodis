@@ -138,7 +138,7 @@ const downloadInformation = async (
           This account has multi-factor authentication
           <span class="font-serif">{{
             requestMetadata.global.response.profile
-              .twoFactorAuthenticationStatus
+              .multiFactorAuthenticationStatus
           }}</span>
         </h3>
         <h3 class="text-lg">

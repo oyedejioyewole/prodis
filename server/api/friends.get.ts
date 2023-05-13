@@ -64,9 +64,7 @@ export default defineEventHandler(async (event) => {
           badges,
           download,
           bot,
-        } = {
-          ...profile,
-        };
+        } = profile;
 
         const lookedUpProfile = {
           badges: badges as Badges,

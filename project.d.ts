@@ -123,6 +123,7 @@ declare global {
     id: string;
     type: number;
     nickname?: string;
+    since: string;
     user: Pick<
       DiscordUser,
       "discriminator" | "public_flags" | "username" | "id" | "avatar"
@@ -158,9 +159,7 @@ declare module "locale-code" {
 
 type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T;
 type APICallbackProcessedResponse = Awaited<
-  ReturnType<
-    typeof import("./server/utils/internals")["setSessionAfterCallback"]
-  >
+  ReturnType<typeof import("./server/utils/internals")["postCallbackActions"]>
 >;
 type APIFriendsResponse = InternalApi["/api/friends"]["get"];
 type APILookupResponse = InternalApi["/api/lookup"]["get"];

@@ -72,7 +72,7 @@ export default defineEventHandler(async (event) => {
     "Content-Type": "application/x-www-form-urlencoded",
   };
 
-  const [{ setSessionAfterCallback }] = await Promise.all([
+  const [{ postCallbackActions }] = await Promise.all([
     import("../utils/internals"),
     $fetch("/oauth2/token/revoke", {
       method: "POST",
@@ -81,7 +81,7 @@ export default defineEventHandler(async (event) => {
     }),
   ]);
 
-  event.context.session.processed = await setSessionAfterCallback(
+  event.context.session.processed = await postCallbackActions(
     profile,
     guilds,
     connections

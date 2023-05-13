@@ -74,7 +74,6 @@ export default defineNuxtConfig({
       methods: ["get"],
     },
     session: {
-      cookieSameSite: "strict",
       idLength: 128,
       storageOptions: {
         driver: "redis",
@@ -102,4 +101,12 @@ export default defineNuxtConfig({
     },
   },
   css: ["bootstrap-icons/font/bootstrap-icons.css"],
+  content: {
+    highlight: {
+      theme: {
+        default: "material-lighter",
+        dark: "material-darker",
+      },
+    },
+  },
 });

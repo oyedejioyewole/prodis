@@ -5,7 +5,6 @@ useHead({
   title: "Account",
 });
 
-const { csrf } = useCsrf();
 const requestMetadata = useState<RequestMetadata>("metadata");
 const { session } = await useSession();
 
@@ -18,21 +17,23 @@ watch(session, (_new) => {
   }
 });
 
-const discordOAuthURLComponents = {
-  client_id: useRuntimeConfig().public.discord.id,
-  redirect_uri: encodeURIComponent(
-    useRuntimeConfig().public.discord.redirectUrl
-  ),
-  response_type: "code",
-  scope: encodeURIComponent("identify connections email guilds"),
-  state: encodeURIComponent(csrf as string),
-};
+const navigateToDiscord = async () => {
+  const {
+    public: {
+      discord: { id, redirectUrl, baseURL },
+    },
+  } = useRuntimeConfig();
+  const { csrf } = useCsrf() as { csrf: string };
 
-const navigateToDiscord = async () =>
   await navigateTo(
-    `https://discord.com/api/oauth2/authorize?client_id=${discordOAuthURLComponents.client_id}&redirect_uri=${discordOAuthURLComponents.redirect_uri}&response_type=${discordOAuthURLComponents.response_type}&scope=${discordOAuthURLComponents.scope}&state=${discordOAuthURLComponents.state}`,
+    `${baseURL}/oauth2/authorize?client_id=${id}&redirect_uri=${encodeURIComponent(
+      redirectUrl
+    )}&response_type=code&scope=${encodeURIComponent(
+      "identify connections email guilds"
+    )}&state=${csrf}`,
     { external: true }
   );
+};
 </script>
 
 <template>
