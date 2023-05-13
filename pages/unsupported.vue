@@ -1,10 +1,11 @@
 <script setup lang="ts">
-const { isMobile } = useDevice();
-
-if (!isMobile) await navigateTo("/");
-
 useHead({
   title: "Unsupported",
+});
+
+onMounted(async () => {
+  const { isMobile } = useDevice();
+  if (isMobile) await navigateTo("/unsupported");
 });
 </script>
 

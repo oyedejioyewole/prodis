@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import type { RequestMetadata } from "./project";
-const { isMobile } = useDevice();
-
-if (isMobile) await navigateTo("/unsupported");
 
 useHead({
   bodyAttrs: {
@@ -31,6 +28,11 @@ useState<RequestMetadata>("metadata", () => ({
 }));
 
 useState<Modal>("modal", () => ({ isOpen: false }));
+
+onMounted(async () => {
+  const { isMobile } = useDevice();
+  if (isMobile) await navigateTo("/unsupported");
+});
 </script>
 
 <template>
