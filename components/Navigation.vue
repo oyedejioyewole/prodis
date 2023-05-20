@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const currentThemeCount = ref(0);
 const theme = useColorMode();
+const isMobileMenuVisible = ref(false);
 
 if (theme.value === "light") {
   currentThemeCount.value = 1;
@@ -22,28 +23,69 @@ const toggleTheme = () => {
     currentThemeCount.value = 0;
   }
 };
-
-const _navigateTo = async (path: string) => await navigateTo(path);
 </script>
 
 <template>
   <nav>
+    <!-- Hamburger icon -->
+    <button
+      class="w-8 space-y-2 md:hidden"
+      @click="isMobileMenuVisible = !isMobileMenuVisible"
+      type="button"
+    >
+      <span class="sr-only">Menu button</span>
+      <span
+        class="block h-[3px] w-full rounded-full bg-black dark:bg-white"
+      ></span>
+      <span
+        class="block h-[3px] w-3/4 rounded-full bg-black dark:bg-white"
+      ></span>
+      <span
+        class="block h-[3px] w-1/2 rounded-full bg-black dark:bg-white"
+      ></span>
+    </button>
+
+    <ol
+      class="absolute top-0 z-10 flex min-w-[90%] flex-col items-center gap-y-4 rounded-xl bg-[#001185] p-10 text-xl text-white transition duration-500 md:hidden"
+      :class="{
+        'translate-y-20 opacity-100': isMobileMenuVisible,
+        '-translate-y-32 opacity-0 ': !isMobileMenuVisible,
+      }"
+    >
+      <li>
+        <NuxtLink
+          to="/"
+          class="flex items-center gap-x-2"
+          :class="{ 'underline underline-offset-8': $route.name === 'index' }"
+          >Search <UIIcon name="search" type="normal"
+        /></NuxtLink>
+      </li>
+      <li>
+        <NuxtLink
+          to="/account"
+          class="flex items-center gap-x-2"
+          :class="{ 'underline underline-offset-8': $route.name === 'account' }"
+          >Account <UIIcon name="person-badge" type="normal"
+        /></NuxtLink>
+      </li>
+    </ol>
+
     <!-- Logo -->
     <NuxtLink
       to="/"
-      class="focus:outline-none dark:focus-visible:outline-white/50 focus-visible:outline-black/50 focus-visible:outline-offset-4 rounded-lg"
+      class="rounded-lg focus:outline-none focus-visible:outline-offset-4 focus-visible:outline-black/50 dark:focus-visible:outline-white/50"
     >
       <span class="sr-only">Prodis</span>
-      <LazySvgoLogo filled class="w-12 aspect-square" />
+      <LazySvgoLogo filled class="aspect-square w-12" />
     </NuxtLink>
 
     <!-- Navigation links -->
     <div
-      class="flex gap-x-4 items-center bg-blurple/30 dark:bg-blurple p-3 rounded-lg transition"
+      class="hidden items-center gap-x-4 rounded-lg bg-blurple/30 p-3 transition dark:bg-blurple md:flex"
     >
       <UIButton
         :type="$route.name === 'index' ? 'menu-active' : 'menu-inactive'"
-        @click="_navigateTo('/')"
+        @click="navigateTo('/')"
       >
         Search
         <UIIcon name="search" type="normal" />
@@ -51,7 +93,7 @@ const _navigateTo = async (path: string) => await navigateTo(path);
 
       <UIButton
         :type="$route.name === 'account' ? 'menu-active' : 'menu-inactive'"
-        @click="_navigateTo('/account')"
+        @click="navigateTo('/account')"
       >
         Use Account
         <UIIcon name="person-badge" type="normal" />
@@ -60,7 +102,7 @@ const _navigateTo = async (path: string) => await navigateTo(path);
 
     <!-- Toggle theme -->
     <button
-      class="focus:outline-none focus-visible:outline-black/50 dark:focus-visible:outline-white/50 focus-visible:outline-offset-4 rounded-lg"
+      class="rounded-lg focus:outline-none focus-visible:outline-offset-4 focus-visible:outline-black/50 dark:focus-visible:outline-white/50"
       @click="toggleTheme"
       type="button"
     >
@@ -79,3 +121,13 @@ const _navigateTo = async (path: string) => await navigateTo(path);
     </button>
   </nav>
 </template>
+
+<style>
+:deep(.v-enter-from) {
+  opacity: 0;
+}
+
+:deep(.v-enter-to) {
+  opacity: 100;
+}
+</style>

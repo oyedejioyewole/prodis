@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { RequestMetadata } from "~/project";
-
 const formData = ref<ValidationConfirmed>({ isAllowed: false });
 
 const emit = defineEmits<{
@@ -85,17 +83,17 @@ const searchForAccount = async (snowflake: string) => {
 
 <template>
   <div>
-    <h1 class="font-serif text-4xl text-center dark:text-white">
+    <h1 class="text-center font-serif text-3xl dark:text-white md:text-4xl">
       Enter the snowflake (ID)
     </h1>
     <form
       class="flex flex-col items-center gap-y-5"
       @submit.prevent="searchForAccount(formData.data ?? '')"
     >
-      <label for="snowflake-form" class="text-xl dark:text-white"
+      <label for="snowflake-form" class="text-center text-xl dark:text-white"
         ><span class="font-bold">Hint:</span> a set of 17-19 numbers</label
       >
-      <div class="flex gap-x-4">
+      <div class="flex flex-col gap-4 md:flex-row">
         <div class="flex items-center gap-x-2">
           <UIIcon name="snow" class="text-blurple" type="large" />
           <UIInput

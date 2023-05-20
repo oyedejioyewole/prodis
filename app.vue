@@ -1,38 +1,10 @@
 <script setup lang="ts">
-import type { RequestMetadata } from "./project";
-
-useHead({
-  bodyAttrs: {
-    class: "dark:bg-black",
-  },
-});
-
-useFont([
-  {
-    family: "Quicksand",
-    src: "/fonts/quicksand-regular.woff2",
-    weight: "400",
-    display: "swap",
-  },
-  {
-    family: "Vollkorn",
-    src: "/fonts/vollkorn-semibold.woff2",
-    weight: "600",
-    display: "swap",
-  },
-]);
-
 useState<RequestMetadata>("metadata", () => ({
   friends: { pending: false },
   global: { pending: false },
 }));
 
 useState<Modal>("modal", () => ({ isOpen: false }));
-
-onMounted(async () => {
-  const { isMobile } = useDevice();
-  if (isMobile) await navigateTo("/unsupported");
-});
 </script>
 
 <template>

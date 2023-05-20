@@ -1,4 +1,4 @@
-import type { InternalApi } from "nitropack";
+import type { InternalApi, Awaited } from "nitropack";
 
 declare global {
   type AccountBadgesKeys =
@@ -15,6 +15,13 @@ declare global {
     | "early-verified-bot-developer"
     | "moderator-programs-alumni"
     | "active-developer";
+
+  type Badges = ReturnType<
+    typeof import("./server/utils/helpers")["getBadges"]
+  >;
+
+  type IconNames =
+    keyof typeof import("./node_modules/bootstrap-icons/font/bootstrap-icons.json");
 
   type ConnectionTypes =
     | "battlenet"
@@ -38,10 +45,6 @@ declare global {
     | "youtube";
 
   type NitroStatus = "none" | "nitro" | "nitro-basic";
-
-  type Badges = ReturnType<
-    typeof import("./server/utils/helpers")["getBadges"]
-  >;
 
   type DiscordConnection = {
     id: string;
@@ -122,7 +125,7 @@ declare global {
   type DiscordRelationship = {
     id: string;
     type: number;
-    nickname?: string;
+    nickname: string | null;
     since: string;
     user: Pick<
       DiscordUser,
@@ -142,6 +145,29 @@ declare global {
 
   type Modal = {
     isOpen: boolean;
+    payload?:
+      | Extract<APIFriendsResponse, {}[]>[0]
+      | APICallbackProcessedResponse["guilds"]["sanitized"]
+      | APICallbackProcessedResponse["connections"]["sanitized"];
+  };
+
+  type APICallbackProcessedResponse = Awaited<
+    ReturnType<typeof import("./server/utils/internals")["postCallbackActions"]>
+  >;
+
+  type APIFriendsResponse = InternalApi["/api/friends"]["get"];
+
+  type APILookupResponse = InternalApi["/api/lookup"]["get"];
+
+  type RequestMetadata = {
+    global: {
+      pending: boolean;
+      response?: APILookupResponse | APICallbackProcessedResponse;
+    };
+    friends: {
+      pending: boolean;
+      response?: APIFriendsResponse;
+    };
   };
 }
 
@@ -156,28 +182,3 @@ declare module "locale-code" {
   function validateCountryName(code: string): boolean;
   function validate(code: string): boolean;
 }
-
-type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T;
-type APICallbackProcessedResponse = Awaited<
-  ReturnType<typeof import("./server/utils/internals")["postCallbackActions"]>
->;
-type APIFriendsResponse = InternalApi["/api/friends"]["get"];
-type APILookupResponse = InternalApi["/api/lookup"]["get"];
-
-type RequestMetadata = {
-  global: {
-    pending: boolean;
-    response?: APILookupResponse | APICallbackProcessedResponse;
-  };
-  friends: {
-    pending: boolean;
-    response?: APIFriendsResponse;
-  };
-};
-
-export {
-  APILookupResponse,
-  APIFriendsResponse,
-  APICallbackProcessedResponse,
-  RequestMetadata,
-};

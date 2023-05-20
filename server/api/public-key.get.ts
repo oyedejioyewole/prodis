@@ -5,12 +5,13 @@ export default defineEventHandler(async (event) => {
   const keysAlreadyExists = await storage.hasItem(sessionId);
 
   if (keysAlreadyExists) {
-    const keys = await storage.getItem(sessionId);
-    if ("publicKey" in keys && typeof keys.publicKey === "string") {
-      return {
-        publicKey: keys.publicKey,
-      };
-    }
+    const { publicKey } = (await storage.getItem(sessionId)) as {
+      publicKey: string;
+      privateKey: string;
+    };
+    return {
+      publicKey,
+    };
   }
 
   const { generateKeyPair } = await import("jose");

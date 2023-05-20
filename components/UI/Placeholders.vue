@@ -6,7 +6,7 @@ const placeholders = usePlaceholder(props.text);
 
 <template>
   <div
-    class="bg-black/50 dark:bg-white/20 p-3 text-white rounded-2xl font-bold"
+    class="rounded-2xl bg-black/50 p-3 font-bold text-white dark:bg-white/20"
   >
     {{ placeholders.toUpperCase() }}
   </div>

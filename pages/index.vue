@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { RequestMetadata } from "~/project";
-
 const requestMetadata = useState<RequestMetadata>("metadata");
 
 useHead({
@@ -10,7 +8,7 @@ useHead({
 
 <template>
   <section
-    class="min-h-screen flex flex-col gap-y-20 items-center justify-center"
+    class="flex min-h-screen flex-col items-center justify-center gap-y-20"
   >
     <NuxtErrorBoundary>
       <HomeSearchForm />
@@ -19,7 +17,7 @@ useHead({
         v-else-if="
           !requestMetadata.global.pending && requestMetadata.global.response
         "
-        class="flex gap-x-10 border-blurple border dark:border-2 p-10 rounded-2xl items-center"
+        class="order-1 flex flex-col items-center gap-10 rounded-2xl border border-blurple p-10 dark:border-2 md:flex-row"
       />
 
       <template #error="{ error }">
@@ -29,7 +27,7 @@ useHead({
         />
         <div class="flex flex-col items-center">
           <LazySvgoError class="w-32 fill-blurple" />
-          <h1 class="text-lg dark:text-white font-bold">
+          <h1 class="text-lg font-bold dark:text-white">
             {{
               (error.value.message as string).includes("Not Found")
                 ? "Oops, the account doesn't exist 😅"

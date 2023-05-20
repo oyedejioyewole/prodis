@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { RequestMetadata } from "~/project";
-
 const requestMetadata = useState<RequestMetadata>("metadata");
 const customIcons = [
   "battlenet",
@@ -68,7 +66,7 @@ const downloadInformation = async (
     <div class="flex flex-col gap-y-6">
       <!-- 1st section (Account information)  -->
       <div
-        class="flex flex-col bg-black/10 dark:bg-white/10 p-10 rounded-2xl relative dark:text-white"
+        class="relative flex flex-col rounded-2xl bg-black/10 p-10 dark:bg-white/10 dark:text-white"
       >
         <!-- START -->
         <h1 class="font-serif text-3xl 2xl:text-4xl">Account Information</h1>
@@ -80,7 +78,7 @@ const downloadInformation = async (
           class="w-fit"
         />
 
-        <h3 class="inline-flex gap-x-1 items-center text-lg">
+        <h3 class="inline-flex items-center gap-x-1 text-lg">
           This account is
           <span class="font-serif">
             {{
@@ -102,7 +100,7 @@ const downloadInformation = async (
         <h3 class="text-lg">
           This account
           <span
-            class="inline-flex gap-x-1 items-center"
+            class="inline-flex items-center gap-x-1"
             v-if="
               requestMetadata.global.response.profile.nitroStatus.includes(
                 'nitro'
@@ -148,7 +146,7 @@ const downloadInformation = async (
           </span>
         </h3>
         <span
-          class="absolute bottom-8 right-10 inline-flex gap-2 items-center ml-auto cursor-pointer"
+          class="absolute bottom-8 right-10 ml-auto inline-flex cursor-pointer items-center gap-2"
           @click="downloadInformation('account')"
         >
           Save (JSON)
@@ -158,14 +156,14 @@ const downloadInformation = async (
       </div>
 
       <!-- 2nd section (Guilds) -->
-      <div class="flex flex-col gap-y-4 2xl:gap-y-2 p-10">
+      <div class="flex flex-col gap-y-4 p-10 2xl:gap-y-2">
         <!-- START -->
         <h1
-          class="text-3xl 2xl:text-4xl font-serif dark:text-white inline-flex items-center justify-between"
+          class="inline-flex items-center justify-between font-serif text-3xl dark:text-white 2xl:text-4xl"
         >
           Guilds
           <span
-            class="inline-flex items-center gap-x-2 font-sans text-lg cursor-pointer"
+            class="inline-flex cursor-pointer items-center gap-x-2 font-sans text-lg"
             @click="downloadInformation('guilds')"
           >
             Save (JSON)
@@ -173,7 +171,7 @@ const downloadInformation = async (
           </span>
         </h1>
         <div
-          class="flex flex-wrap gap-2 items-center"
+          class="flex flex-wrap items-center gap-2"
           v-if="requestMetadata.global.response.guilds.sanitized.length > 0"
         >
           <div
@@ -198,14 +196,14 @@ const downloadInformation = async (
       </div>
 
       <!-- 3rd section (Connections) -->
-      <div class="flex flex-col gap-y-4 2xl:gap-y-2 p-10">
+      <div class="flex flex-col gap-y-4 p-10 2xl:gap-y-2">
         <!-- START -->
         <h1
-          class="text-3xl 2xl:text-4xl font-serif dark:text-white inline-flex items-center justify-between"
+          class="inline-flex items-center justify-between font-serif text-3xl dark:text-white 2xl:text-4xl"
         >
           Connections
           <span
-            class="inline-flex items-center gap-x-2 font-sans text-lg cursor-pointer"
+            class="inline-flex cursor-pointer items-center gap-x-2 font-sans text-lg"
             @click="downloadInformation('connections')"
           >
             Save (JSON)

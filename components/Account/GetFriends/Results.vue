@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { RequestMetadata } from "~/project";
 import { useDownload } from "~/composables/useDownload";
 
 const requestMetadata = useState<RequestMetadata>("metadata");
@@ -15,38 +14,36 @@ const requestMetadata = useState<RequestMetadata>("metadata");
       v-for="(friend, index) of requestMetadata.friends.response"
       :key="index"
       :ref="`friend-${index}`"
-      class="flex items-center justify-between bg-black/10 p-3 2xl:px-8 rounded-lg"
+      class="flex items-center justify-between rounded-lg bg-black/10 p-3 2xl:px-8"
     >
-      <VTooltip :boundary="$refs[`friend-${index}`]">
-        <div class="flex gap-x-3 items-center">
-          <NuxtImg
-            :src="friend.avatarURL"
-            quality="100"
-            loading="lazy"
-            alt="Profile picture"
-            class="rounded-2xl"
-            width="50"
-            height="50"
-            :title="`${friend.username}'s profile picture`"
-          />
-          <h3 class="text-lg">
-            {{ friend.username }}#{{ friend.discriminator }}
-          </h3>
-        </div>
-        <template #popper>
-          <UIBadges
-            :badges="friend.badges"
-            type="tooltip"
-            :bot="friend.bot ?? false"
-          />
-        </template>
-      </VTooltip>
+      <div
+        class="flex cursor-pointer items-center gap-x-3"
+        @click="useModal(true, friend)"
+      >
+        <NuxtImg
+          :src="friend.avatarURL"
+          quality="100"
+          loading="lazy"
+          alt="Profile picture"
+          class="rounded-2xl"
+          width="50"
+          height="50"
+          :title="`${friend.username}'s profile picture`"
+        />
+        <h3 class="text-sm md:text-lg">
+          {{ friend.username }}#{{ friend.discriminator }}
+        </h3>
+      </div>
 
       <span
-        class="inline-flex items-center gap-x-2 group cursor-pointer"
+        class="group inline-flex cursor-pointer items-center gap-x-2"
         @click="useDownload(friend.download, friend.download.user)"
       >
-        <h4 class="opacity-0 group-hover:opacity-100 transition">Save</h4>
+        <h4
+          class="hidden text-sm opacity-0 transition group-hover:opacity-100 md:block"
+        >
+          Save
+        </h4>
         <UIIcon
           :name="$colorMode.value === 'dark' ? 'save-fill' : 'save'"
           type="normal"

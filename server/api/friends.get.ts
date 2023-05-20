@@ -1,5 +1,3 @@
-import type { APILookupResponse } from "~/project";
-
 export default defineEventHandler(async (event) => {
   const headers = getHeaders(event);
 
@@ -47,8 +45,8 @@ export default defineEventHandler(async (event) => {
 
   if (relationships.length > 0) {
     return await Promise.all(
-      relationships.map(async (relationship) => {
-        const jwt = await createJWT({ snowflake: relationship.id }, secret);
+      relationships.map(async ({ id, nickname, since, user }) => {
+        const jwt = await createJWT({ snowflake: id }, secret);
 
         const profile = await $fetch<APILookupResponse>("/api/lookup", {
           headers: {
@@ -67,12 +65,14 @@ export default defineEventHandler(async (event) => {
         } = profile;
 
         const lookedUpProfile = {
+          avatarURL,
           badges: badges as Badges,
+          bot,
           createdAt,
           discriminator,
-          avatarURL,
+          nickname: nickname || undefined,
+          since,
           username,
-          bot,
         };
 
         for (const property of [
@@ -81,16 +81,15 @@ export default defineEventHandler(async (event) => {
           "avatar",
           "public_flags",
         ])
-          delete relationship.user[property as keyof typeof relationship.user];
+          delete user[property as keyof typeof user];
 
         const sanitizedRelationship = Object.fromEntries(
-          Object.entries(relationship.user).filter(([_, value]) => value)
+          Object.entries(user).filter(([_, value]) => value)
         );
 
         return {
           ...lookedUpProfile,
           download: { ...sanitizedRelationship, ...download },
-          nickname: relationship.nickname ?? undefined,
         };
       })
     );

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useDownload } from "~/composables/useDownload";
-import type { RequestMetadata } from "~/project";
 
 const requestMetadata = useState<RequestMetadata>("metadata");
 </script>
@@ -20,7 +19,7 @@ const requestMetadata = useState<RequestMetadata>("metadata");
       class="rounded-2xl"
     />
 
-    <div class="flex flex-col gap-y-5">
+    <div class="flex flex-col items-center gap-y-5 md:items-start md:gap-y-2">
       <!-- Username & discriminator -->
       <h1 class="font-serif text-2xl dark:text-white">
         {{ requestMetadata.global.response.username }}#{{
@@ -28,7 +27,7 @@ const requestMetadata = useState<RequestMetadata>("metadata");
         }}
       </h1>
 
-      <div class="flex flex-col gap-y-2">
+      <div class="contents gap-y-2">
         <!-- Badges (if any) -->
         <UIBadges
           :badges="requestMetadata.global.response.badges"
@@ -37,14 +36,14 @@ const requestMetadata = useState<RequestMetadata>("metadata");
         />
 
         <!-- Account creation date -->
-        <h2 class="dark:text-white">
+        <h2 class="text-center dark:text-white md:text-left">
           Has been a member since
           {{ requestMetadata.global.response.createdAt }}
         </h2>
 
         <!-- Save JSON -->
-        <a
-          class="inline-flex items-center gap-x-2 cursor-pointer group w-fit dark:text-white"
+        <button
+          class="group hidden w-fit cursor-pointer items-center gap-x-2 dark:text-white md:inline-flex"
           @click="
             useDownload(
               requestMetadata.global.response.download,
@@ -53,10 +52,15 @@ const requestMetadata = useState<RequestMetadata>("metadata");
           "
         >
           <UIIcon name="save" type="normal" />
-          <span class="group-hover:opacity-100 opacity-0 transition"
+          <span class="opacity-0 transition group-hover:opacity-100"
             >Save (JSON)</span
           >
-        </a>
+        </button>
+
+        <UIButton type="normal" class="flex gap-x-2 md:hidden">
+          <UIIcon name="save" type="normal" />
+          Save
+        </UIButton>
       </div>
     </div>
   </div>

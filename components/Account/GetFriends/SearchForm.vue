@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { RequestMetadata } from "~/project";
-
 const emit = defineEmits<{
   (event: "clearErrors"): void;
 }>();

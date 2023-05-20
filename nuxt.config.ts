@@ -9,7 +9,7 @@ export default defineNuxtConfig({
   modules: [
     "@nuxtjs/tailwindcss",
     "nuxt-svgo",
-    "nuxt-fonty",
+    "@hypernym/nuxt-font",
     "nuxt-headlessui",
     "nuxt-security",
     "@nuxt/image-edge",
@@ -45,7 +45,7 @@ export default defineNuxtConfig({
     },
     rootTag: "main",
   },
-  fonty: {
+  font: {
     autoImport: true,
   },
   devtools: {},
@@ -104,8 +104,8 @@ export default defineNuxtConfig({
   content: {
     highlight: {
       theme: {
-        default: "material-lighter",
-        dark: "material-darker",
+        default: "github-light",
+        dark: "github-dark",
       },
     },
   },

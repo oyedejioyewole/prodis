@@ -1,16 +1,26 @@
 <template>
-  <div v-if="$route.name === 'index'" class="flex flex-col gap-y-4">
-    <UIIcon
-      name="snow3"
-      class="text-blurple text-7xl animate-spin duration-1000 block"
-    />
-    <h1 class="dark:text-white text-lg">Loading ...</h1>
-  </div>
   <div
-    v-else-if="$route.name === 'account'"
-    class="flex flex-col gap-y-4 w-1/2 items-center mx-auto"
+    v-if="$route.name === 'index'"
+    class="flex w-full animate-pulse flex-col items-center justify-center gap-x-4 gap-y-10 md:flex-row"
   >
-    <LazySvgoSnowflakeSearch class="w-24 fill-blurple" />
-    <h1 class="font-bold text-lg">Loading ...</h1>
+    <div class="aspect-square w-36 rounded-lg bg-black/40 md:w-48">&nbsp;</div>
+    <div
+      class="flex w-full flex-col items-center gap-y-5 md:w-[20%] md:items-start"
+    >
+      <div class="h-4 w-3/4 rounded-full bg-black/40">&nbsp;</div>
+      <div class="h-4 w-1/2 rounded-full bg-black/40">&nbsp;</div>
+      <div class="h-4 w-1/4 rounded-full bg-black/40">&nbsp;</div>
+    </div>
+  </div>
+  <div v-else-if="$route.name === 'account'" class="animate-pulse space-y-4">
+    <div
+      class="flex h-10 w-full justify-between"
+      v-for="(skeleton, index) in [...Array(3).keys()]"
+      :keys="index"
+    >
+      <div class="w-[10%] rounded-md bg-black/40"></div>
+      <div class="w-[60%] rounded-md bg-black/40"></div>
+      <div class="w-1/4 rounded-md bg-black/40"></div>
+    </div>
   </div>
 </template>

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { RequestMetadata } from "~/project";
-
 useHead({
   title: "Account",
 });
@@ -37,10 +35,10 @@ const navigateToDiscord = async () => {
 </script>
 
 <template>
-  <section class="flex min-h-screen py-10 gap-x-10">
+  <section class="flex min-h-screen flex-col gap-10 py-10 md:flex-row">
     <!-- Account section -->
     <section
-      class="flex-auto flex flex-col gap-y-4 justify-center"
+      class="flex flex-auto flex-col justify-center gap-y-4"
       :class="{
         'items-center': !(
           requestMetadata.global.response &&
@@ -49,7 +47,7 @@ const navigateToDiscord = async () => {
       }"
     >
       <NuxtErrorBoundary>
-        <!--  Results (if any) -->
+        <!-- Results (if any) -->
         <LazyAccountResults
           v-if="
             !requestMetadata.global.pending &&
@@ -58,9 +56,9 @@ const navigateToDiscord = async () => {
           "
         />
 
-        <!-- Default (if any) -->
-        <div v-else class="contents">
-          <h1 class="text-4xl font-serif dark:text-white">
+        <!-- Default view -->
+        <div v-else class="contents text-center">
+          <h1 class="font-serif text-3xl dark:text-white md:text-4xl">
             Whenever you're ready
           </h1>
 
@@ -82,8 +80,8 @@ const navigateToDiscord = async () => {
 
     <!-- Get Friends section -->
     <AccountGetFriendsSection
-      class="flex-none flex flex-col gap-y-10 w-[40%] 2xl:w-1/4 border-black/40 dark:border-white/30 border-2 rounded-lg px-10 dark:text-white border-dashed justify-center overflow-y-scroll h-fit my-auto py-20"
+      class="my-auto flex h-fit w-full flex-none flex-col justify-center gap-y-10 overflow-y-scroll rounded-lg border-2 border-dashed border-black/40 px-10 py-20 dark:border-white/30 dark:text-white md:w-1/2 lg:w-[40%] 2xl:w-1/4"
     />
-    <UIModal content="guide" />
+    <UIModal content="faq" />
   </section>
 </template>
