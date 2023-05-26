@@ -14,14 +14,12 @@ declare global {
     | "verified-bot"
     | "early-verified-bot-developer"
     | "moderator-programs-alumni"
-    | "active-developer";
+    | "active-developer"
+    | "nitro";
 
   type Badges = ReturnType<
     typeof import("./server/utils/helpers")["getBadges"]
   >;
-
-  type IconNames =
-    keyof typeof import("./node_modules/bootstrap-icons/font/bootstrap-icons.json");
 
   type ConnectionTypes =
     | "battlenet"
@@ -43,6 +41,17 @@ declare global {
     | "twitter"
     | "xbox"
     | "youtube";
+
+  type BootstrapIcons =
+    keyof typeof import("./node_modules/bootstrap-icons/font/bootstrap-icons.json");
+
+  type SiteAssets = "logo" | "error" | "snowflake-search";
+
+  type IconNames =
+    | BootstrapIcons
+    | Exclude<ConnectionTypes, BootstrapIcons>
+    | SiteAssets
+    | AccountBadgesKeys;
 
   type NitroStatus = "none" | "nitro" | "nitro-basic";
 
@@ -74,13 +83,13 @@ declare global {
     afk_timeout: number;
     widget_enabled?: boolean;
     widget_channel_id?: string | null;
-    verification_level: number;
+    verification_level: 0 | 1 | 2 | 3 | 4;
     default_message_notifications: number;
     explicit_content_filter: number;
     roles: [];
     emojis: [];
     features: string[];
-    mfa_level: number;
+    mfa_level: 0 | 1;
     application_id?: string | null;
     system_channel_id?: string | null;
     system_channel_flags: number;
@@ -99,7 +108,7 @@ declare global {
     approximate_member_count?: number;
     approximate_presence_count?: number;
     welcome_screen?: {};
-    nsfw_level: number;
+    nsfw_level: 0 | 1 | 2 | 3;
     stickers?: [];
     premium_progress_bar_enabled: boolean;
   };
@@ -147,8 +156,8 @@ declare global {
     isOpen: boolean;
     payload?:
       | Extract<APIFriendsResponse, {}[]>[0]
-      | APICallbackProcessedResponse["guilds"]["sanitized"]
-      | APICallbackProcessedResponse["connections"]["sanitized"];
+      | APICallbackProcessedResponse["guilds"]["sanitized"][0]
+      | APICallbackProcessedResponse["connections"]["sanitized"][0];
   };
 
   type APICallbackProcessedResponse = Awaited<

@@ -51,14 +51,14 @@ const requestMetadata = useState<RequestMetadata>("metadata");
             )
           "
         >
-          <UIIcon name="save" type="normal" />
+          <UIIcon name="save" type="normal" color="black" />
           <span class="opacity-0 transition group-hover:opacity-100"
             >Save (JSON)</span
           >
         </button>
 
         <UIButton type="normal" class="flex gap-x-2 md:hidden">
-          <UIIcon name="save" type="normal" />
+          <UIIcon name="save" type="normal" color="black" />
           Save
         </UIButton>
       </div>

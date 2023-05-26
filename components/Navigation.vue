@@ -57,7 +57,7 @@ const toggleTheme = () => {
           to="/"
           class="flex items-center gap-x-2"
           :class="{ 'underline underline-offset-8': $route.name === 'index' }"
-          >Search <UIIcon name="search" type="normal"
+          >Search <UIIcon name="search" type="normal" color="black"
         /></NuxtLink>
       </li>
       <li>
@@ -65,7 +65,7 @@ const toggleTheme = () => {
           to="/account"
           class="flex items-center gap-x-2"
           :class="{ 'underline underline-offset-8': $route.name === 'account' }"
-          >Account <UIIcon name="person-badge" type="normal"
+          >Account <UIIcon name="person-badge" type="normal" color="black"
         /></NuxtLink>
       </li>
     </ol>
@@ -76,7 +76,7 @@ const toggleTheme = () => {
       class="rounded-lg focus:outline-none focus-visible:outline-offset-4 focus-visible:outline-black/50 dark:focus-visible:outline-white/50"
     >
       <span class="sr-only">Prodis</span>
-      <LazySvgoLogo filled class="aspect-square w-12" />
+      <UIIcon :custom="true" name="logo" />
     </NuxtLink>
 
     <!-- Navigation links -->
@@ -88,7 +88,7 @@ const toggleTheme = () => {
         @click="navigateTo('/')"
       >
         Search
-        <UIIcon name="search" type="normal" />
+        <UIIcon name="search" type="normal" color="black" />
       </UIButton>
 
       <UIButton
@@ -96,7 +96,7 @@ const toggleTheme = () => {
         @click="navigateTo('/account')"
       >
         Use Account
-        <UIIcon name="person-badge" type="normal" />
+        <UIIcon name="person-badge" type="normal" color="black" />
       </UIButton>
     </div>
 
@@ -117,6 +117,7 @@ const toggleTheme = () => {
         "
         class="cursor-pointer dark:text-white"
         type="normal"
+        color="black"
       />
     </button>
   </nav>

@@ -26,7 +26,7 @@ useHead({
           id="error-search-form"
         />
         <div class="flex flex-col items-center">
-          <LazySvgoError class="w-32 fill-blurple" />
+          <UIIcon :custom="true" name="error" />
           <h1 class="text-lg font-bold dark:text-white">
             {{
               (error.value.message as string).includes("Not Found")

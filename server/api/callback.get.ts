@@ -72,14 +72,11 @@ export default defineEventHandler(async (event) => {
     "Content-Type": "application/x-www-form-urlencoded",
   };
 
-  const [{ postCallbackActions }] = await Promise.all([
-    import("../utils/internals"),
-    $fetch("/oauth2/token/revoke", {
-      method: "POST",
-      ...options,
-      body: new URLSearchParams({ token: access_token }),
-    }),
-  ]);
+  await $fetch("/oauth2/token/revoke", {
+    method: "POST",
+    ...options,
+    body: new URLSearchParams({ token: access_token }),
+  });
 
   event.context.session.processed = await postCallbackActions(
     profile,

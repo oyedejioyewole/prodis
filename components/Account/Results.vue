@@ -7,53 +7,6 @@ const customIcons = [
   "leagueoflegends",
   "riotgames",
 ];
-
-const downloadInformation = async (
-  type: "account" | "guilds" | "connections"
-) => {
-  const { saveAs } = await import("file-saver");
-
-  if (!requestMetadata.value.global.response) return;
-
-  if (type === "account" && "profile" in requestMetadata.value.global.response)
-    saveAs(
-      new Blob(
-        [
-          JSON.stringify(
-            requestMetadata.value.global.response.profile.download
-          ),
-        ],
-        { type: "application/json" }
-      ),
-      "your-discord-account.json"
-    );
-  else if (
-    type === "guilds" &&
-    "guilds" in requestMetadata.value.global.response
-  )
-    saveAs(
-      new Blob(
-        [JSON.stringify(requestMetadata.value.global.response.guilds.download)],
-        { type: "application/json" }
-      ),
-      "your-discord-guilds.json"
-    );
-  else if (
-    type === "connections" &&
-    "connections" in requestMetadata.value.global.response
-  )
-    saveAs(
-      new Blob(
-        [
-          JSON.stringify(
-            requestMetadata.value.global.response.connections.download
-          ),
-        ],
-        { type: "application/json" }
-      ),
-      "your-discord-connections.json"
-    );
-};
 </script>
 
 <template>
@@ -94,6 +47,7 @@ const downloadInformation = async (
                 : 'patch-exclamation'
             }`"
             type="normal"
+            color="black"
           />
         </h3>
 
@@ -109,7 +63,7 @@ const downloadInformation = async (
           >
             uses
             <span class="inline-flex">
-              <LazySvgoBadgesNitro class="w-6" />
+              <UIIcon name="nitro" :custom="true" />
               <UIIcon
                 name="plus"
                 type="large"
@@ -122,7 +76,7 @@ const downloadInformation = async (
           </span>
           <span class="inline-flex items-center gap-x-1" v-else>
             doesn't use
-            <LazySvgoBadgesNitro class="w-6" />
+            <UIIcon name="nitro" :custom="true" />
           </span>
         </h3>
 
@@ -147,10 +101,15 @@ const downloadInformation = async (
         </h3>
         <span
           class="absolute bottom-8 right-10 ml-auto inline-flex cursor-pointer items-center gap-2"
-          @click="downloadInformation('account')"
+          @click="
+            useDownload(
+              requestMetadata.global.response.profile.download,
+              'account'
+            )
+          "
         >
           Save (JSON)
-          <UIIcon name="save" type="normal" />
+          <UIIcon name="save" type="normal" color="black" />
         </span>
         <!-- END -->
       </div>
@@ -164,21 +123,26 @@ const downloadInformation = async (
           Guilds
           <span
             class="inline-flex cursor-pointer items-center gap-x-2 font-sans text-lg"
-            @click="downloadInformation('guilds')"
+            @click="
+              useDownload(
+                requestMetadata.global.response.guilds.download,
+                'guilds'
+              )
+            "
           >
             Save (JSON)
-            <UIIcon name="save" type="normal" />
+            <UIIcon name="save" type="normal" color="black" />
           </span>
         </h1>
         <div
           class="flex flex-wrap items-center gap-2"
           v-if="requestMetadata.global.response.guilds.sanitized.length > 0"
         >
-          <div
+          <button
             v-for="(guild, index) of requestMetadata.global.response.guilds
               .sanitized"
             :key="index"
-            class="cursor-pointer"
+            @click="useModal(true, guild)"
           >
             <LazyNuxtImg
               width="50"
@@ -189,7 +153,7 @@ const downloadInformation = async (
               :alt="`${guild.name} icon`"
             />
             <UIPlaceholders :text="guild.name" v-else />
-          </div>
+          </button>
         </div>
         <h2 class="text-lg" v-else>Oops, you aren't in any guilds 😪</h2>
         <!-- END -->
@@ -204,10 +168,15 @@ const downloadInformation = async (
           Connections
           <span
             class="inline-flex cursor-pointer items-center gap-x-2 font-sans text-lg"
-            @click="downloadInformation('connections')"
+            @click="
+              useDownload(
+                requestMetadata.global.response.connections.download,
+                'connections'
+              )
+            "
           >
             Save (JSON)
-            <UIIcon name="save" type="normal" />
+            <UIIcon name="save" type="normal" color="black" />
           </span>
         </h1>
         <div
@@ -226,29 +195,9 @@ const downloadInformation = async (
               class="dark:text-white"
               type="large"
               v-if="!customIcons.includes(connection.type)"
+              color="black"
             />
-            <div v-else>
-              <LazySvgoBrandsBattlenet
-                class="w-6"
-                v-if="connection.type === 'battlenet'"
-              />
-              <LazySvgoBrandsEbay
-                class="w-8"
-                v-else-if="connection.type === 'ebay'"
-              />
-              <LazySvgoBrandsEpicgames
-                class="w-6"
-                v-else-if="connection.type === 'epicgames'"
-              />
-              <LazySvgoBrandsLeagueoflegends
-                class="w-6"
-                v-else-if="connection.type === 'leagueoflegends'"
-              />
-              <LazySvgoBrandsRiotgames
-                class="w-6"
-                v-else-if="connection.type === 'riotgames'"
-              />
-            </div>
+            <UIIcon :custom="true" :name="connection.type" v-else />
           </div>
         </div>
         <h2 class="text-lg" v-else>

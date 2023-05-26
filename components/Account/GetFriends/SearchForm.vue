@@ -93,7 +93,7 @@ const getAccountRelationships = async (token: string) => {
   >
     <label for="discord-token-form" class="sr-only">Active Discord token</label>
     <div class="flex items-center gap-x-2">
-      <UIIcon name="tags-fill" type="large" class="text-blurple" />
+      <UIIcon name="tags-fill" type="large" />
       <UIInput
         type="text"
         class="w-full"

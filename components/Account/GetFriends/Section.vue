@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { useModal } from "~/composables/useModal";
-
+const { isDesktop } = useDevice();
 const requestMetadata = useState<RequestMetadata>("metadata");
 </script>
 
@@ -19,11 +18,16 @@ const requestMetadata = useState<RequestMetadata>("metadata");
         <UIIcon
           :name="$colorMode.value === 'dark' ? 'book-fill' : 'book'"
           type="large"
+          color="black"
         />
       </button>
     </h2>
     <NuxtErrorBoundary>
-      <AccountGetFriendsSearchForm />
+      <AccountGetFriendsSearchForm v-if="isDesktop" />
+      <p class="text-lg dark:text-white" v-else>
+        Sorry you're device is not supported
+      </p>
+
       <LazyUILoading v-if="requestMetadata.friends.pending" />
       <AccountGetFriendsResults
         v-else-if="
@@ -39,7 +43,7 @@ const requestMetadata = useState<RequestMetadata>("metadata");
         />
 
         <div class="flex flex-col items-center gap-y-2">
-          <LazySvgoError class="w-32 fill-blurple" />
+          <UIIcon :custom="true" name="error" />
           <h1 class="text-center text-lg font-bold dark:text-white">
             {{
               (error.value.message as string).includes("Unauthorized")

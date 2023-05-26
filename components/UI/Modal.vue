@@ -101,6 +101,18 @@ const closeModal = () => {
                     </UIButton>
                   </div>
                 </div>
+                <div v-else-if="'owner' in modal.payload">
+                  <NuxtImg
+                    :src="modal.payload.icon"
+                    quality="100"
+                    loading="lazy"
+                    alt="Guild icon"
+                    class="rounded-2xl"
+                    width="100%"
+                    height="100%"
+                    :title="`${modal.payload.name} icon`"
+                  />
+                </div>
               </div>
               <ContentDoc :path="`/${content}`" id="faq" v-else />
             </HeadlessDialogPanel>
