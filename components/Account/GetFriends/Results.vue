@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDownload } from "~/composables/useDownload";
-
 const requestMetadata = useState<RequestMetadata>("metadata");
 </script>
 
@@ -21,7 +19,7 @@ const requestMetadata = useState<RequestMetadata>("metadata");
         @click="useModal(true, friend)"
       >
         <NuxtImg
-          :src="friend.avatarURL"
+          :src="friend.avatar"
           quality="100"
           loading="lazy"
           alt="Profile picture"

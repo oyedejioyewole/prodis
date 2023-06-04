@@ -1,47 +1,45 @@
-export const useDate = (date: string) => {
-  const _getMonthName = (month: number) => {
-    const monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
+const _getMonthName = (month: number) => {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
-    return monthNames[month];
-  };
+  return monthNames[month];
+};
 
-  const _getSuffix = (dayOfMonth: number) => {
-    if (dayOfMonth >= 11 && dayOfMonth <= 13) {
+const _getSuffix = (day: number) => {
+  if (day >= 11 && day <= 13) {
+    return "th";
+  }
+  switch (day % 10) {
+    case 1:
+      return "st";
+    case 2:
+      return "nd";
+    case 3:
+      return "rd";
+    default:
       return "th";
-    }
-    switch (dayOfMonth % 10) {
-      case 1:
-        return "st";
-      case 2:
-        return "nd";
-      case 3:
-        return "rd";
-      default:
-        return "th";
-    }
-  };
+  }
+};
 
+export const useDate = (date: string) => {
   const dateObject = new Date(date);
 
-  const year = dateObject.getFullYear();
+  const day = dateObject.getDate();
   const month = _getMonthName(dateObject.getMonth());
-  const day = {
-    body: dateObject.getDate(),
-    suffix: _getSuffix(dateObject.getDate()),
-  };
+  const suffix = _getSuffix(day);
+  const year = dateObject.getFullYear();
 
-  return `${day.body}${day.suffix} ${month}, ${year}`;
+  return `${day}${suffix} ${month}, ${year}`;
 };

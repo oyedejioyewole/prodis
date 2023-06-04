@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDownload } from "~/composables/useDownload";
-
 const requestMetadata = useState<RequestMetadata>("metadata");
 </script>
 
@@ -13,7 +11,7 @@ const requestMetadata = useState<RequestMetadata>("metadata");
   >
     <!-- Profile avatar -->
     <NuxtImg
-      :src="requestMetadata.global.response.avatarURL"
+      :src="requestMetadata.global.response.avatar"
       quality="100"
       loading="lazy"
       class="rounded-2xl"
@@ -38,7 +36,7 @@ const requestMetadata = useState<RequestMetadata>("metadata");
         <!-- Account creation date -->
         <h2 class="text-center dark:text-white md:text-left">
           Has been a member since
-          {{ requestMetadata.global.response.createdAt }}
+          {{ requestMetadata.global.response.createdOn }}
         </h2>
 
         <!-- Save JSON -->

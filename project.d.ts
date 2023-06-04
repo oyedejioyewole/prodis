@@ -178,6 +178,10 @@ declare global {
       response?: APIFriendsResponse;
     };
   };
+
+  interface String {
+    toString(base: number): string;
+  }
 }
 
 declare module "locale-code" {

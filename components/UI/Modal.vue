@@ -97,7 +97,7 @@ const closeModal = () => {
                         )
                       "
                     >
-                      <UIIcon type="normal" name="save" /> Save
+                      <UIIcon type="normal" name="save" color="white" /> Save
                     </UIButton>
                   </div>
                 </div>
@@ -146,9 +146,6 @@ div:deep(#faq) {
   }
   & p {
     @apply dark:text-white;
-  }
-  & img {
-    @apply mx-auto rounded-2xl;
   }
 }
 </style>

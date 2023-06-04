@@ -1,4 +1,5 @@
 export default defineEventHandler(async (event) => {
+  // Validate route parameters
   const body = await readBody<{ payload: string }>(event);
 
   if (!body)
@@ -12,6 +13,7 @@ export default defineEventHandler(async (event) => {
       message: "Oops, body doesn't have the required parameters",
     });
 
+  // Validate session
   const sessionId = event.context.sessionId;
   const storage = useStorage("keys");
   const keysAlreadyExists = await storage.hasItem(sessionId);
@@ -23,11 +25,13 @@ export default defineEventHandler(async (event) => {
     });
   }
 
+  // Get the private key from session
   const { privateKey } = (await storage.getItem(sessionId)) as {
     privateKey: string;
     publicKey: string;
   };
 
+  // Decode JWE token
   const { compactDecrypt, importPKCS8 } = await import("jose");
 
   const key = await importPKCS8(privateKey, "RSA-OAEP");
@@ -35,5 +39,6 @@ export default defineEventHandler(async (event) => {
 
   const { secret } = useRuntimeConfig();
 
+  // The moment of truth
   return await createJWT({ ...JSON.parse(plaintext.toString()) }, secret);
 });

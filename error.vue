@@ -1,5 +1,5 @@
 <script setup lang="ts">
-useHead({ title: "Oopsie" });
+useHead({ title: "Oops" });
 const error = useError();
 </script>
 

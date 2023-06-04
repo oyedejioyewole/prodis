@@ -1,7 +1,6 @@
 export default defineEventHandler(async (event) => {
-  const headers = getHeaders(event);
-
-  const jwtPayload = headers["x-token"];
+  // Validate route parameters
+  const jwtPayload = getHeaders(event)["x-token"];
 
   if (!jwtPayload)
     throw createError({
@@ -9,6 +8,7 @@ export default defineEventHandler(async (event) => {
       message: "Oops, couldn't find any JWT attached to the request",
     });
 
+  // Validate (and decrypt if valid) the JWT
   const {
     public: {
       discord: { baseURL },
@@ -28,8 +28,10 @@ export default defineEventHandler(async (event) => {
 
   const { token } = processedJWT;
 
-  const [relationships] = await Promise.all([
-    $fetch<DiscordRelationship[]>("/users/@me/relationships", {
+  // Fetch the user's friends
+  const relationships = await $fetch<DiscordRelationship[]>(
+    "/users/@me/relationships",
+    {
       baseURL,
       headers: {
         authorization: token,
@@ -40,60 +42,46 @@ export default defineEventHandler(async (event) => {
           message: response.statusText,
         });
       },
-    }),
-  ]);
+    }
+  );
 
-  if (relationships.length > 0) {
+  // Check if the user has any friends (if true, return them)
+  if (relationships.length > 0)
     return await Promise.all(
-      relationships.map(async ({ id, nickname, since, user }) => {
-        const jwt = await createJWT({ snowflake: id }, secret);
-
-        const profile = await $fetch<APILookupResponse>("/api/lookup", {
-          headers: {
-            "x-token": jwt,
-          },
-        });
-
-        const {
-          createdAt,
-          discriminator,
-          avatarURL,
-          username,
-          badges,
-          download,
-          bot,
-        } = profile;
-
-        const lookedUpProfile = {
-          avatarURL,
-          badges: badges as Badges,
-          bot,
-          createdAt,
-          discriminator,
-          nickname: nickname || undefined,
+      relationships.map(
+        async ({
+          id,
+          nickname,
           since,
-          username,
-        };
+          user: { avatar_decoration, display_name, global_name },
+        }) => {
+          const jwt = await createJWT({ snowflake: id }, secret);
 
-        for (const property of [
-          "discriminator",
-          "username",
-          "avatar",
-          "public_flags",
-        ])
-          delete user[property as keyof typeof user];
+          const { download, ...profile } = await $fetch<APILookupResponse>(
+            "/api/lookup",
+            {
+              headers: {
+                "x-token": jwt,
+              },
+            }
+          );
 
-        const sanitizedRelationship = Object.fromEntries(
-          Object.entries(user).filter(([_, value]) => value)
-        );
+          const sanitizedRelationship = Object.fromEntries(
+            Object.entries({
+              avatar_decoration,
+              display_name,
+              global_name,
+            }).filter(([_, value]) => value)
+          );
 
-        return {
-          ...lookedUpProfile,
-          download: { ...sanitizedRelationship, ...download },
-        };
-      })
+          return {
+            ...profile,
+            nickname: nickname ?? undefined,
+            since,
+            download: { ...sanitizedRelationship, ...download },
+          };
+        }
+      )
     );
-  }
-
-  return "Oops, this account doesn't have friends";
+  else return "Oops, this account doesn't have friends";
 });

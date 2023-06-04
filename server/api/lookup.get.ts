@@ -1,9 +1,7 @@
 export default defineEventHandler(async (event) => {
-  // Prepartion
-  const headers = getHeaders(event);
-  const jwtPayload = headers["x-token"];
+  // Validate route parameters
+  const jwtPayload = getHeaders(event)["x-token"];
 
-  // Validation of API route parameters
   if (!jwtPayload)
     throw createError({
       statusCode: 400,
@@ -12,6 +10,7 @@ export default defineEventHandler(async (event) => {
 
   const { secret } = useRuntimeConfig();
 
+  // Validate (and decrypt if valid) the JWT
   const processedJWT = await verifyJWT<{ snowflake: string }>(
     jwtPayload,
     secret
@@ -28,6 +27,7 @@ export default defineEventHandler(async (event) => {
       message: "Oops, JWT didn't include a snowflake",
     });
 
+  // Test the snowflake
   const { snowflake } = processedJWT;
 
   if (!/^[0-9]{17,19}$/.test(snowflake)) {
@@ -37,6 +37,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
+  // Prepare the request
   const {
     public: {
       discord: { baseURL },
@@ -44,8 +45,18 @@ export default defineEventHandler(async (event) => {
     discord: { botToken },
   } = useRuntimeConfig();
 
-  // Fetch the snowflakes profile
-  const profile = await $fetch<DiscordUser>(`/users/${snowflake}`, {
+  // Fetch the snowflake's profile
+  const {
+    discriminator,
+    username,
+    public_flags,
+    bot,
+    avatar,
+    id,
+    banner,
+    accent_color,
+    ...remaining
+  } = await $fetch<DiscordUser>(`/users/${snowflake}`, {
     headers: { Authorization: `Bot ${botToken}` },
     baseURL,
     onResponseError: ({ response: { statusText, status } }) => {
@@ -56,53 +67,52 @@ export default defineEventHandler(async (event) => {
     },
   });
 
-  // Get the account creation date from user id
+  // Prepare the response
   const timestamp = converterUserIDOrSnowflakeIntoDate(BigInt(snowflake));
-  const createdAt = formatDate(timestamp);
+  const createdOn = formatDate(timestamp);
 
-  // Make an avatar URL
-  const avatarURL = profile.avatar
-    ? `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.${
-        profile.avatar.startsWith("a_") ? "gif" : "webp"
-      }`
-    : `https://cdn.discordapp.com/embed/avatars/${
-        parseInt(profile.discriminator) % 5
-      }.png`;
-
-  // Select only the needed fields
-  const { username, discriminator, public_flags, bot } = {
-    ...profile,
+  const assets = {
+    avatar: avatar
+      ? `https://cdn.discordapp.com/avatars/${id}/${avatar}.${
+          avatar.startsWith("a_") ? "gif" : "webp"
+        }`
+      : `https://cdn.discordapp.com/embed/avatars/${
+          parseInt(discriminator) % 5
+        }.png`,
+    banner: banner
+      ? `https://cdn.discordapp.com/banners/${id}/${banner}${
+          banner.startsWith("a_") ? ".gif" : ".webp"
+        }?size=2048`
+      : "User doesn't have a banner",
   };
 
+  const accentColor = `#${
+    accent_color?.toString(16).padStart(6, "0") ?? undefined
+  }`;
   const badges = public_flags ? getBadges(public_flags) : "none";
-  const user = `${profile.username}#${profile.discriminator}`;
+  const user = `${username}#${discriminator}`;
 
-  for (const property of [
-    "public_flags",
-    "flags",
-    "avatar",
-    "username",
-    "discriminator",
-  ])
-    delete profile[property as keyof typeof profile];
+  delete remaining.flags;
 
   const sanitizedProfile = Object.fromEntries(
-    Object.entries(profile).filter(([_, value]) => value)
+    Object.entries(remaining).filter(([_, value]) => value)
   );
 
+  // The moment of truth
   return {
-    avatarURL,
+    avatar: assets.avatar,
     badges: badges as Badges,
     bot,
-    createdAt,
+    createdOn,
     discriminator,
     download: {
       badges: badges as Badges,
       bot: bot
         ? "This account is a bot account"
         : "This account is not a bot account",
-      createdAt,
-      avatarURL,
+      createdOn,
+      accentColor,
+      ...assets,
       ...sanitizedProfile,
       user,
     },

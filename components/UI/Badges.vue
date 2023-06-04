@@ -12,10 +12,10 @@ defineProps<{
     <!-- Badges: START -->
     <div class="flex items-center gap-x-2" v-if="Array.isArray(badges)">
       <div v-for="(badge, index) of badges" :key="index">
-        <UIIcon v-if="!bot" type="large" :name="badge" />
+        <UIIcon type="large" :name="badge" :custom="true" />
         <h1
           class="inline-flex items-center gap-x-1 rounded-xl bg-blurple px-3 py-1 dark:text-white"
-          v-else-if="bot"
+          v-if="bot"
         >
           Bot
           <UIIcon
