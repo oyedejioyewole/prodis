@@ -42,11 +42,11 @@ const closeModal = () => {
             >
               <div v-if="modal.payload">
                 <div
-                  v-if="'avatarURL' in modal.payload"
+                  v-if="'avatar' in modal.payload"
                   class="flex items-center gap-x-4"
                 >
                   <NuxtImg
-                    :src="modal.payload.avatarURL"
+                    :src="modal.payload.avatar"
                     quality="100"
                     loading="lazy"
                     alt="Profile picture"
@@ -83,7 +83,7 @@ const closeModal = () => {
                     <h2>
                       Been a member since
                       <span class="rounded-md bg-[#8084ff] px-2 py-1">{{
-                        modal.payload.createdAt
+                        modal.payload.createdOn
                       }}</span>
                     </h2>
 

@@ -48,12 +48,6 @@ $ pnpm install
 $ pnpm install -g vue-tsc
 ```
 
-**POV:** why didn't I install `vue-tsc` with as a dependency (or devDependency), well if you know how to solve this error when trying to boot up Nuxt then I'll add it
-
-```log
-
-```
-
 #### Scripts
 
 Here is a list of every possible command you can run and what they do
