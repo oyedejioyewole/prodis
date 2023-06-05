@@ -99,6 +99,9 @@ export default defineNuxtConfig({
         ...redisOptions,
       },
     },
+    prerender: {
+      routes: ["/", "/account"],
+    },
   },
   css: ["bootstrap-icons/font/bootstrap-icons.css"],
   content: {
