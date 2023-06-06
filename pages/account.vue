@@ -16,19 +16,19 @@ watch(session, (_new) => {
 });
 
 const navigateToDiscord = async () => {
+  const { nanoid } = await import("nanoid");
   const {
     public: {
       discord: { id, redirectUrl, baseURL },
     },
   } = useRuntimeConfig();
-  const { csrf } = useCsrf() as { csrf: string };
 
   await navigateTo(
     `${baseURL}/oauth2/authorize?client_id=${id}&redirect_uri=${encodeURIComponent(
       redirectUrl
     )}&response_type=code&scope=${encodeURIComponent(
       "identify connections email guilds"
-    )}&state=${csrf}`,
+    )}&state=${nanoid(128)}`,
     { external: true }
   );
 };
