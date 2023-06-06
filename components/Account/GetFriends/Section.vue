@@ -46,7 +46,8 @@ const requestMetadata = useState<RequestMetadata>("metadata");
           <UIIcon :custom="true" name="error" />
           <h1 class="text-center text-lg font-bold dark:text-white">
             {{
-              (error.value.message as string).includes("Unauthorized")
+              (error.value.message as string).includes("Unauthorized") ||
+              (error.value.message as string).includes("401")
                 ? "Oops, looks like you've got an inactive token 😅"
                 : (error.value.message as string).includes("Failed to fetch")
                 ? "Oops, there was an error sending the request 🤪"

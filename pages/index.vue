@@ -27,9 +27,11 @@ useHead({
         />
         <div class="flex flex-col items-center">
           <UIIcon :custom="true" name="error" />
+          <p>{{ error }}</p>
           <h1 class="text-lg font-bold dark:text-white">
             {{
-              (error.value.message as string).includes("Not Found")
+              (error.value.message as string).includes("Not Found") ||
+              (error.value.message as string).includes("404")
                 ? "Oops, the account doesn't exist 😅"
                 : (error.value.message as string).includes("Failed to fetch")
                 ? "Oops, there was an error sending the request 🤪"
