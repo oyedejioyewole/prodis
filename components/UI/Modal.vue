@@ -10,7 +10,7 @@ const closeModal = () => {
 </script>
 
 <template>
-  <dialog>
+  <dialog id="faq-dialog">
     <span class="float-right text-3xl hover:cursor-pointer" @click="closeModal">
       <UIIcon name="x" color="black" />
     </span>
