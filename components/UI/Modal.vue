@@ -10,7 +10,7 @@ const closeModal = () => {
 </script>
 
 <template>
-  <dialog id="faq">
+  <dialog>
     <span class="float-right text-3xl hover:cursor-pointer" @click="closeModal">
       <UIIcon name="x" color="black" />
     </span>
@@ -77,7 +77,7 @@ const closeModal = () => {
 </template>
 
 <style lang="scss">
-dialog#faq {
+dialog {
   @apply max-w-2xl rounded-lg p-10;
 
   div#contents {
