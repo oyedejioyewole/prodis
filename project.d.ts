@@ -153,7 +153,6 @@ declare global {
   };
 
   type Modal = {
-    isOpen: boolean;
     payload?:
       | Extract<APIFriendsResponse, {}[]>[0]
       | APICallbackProcessedResponse["guilds"]["sanitized"][0]
