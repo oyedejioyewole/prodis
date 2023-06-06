@@ -11,7 +11,6 @@ const requestMetadata = useState<RequestMetadata>("metadata");
       "
       v-for="(friend, index) of requestMetadata.friends.response"
       :key="index"
-      :ref="`friend-${index}`"
       class="flex items-center justify-between rounded-lg bg-black/10 p-3 2xl:px-8"
     >
       <div

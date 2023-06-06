@@ -2,7 +2,6 @@
   "recommendations": [
     "bradlc.vscode-tailwindcss",
     "streetsidesoftware.code-spell-checker",
-    "usernamehw.errorlens",
-    "p42ai.refactor"
+    "usernamehw.errorlens"
   ]
 }

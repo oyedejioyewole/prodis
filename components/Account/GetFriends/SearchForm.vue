@@ -38,7 +38,7 @@ const getAccountRelationships = async (token: string) => {
       .setProtectedHeader({ alg: "RSA-OAEP", enc: "A256GCM" })
       .encrypt(key);
 
-    const { data: jwtToken, error: jwtSigningError } = await useCsrfFetch(
+    const { data: jwtToken, error: jwtSigningError } = await useFetch(
       "/api/sign",
       {
         method: "POST",

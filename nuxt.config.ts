@@ -58,7 +58,6 @@ export default defineNuxtConfig({
       crossOriginEmbedderPolicy:
         process.env.NODE_ENV === "development" ? "unsafe-none" : "require-corp",
     },
-    csrf: true,
   },
   image: {
     domains: ["cdn.discordapp.com"],

@@ -32,7 +32,7 @@ const searchForAccount = async (snowflake: string) => {
       .setProtectedHeader({ alg: "RSA-OAEP-256", enc: "A256GCM" })
       .encrypt(key);
 
-    const { data: jwtToken, error: jwtSigningError } = await useCsrfFetch(
+    const { data: jwtToken, error: jwtSigningError } = await useFetch(
       "/api/sign",
       {
         method: "POST",
@@ -40,6 +40,9 @@ const searchForAccount = async (snowflake: string) => {
           payload: jwe,
         },
         key: "jwt-token",
+        headers: {
+          "x-csrf-token": "1",
+        },
       }
     );
 
