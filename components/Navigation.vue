@@ -57,16 +57,20 @@ const toggleTheme = () => {
           to="/"
           class="flex items-center gap-x-2"
           :class="{ 'underline underline-offset-8': $route.name === 'index' }"
-          >Search <UIIcon name="search" type="normal" color="black"
-        /></NuxtLink>
+          :prefetch="true"
+        >
+          Search <UIIcon name="search" type="normal" color="black" />
+        </NuxtLink>
       </li>
       <li>
         <NuxtLink
           to="/account"
           class="flex items-center gap-x-2"
           :class="{ 'underline underline-offset-8': $route.name === 'account' }"
-          >Account <UIIcon name="person-badge" type="normal" color="black"
-        /></NuxtLink>
+          :prefetch="true"
+        >
+          Account <UIIcon name="person-badge" type="normal" color="black" />
+        </NuxtLink>
       </li>
     </ol>
 
@@ -74,6 +78,7 @@ const toggleTheme = () => {
     <NuxtLink
       to="/"
       class="rounded-lg focus:outline-none focus-visible:outline-offset-4 focus-visible:outline-black/50 dark:focus-visible:outline-white/50"
+      :prefetch="true"
     >
       <span class="sr-only">Prodis</span>
       <UIIcon :custom="true" name="logo" />
