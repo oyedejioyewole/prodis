@@ -15,17 +15,17 @@ const requestMetadata = useState<RequestMetadata>("metadata");
         @click="useModal(true)"
       >
         <span class="sr-only">Open the Guide</span>
-        <UIIcon name="book" type="large" />
+        <LazyUIIcon name="book" type="large" />
       </button>
     </h2>
-    <NuxtErrorBoundary>
-      <AccountGetFriendsSearchForm v-if="isDesktop" />
+    <LazyNuxtErrorBoundary>
+      <LazyAccountGetFriendsSearchForm v-if="isDesktop" />
       <p class="text-lg dark:text-white" v-else>
         Sorry you're device is not supported
       </p>
 
       <LazyUILoading v-if="requestMetadata.friends.pending" />
-      <AccountGetFriendsResults
+      <LazyAccountGetFriendsResults
         v-else-if="
           !requestMetadata.friends.pending && requestMetadata.friends.response
         "
@@ -33,13 +33,13 @@ const requestMetadata = useState<RequestMetadata>("metadata");
       />
 
       <template #error="{ error }">
-        <AccountGetFriendsSearchForm
+        <LazyAccountGetFriendsSearchForm
           @clear-errors="error.value = null"
           class="mb-10"
         />
 
         <div class="flex flex-col items-center gap-y-2">
-          <UIIcon :custom="true" name="error" />
+          <LazyUIIcon :custom="true" name="error" />
           <h1 class="text-center text-lg font-bold dark:text-white">
             {{
               (error.value.message as string).includes("Unauthorized") ||
@@ -52,6 +52,6 @@ const requestMetadata = useState<RequestMetadata>("metadata");
           </h1>
         </div>
       </template>
-    </NuxtErrorBoundary>
+    </LazyNuxtErrorBoundary>
   </aside>
 </template>

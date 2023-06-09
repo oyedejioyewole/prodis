@@ -36,56 +36,56 @@ const toggleTheme = () => {
       }"
     >
       <li>
-        <NuxtLink
+        <LazyNuxtLink
           to="/"
           class="flex items-center gap-x-2"
           :class="{ 'underline underline-offset-8': $route.name === 'index' }"
           :prefetch="true"
         >
-          Search <UIIcon name="search" type="normal" />
-        </NuxtLink>
+          Search <LazyUIIcon name="search" type="normal" />
+        </LazyNuxtLink>
       </li>
       <li>
-        <NuxtLink
+        <LazyNuxtLink
           to="/account"
           class="flex items-center gap-x-2"
           :class="{ 'underline underline-offset-8': $route.name === 'account' }"
           :prefetch="true"
         >
           Account <UIIcon name="person-badge" type="normal" />
-        </NuxtLink>
+        </LazyNuxtLink>
       </li>
     </ul>
 
     <!-- Logo -->
-    <NuxtLink
+    <LazyNuxtLink
       to="/"
       class="rounded-lg focus:outline-none focus-visible:outline-offset-4 focus-visible:outline-black/50 dark:focus-visible:outline-white/50"
       :prefetch="true"
     >
       <span class="sr-only">Prodis</span>
-      <UIIcon :custom="true" name="logo" />
-    </NuxtLink>
+      <LazyUIIcon :custom="true" name="logo" />
+    </LazyNuxtLink>
 
     <!-- Navigation links -->
     <div
       class="hidden items-center gap-x-4 rounded-lg bg-blurple/30 p-3 transition dark:bg-blurple md:flex"
     >
-      <UIButton
+      <LazyUIButton
         :type="$route.name === 'index' ? 'menu-active' : 'menu-inactive'"
         @click="navigateTo('/')"
       >
         Search
-        <UIIcon name="search" type="normal" />
-      </UIButton>
+        <LazyUIIcon name="search" type="normal" />
+      </LazyUIButton>
 
-      <UIButton
+      <LazyUIButton
         :type="$route.name === 'account' ? 'menu-active' : 'menu-inactive'"
         @click="navigateTo('/account')"
       >
         Use Account
-        <UIIcon name="person-badge" type="normal" />
-      </UIButton>
+        <LazyUIIcon name="person-badge" type="normal" />
+      </LazyUIButton>
     </div>
 
     <!-- Toggle theme -->
@@ -95,8 +95,12 @@ const toggleTheme = () => {
       type="button"
     >
       <span class="sr-only">Toggle theme</span>
-      <ColorScheme placeholder="Loading ..." tag="span" class="dark:text-white">
-        <UIIcon
+      <LazyColorScheme
+        placeholder="Loading ..."
+        tag="span"
+        class="dark:text-white"
+      >
+        <LazyUIIcon
           :name="`${
             $colorMode.value === 'light'
               ? 'brightness-high'
@@ -106,7 +110,7 @@ const toggleTheme = () => {
           }`"
           class="cursor-pointer dark:text-white"
           type="normal"
-      /></ColorScheme>
+      /></LazyColorScheme>
     </button>
   </nav>
 </template>

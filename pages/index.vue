@@ -10,18 +10,18 @@ useHead({
   <section
     class="flex min-h-screen flex-col items-center justify-center gap-y-20"
   >
-    <NuxtErrorBoundary>
-      <HomeSearchForm />
-      <LazyUILoading v-if="requestMetadata.global.pending" />
+    <LazyNuxtErrorBoundary>
+      <LazyHomeSearchForm />
+      <LazyUILoading v-if="requestMetadata.lookup.pending" />
       <LazyHomeResults
         v-else-if="
-          !requestMetadata.global.pending && requestMetadata.global.response
+          !requestMetadata.lookup.pending && requestMetadata.lookup.response
         "
         class="order-1 flex flex-col items-center gap-10 rounded-2xl border border-blurple p-10 dark:border-2 md:flex-row"
       />
 
       <template #error="{ error }">
-        <HomeSearchForm
+        <LazyHomeSearchForm
           @clear-errors="error.value = null"
           id="error-search-form"
         />
@@ -39,6 +39,6 @@ useHead({
           </h1>
         </div>
       </template>
-    </NuxtErrorBoundary>
+    </LazyNuxtErrorBoundary>
   </section>
 </template>

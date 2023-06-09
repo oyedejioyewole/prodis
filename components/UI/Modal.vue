@@ -21,7 +21,7 @@ const postLazyLoad = () => (isImageLoading.value = false);
       type="button"
     >
       <span class="sr-only">Close this dialog</span>
-      <UIIcon name="x" />
+      <LazyUIIcon name="x" />
     </button>
 
     <template v-if="modal.isOpen">
@@ -45,10 +45,16 @@ const postLazyLoad = () => (isImageLoading.value = false);
               <span class="rounded-md bg-[#8084ff] px-2 py-1"> aka </span>
               {{ modal.payload.nickname }}
             </h2>
-            <LazyUIBadgesOrFeatures
-              :badges="modal.payload.badges"
-              :bot="modal.payload.bot"
-            />
+            <h2 class="inline-flex items-center gap-x-1">
+              <b class="font-serif text-lg dark:text-white">Badges:</b>
+              <LazyUIExtrasBadges
+                :badges="modal.payload.badges"
+                :bot="modal.payload.bot"
+                v-if="Array.isArray(modal.payload.badges)"
+                class="w-fit"
+              />
+              <h3 v-else class="text-lg dark:text-white">None 🤪</h3>
+            </h2>
             <h2>
               Been friends since
               <span class="rounded-md bg-[#8084ff] px-2 py-1">{{
@@ -84,7 +90,7 @@ const postLazyLoad = () => (isImageLoading.value = false);
             :alt="`${modal.payload.name}'s icon`"
             class="aspect-square h-fit rounded-2xl object-cover"
             :class="{
-              'w-[128px] animate-pulse bg-gray-500': isImageLoading,
+              'w-[128px] animate-pulse bg-gray-300': isImageLoading,
               'w-fit': !isImageLoading,
             }"
             id="guild-icon"
@@ -129,7 +135,7 @@ const postLazyLoad = () => (isImageLoading.value = false);
                   </h2>
                 </span>
 
-                <LazyUIBadgesOrFeatures
+                <LazyUIExtrasGuildsFeatures
                   v-if="Array.isArray(modal.payload.features)"
                   :features="modal.payload.features"
                 />

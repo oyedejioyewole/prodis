@@ -22,9 +22,9 @@ useFont([
 </script>
 
 <template>
-  <div class="w-[90%] mx-auto py-5 selection:bg-blurple/50">
+  <div class="mx-auto w-[90%] py-5 selection:bg-blurple/50">
     <!-- Navigation -->
-    <Navigation class="flex justify-between items-center" />
+    <LazyNavigation class="flex items-center justify-between" />
 
     <!-- Content -->
     <slot />

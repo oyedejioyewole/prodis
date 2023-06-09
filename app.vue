@@ -1,7 +1,8 @@
 <script setup lang="ts">
 useState<RequestMetadata>("metadata", () => ({
   friends: { pending: false },
-  global: { pending: false },
+  lookup: { pending: false },
+  account: { pending: false },
 }));
 
 useState<Modal>("modal", () => ({ isOpen: false }));

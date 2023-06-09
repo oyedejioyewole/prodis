@@ -3,7 +3,6 @@ defineProps<{
   name: IconNames;
   type?: "normal" | "large";
   custom?: boolean;
-  classes?: string;
 }>();
 </script>
 

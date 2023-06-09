@@ -40,6 +40,33 @@ export const postCallbackActions = async (
     Object.entries(profile).filter(([_, value]) => value)
   );
 
+  const usableGuildsInformation = guilds.map(
+    ({ name, icon, owner, id, features }) => ({
+      icon: icon
+        ? icon.startsWith("a_")
+          ? `${cdn}/icons/${id}/${icon}.gif`
+          : `${cdn}/icons/${id}/${icon}.webp`
+        : undefined,
+      name,
+      owner,
+      features:
+        features.length > 0
+          ? features.map(
+              (feature) =>
+                feature.toLowerCase().replace(/_/g, "-") as UsableGuildFeatures
+            )
+          : "Sorry, I couldn't find any features 🤷",
+    })
+  );
+
+  const usableConnectionsInformation = connections.map(
+    ({ name, type, ...rest }) => ({
+      name,
+      type,
+      download: rest,
+    })
+  );
+
   return {
     profile: {
       badges: badges as Badges,
@@ -59,40 +86,8 @@ export const postCallbackActions = async (
       multiFactorAuthenticationStatus,
       verified,
     },
-    guilds: {
-      download: guilds, // TODO: format the guilds here with useful information for the download
-      sanitized: guilds.map(({ name, icon, owner, id, features }) => ({
-        icon: icon
-          ? icon.startsWith("a_")
-            ? `${cdn}/icons/${id}/${icon}.gif`
-            : `${cdn}/icons/${id}/${icon}.webp`
-          : undefined,
-        name,
-        owner,
-        features:
-          features.length > 0
-            ? features.map(
-                (feature) =>
-                  feature
-                    .toLowerCase()
-                    .replace(/_/g, "-") as UsableGuildFeatures
-              )
-            : "Sorry, I couldn't find any features 🤷",
-      })),
-    },
-    connections: {
-      download: connections,
-      sanitized: connections.map(
-        ({ name, type, verified, friend_sync, visibility, show_activity }) => ({
-          name,
-          type,
-          verified,
-          friendSync: friend_sync,
-          visibility,
-          showActivity: show_activity,
-        })
-      ),
-    },
+    guilds: usableGuildsInformation,
+    connections: usableConnectionsInformation,
   };
 };
 

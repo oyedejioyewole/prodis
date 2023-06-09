@@ -93,8 +93,8 @@ const getAccountRelationships = async (token: string) => {
   >
     <label for="discord-token-form" class="sr-only">Active Discord token</label>
     <div class="flex items-center gap-x-2">
-      <UIIcon name="tags-fill" type="large" />
-      <UIInput
+      <LazyUIIcon name="tags-fill" type="large" />
+      <LazyUIInput
         type="text"
         class="w-full"
         placeholder="Active Discord token"
@@ -102,8 +102,8 @@ const getAccountRelationships = async (token: string) => {
         label-id="discord-token-form"
       />
     </div>
-    <UIButton type="normal" :disabled="!formData.isAllowed" action="submit"
-      >Let's Go 🎉</UIButton
+    <LazyUIButton type="normal" :disabled="!formData.isAllowed" action="submit"
+      >Let's Go 🎉</LazyUIButton
     >
   </form>
 </template>

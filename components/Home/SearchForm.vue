@@ -13,7 +13,7 @@ const searchForAccount = async (snowflake: string) => {
 
   const requestMetadata = useState<RequestMetadata>("metadata");
 
-  requestMetadata.value.global = {
+  requestMetadata.value.lookup = {
     pending: true,
   };
 
@@ -55,19 +55,19 @@ const searchForAccount = async (snowflake: string) => {
       });
 
       if (data.value) {
-        requestMetadata.value.global = {
+        requestMetadata.value.lookup = {
           pending: false,
           response: data.value,
         };
       } else if (error.value) {
-        requestMetadata.value.global = {
+        requestMetadata.value.lookup = {
           pending: false,
           response: undefined,
         };
         throw createError(error.value.message);
       }
     } else if (jwtSigningError.value) {
-      requestMetadata.value.global = {
+      requestMetadata.value.lookup = {
         pending: false,
         response: undefined,
       };
@@ -75,7 +75,7 @@ const searchForAccount = async (snowflake: string) => {
     }
     return;
   } else if (publicKeyRequestError.value) {
-    requestMetadata.value.global = {
+    requestMetadata.value.lookup = {
       pending: false,
       response: undefined,
     };
@@ -98,16 +98,19 @@ const searchForAccount = async (snowflake: string) => {
       >
       <div class="flex flex-col gap-4 md:flex-row">
         <div class="flex items-center gap-x-2">
-          <UIIcon name="snow" type="large" class="text-blurple" />
-          <UIInput
+          <LazyUIIcon name="snow" type="large" class="text-blurple" />
+          <LazyUIInput
             type="text"
             placeholder="Snowflake ID"
             @validation-confirmed="handleValidationResults"
             label-id="snowflake-form"
           />
         </div>
-        <UIButton type="normal" :disabled="!formData.isAllowed" action="submit"
-          >Let's Go 🎉</UIButton
+        <LazyUIButton
+          type="normal"
+          :disabled="!formData.isAllowed"
+          action="submit"
+          >Let's Go 🎉</LazyUIButton
         >
       </div>
     </form>

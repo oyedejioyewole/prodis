@@ -196,8 +196,7 @@ declare global {
     isOpen: boolean;
     payload?:
       | Extract<APIFriendsResponse, {}[]>[0]
-      | APICallbackProcessedResponse["guilds"]["sanitized"][0]
-      | APICallbackProcessedResponse["connections"]["sanitized"][0];
+      | APICallbackProcessedResponse["guilds"]["sanitized"][0];
   };
 
   type APICallbackProcessedResponse = Awaited<
@@ -211,9 +210,13 @@ declare global {
   type APILookupResponse = InternalApi["/api/lookup"]["get"];
 
   type RequestMetadata = {
-    global: {
+    lookup: {
       pending: boolean;
-      response?: APILookupResponse | APICallbackProcessedResponse;
+      response?: APILookupResponse;
+    };
+    account: {
+      pending: boolean;
+      response?: APICallbackProcessedResponse;
     };
     friends: {
       pending: boolean;
