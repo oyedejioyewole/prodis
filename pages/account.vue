@@ -68,7 +68,7 @@ const navigateToDiscord = async () => {
             class="px-10 py-5 text-lg"
             @click="navigateToDiscord()"
           >
-            Login <UIIcon name="door-open-fill" type="normal" color="white" />
+            Login <UIIcon name="door-open-fill" type="normal" />
           </UIButton>
         </div>
 

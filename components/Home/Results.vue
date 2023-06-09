@@ -27,7 +27,7 @@ const requestMetadata = useState<RequestMetadata>("metadata");
 
       <div class="contents gap-y-2">
         <!-- Badges (if any) -->
-        <UIBadges
+        <UIBadgesOrFeatures
           :badges="requestMetadata.global.response.badges"
           type="display"
           :bot="requestMetadata.global.response.bot ?? false"
@@ -49,14 +49,14 @@ const requestMetadata = useState<RequestMetadata>("metadata");
             )
           "
         >
-          <UIIcon name="save" type="normal" color="black" />
+          <UIIcon name="save" type="normal" />
           <span class="opacity-0 transition group-hover:opacity-100"
             >Save (JSON)</span
           >
         </button>
 
         <UIButton type="normal" class="flex gap-x-2 md:hidden">
-          <UIIcon name="save" type="normal" color="black" />
+          <UIIcon name="save" type="normal" />
           Save
         </UIButton>
       </div>

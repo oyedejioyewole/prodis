@@ -15,11 +15,7 @@ const requestMetadata = useState<RequestMetadata>("metadata");
         @click="useModal(true)"
       >
         <span class="sr-only">Open the Guide</span>
-        <UIIcon
-          :name="$colorMode.value === 'dark' ? 'book-fill' : 'book'"
-          type="large"
-          color="black"
-        />
+        <UIIcon name="book" type="large" />
       </button>
     </h2>
     <NuxtErrorBoundary>

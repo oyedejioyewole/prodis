@@ -7,6 +7,10 @@ const customIcons = [
   "leagueoflegends",
   "riotgames",
 ];
+
+const isImageLoading = ref(true);
+
+const postLazyLoad = () => (isImageLoading.value = false);
 </script>
 
 <template>
@@ -21,18 +25,20 @@ const customIcons = [
       <div
         class="relative flex flex-col rounded-2xl bg-black/10 p-10 dark:bg-white/10 dark:text-white"
       >
-        <!-- START -->
+        <!-- Heading -->
         <h1 class="font-serif text-3xl 2xl:text-4xl">Account Information</h1>
 
-        <UIBadges
+        <!-- Account badges? -->
+        <UIBadgesOrFeatures
           :badges="requestMetadata.global.response.profile.badges"
           :bot="requestMetadata.global.response.profile.bot ?? false"
           type="display"
           class="w-fit"
         />
 
+        <!-- Verified account? -->
         <h3 class="inline-flex items-center gap-x-1 text-lg">
-          This account is
+          Your are
           <span class="font-serif">
             {{
               requestMetadata.global.response.profile.verified
@@ -47,59 +53,57 @@ const customIcons = [
                 : 'patch-exclamation'
             }`"
             type="normal"
-            color="black"
           />
         </h3>
 
-        <h3 class="text-lg">
-          This account
-          <span
-            class="inline-flex items-center gap-x-1"
-            v-if="
-              requestMetadata.global.response.profile.nitroStatus.includes(
-                'nitro'
-              )
-            "
-          >
-            uses
-            <span class="inline-flex">
-              <UIIcon name="nitro" :custom="true" />
-              <UIIcon
-                name="plus"
-                type="large"
-                v-if="
-                  requestMetadata.global.response.profile.nitroStatus ===
-                  'nitro'
-                "
-              />
-            </span>
-          </span>
-          <span class="inline-flex items-center gap-x-1" v-else>
-            doesn't use
+        <!-- Has nitro? -->
+        <h3 class="inline-flex items-center gap-x-1 text-lg">
+          Your account
+          {{
+            requestMetadata.global.response.profile.nitroStatus.includes(
+              "nitro"
+            )
+              ? "has"
+              : "doesn't have"
+          }}
+          <div class="flex">
             <UIIcon name="nitro" :custom="true" />
-          </span>
+            <UIIcon
+              name="plus"
+              type="large"
+              v-if="
+                requestMetadata.global.response.profile.nitroStatus === 'nitro'
+              "
+            />
+          </div>
         </h3>
 
+        <!-- Account language -->
         <h3 class="text-lg">
-          This account uses
+          Your default language is
           <span class="font-serif">{{
             requestMetadata.global.response.profile.locale
           }}</span>
         </h3>
+
+        <!-- Multi-factor authentication state -->
         <h3 class="text-lg">
-          This account has multi-factor authentication
+          You have multi-factor authentication
           <span class="font-serif">{{
             requestMetadata.global.response.profile
               .multiFactorAuthenticationStatus
           }}</span>
         </h3>
+
+        <!-- Joined at -->
         <h3 class="text-lg">
-          Has been a user since the
+          Joined on the
           <span class="font-serif">
             {{ requestMetadata.global.response.profile.createdAt }}
           </span>
         </h3>
-        <span
+
+        <button
           class="absolute bottom-8 right-10 ml-auto inline-flex cursor-pointer items-center gap-2"
           @click="
             useDownload(
@@ -109,8 +113,8 @@ const customIcons = [
           "
         >
           Save (JSON)
-          <UIIcon name="save" type="normal" color="black" />
-        </span>
+          <UIIcon name="save" type="normal" />
+        </button>
         <!-- END -->
       </div>
 
@@ -131,7 +135,7 @@ const customIcons = [
             "
           >
             Save (JSON)
-            <UIIcon name="save" type="normal" color="black" />
+            <UIIcon name="save" type="normal" />
           </span>
         </h1>
         <div
@@ -147,10 +151,14 @@ const customIcons = [
             <LazyNuxtImg
               width="50"
               height="50"
-              class="rounded-2xl"
+              class="aspect-square w-[50px] rounded-2xl object-cover"
+              :class="{
+                'animate-pulse bg-gray-300': isImageLoading,
+              }"
               :src="guild.icon"
               v-if="guild.icon"
               :alt="`${guild.name} icon`"
+              @load="postLazyLoad"
             />
             <UIPlaceholders :text="guild.name" v-else />
           </button>
@@ -176,7 +184,7 @@ const customIcons = [
             "
           >
             Save (JSON)
-            <UIIcon name="save" type="normal" color="black" />
+            <UIIcon name="save" type="normal" />
           </span>
         </h1>
         <div
@@ -195,7 +203,6 @@ const customIcons = [
               class="dark:text-white"
               type="large"
               v-if="!customIcons.includes(connection.type)"
-              color="black"
             />
             <UIIcon :custom="true" :name="connection.type" v-else />
           </div>

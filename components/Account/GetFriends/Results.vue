@@ -44,7 +44,6 @@ const requestMetadata = useState<RequestMetadata>("metadata");
         <UIIcon
           :name="$colorMode.value === 'dark' ? 'save-fill' : 'save'"
           type="normal"
-          color="black"
         />
       </span>
     </div>

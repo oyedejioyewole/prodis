@@ -1,14 +1,11 @@
 export const useModal = (state: boolean, payload?: Modal["payload"]) => {
-  const modal = document.querySelector(
+  const element = document.querySelector(
     "dialog#faq-dialog"
   ) as HTMLDialogElement;
-  const modalPayload = useState<Modal>("modal");
+  const modal = useState<Modal>("modal");
 
-  if (state) {
-    modalPayload.value = { payload };
-    modal.showModal();
-  } else {
-    modalPayload.value = { payload: undefined };
-    modal.close();
-  }
+  modal.value = { payload: payload, isOpen: state };
+
+  if (state) element.showModal();
+  else element.close();
 };

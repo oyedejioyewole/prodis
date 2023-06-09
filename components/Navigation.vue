@@ -1,27 +1,10 @@
 <script setup lang="ts">
-const currentThemeCount = ref(0);
 const theme = useColorMode();
 const isMobileMenuVisible = ref(false);
 
-if (theme.value === "light") {
-  currentThemeCount.value = 1;
-} else if (theme.value === "dark") {
-  currentThemeCount.value = 2;
-} else if (theme.value === "system") {
-  currentThemeCount.value = 0;
-}
-
 const toggleTheme = () => {
-  currentThemeCount.value++;
-
-  if (currentThemeCount.value === 1) {
-    theme.preference = "light";
-  } else if (currentThemeCount.value === 2) {
-    theme.preference = "dark";
-  } else {
-    theme.preference = "system";
-    currentThemeCount.value = 0;
-  }
+  if (theme.preference === "dark") theme.preference = "light";
+  else if (theme.preference === "light") theme.preference = "dark";
 };
 </script>
 
@@ -45,7 +28,7 @@ const toggleTheme = () => {
       ></span>
     </button>
 
-    <ol
+    <ul
       class="absolute top-0 z-10 flex min-w-[90%] flex-col items-center gap-y-4 rounded-xl bg-[#001185] p-10 text-xl text-white transition duration-500 md:hidden"
       :class="{
         'translate-y-20 opacity-100': isMobileMenuVisible,
@@ -59,7 +42,7 @@ const toggleTheme = () => {
           :class="{ 'underline underline-offset-8': $route.name === 'index' }"
           :prefetch="true"
         >
-          Search <UIIcon name="search" type="normal" color="black" />
+          Search <UIIcon name="search" type="normal" />
         </NuxtLink>
       </li>
       <li>
@@ -69,10 +52,10 @@ const toggleTheme = () => {
           :class="{ 'underline underline-offset-8': $route.name === 'account' }"
           :prefetch="true"
         >
-          Account <UIIcon name="person-badge" type="normal" color="black" />
+          Account <UIIcon name="person-badge" type="normal" />
         </NuxtLink>
       </li>
-    </ol>
+    </ul>
 
     <!-- Logo -->
     <NuxtLink
@@ -93,7 +76,7 @@ const toggleTheme = () => {
         @click="navigateTo('/')"
       >
         Search
-        <UIIcon name="search" type="normal" color="black" />
+        <UIIcon name="search" type="normal" />
       </UIButton>
 
       <UIButton
@@ -101,7 +84,7 @@ const toggleTheme = () => {
         @click="navigateTo('/account')"
       >
         Use Account
-        <UIIcon name="person-badge" type="normal" color="black" />
+        <UIIcon name="person-badge" type="normal" />
       </UIButton>
     </div>
 
@@ -112,18 +95,18 @@ const toggleTheme = () => {
       type="button"
     >
       <span class="sr-only">Toggle theme</span>
-      <UIIcon
-        :name="
-          currentThemeCount === 0
-            ? 'display-fill'
-            : currentThemeCount === 1
-            ? 'brightness-high-fill'
-            : 'moon-stars-fill'
-        "
-        class="cursor-pointer dark:text-white"
-        type="normal"
-        color="black"
-      />
+      <ColorScheme placeholder="Loading ..." tag="span" class="dark:text-white">
+        <UIIcon
+          :name="`${
+            $colorMode.value === 'light'
+              ? 'brightness-high'
+              : $colorMode.value === 'dark'
+              ? 'moon-stars-fill'
+              : 'display'
+          }`"
+          class="cursor-pointer dark:text-white"
+          type="normal"
+      /></ColorScheme>
     </button>
   </nav>
 </template>

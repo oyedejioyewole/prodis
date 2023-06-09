@@ -1,6 +1,14 @@
 import type { InternalApi, Awaited } from "nitropack";
 
 declare global {
+  type Replace<
+    Source extends string,
+    Target extends string,
+    Replacement extends string
+  > = Source extends `${infer Start}${Target}${infer Rest}`
+    ? `${Start}${Replacement}${Replace<Rest, Target, Replacement>}`
+    : Source;
+
   type AccountBadgesKeys =
     | "staff"
     | "partnered-server-owner"
@@ -45,12 +53,44 @@ declare global {
   type BootstrapIcons =
     keyof typeof import("./node_modules/bootstrap-icons/font/bootstrap-icons.json");
 
-  type SiteAssets = "logo" | "error" | "snowflake-search";
+  type SiteAssets = "logo" | "error" | "guild-owner";
+
+  type GuildFeature =
+    | "ANIMATED_BANNER"
+    | "ANIMATED_ICON"
+    | "APPLICATION_COMMAND_PERMISSIONS_V2"
+    | "AUTO_MODERATION"
+    | "BANNER"
+    | "COMMUNITY"
+    | "CREATOR_MONETIZABLE_PROVISIONAL"
+    | "CREATOR_STORE_PAGE"
+    | "DEVELOPER_SUPPORT_SERVER"
+    | "DISCOVERABLE"
+    | "FEATURABLE"
+    | "INVITES_DISABLED"
+    | "INVITE_SPLASH"
+    | "MEMBER_VERIFICATION_GATE_ENABLED"
+    | "MORE_STICKERS"
+    | "NEWS"
+    | "PARTNERED"
+    | "PREVIEW_ENABLED"
+    | "RAID_ALERTS_DISABLED"
+    | "ROLE_ICONS"
+    | "ROLE_SUBSCRIPTIONS_AVAILABLE_FOR_PURCHASE"
+    | "ROLE_SUBSCRIPTIONS_ENABLED"
+    | "TICKETED_EVENTS_ENABLED"
+    | "VANITY_URL"
+    | "VERIFIED"
+    | "VIP_REGIONS"
+    | "WELCOME_SCREEN_ENABLED";
+
+  type UsableGuildFeatures = Lowercase<Replace<GuildFeature, "_", "-">>;
 
   type IconNames =
     | BootstrapIcons
     | Exclude<ConnectionTypes, BootstrapIcons>
     | SiteAssets
+    | UsableGuildFeatures
     | AccountBadgesKeys;
 
   type NitroStatus = "none" | "nitro" | "nitro-basic";
@@ -88,7 +128,7 @@ declare global {
     explicit_content_filter: number;
     roles: [];
     emojis: [];
-    features: string[];
+    features: GuildFeature[];
     mfa_level: 0 | 1;
     application_id?: string | null;
     system_channel_id?: string | null;
@@ -153,6 +193,7 @@ declare global {
   };
 
   type Modal = {
+    isOpen: boolean;
     payload?:
       | Extract<APIFriendsResponse, {}[]>[0]
       | APICallbackProcessedResponse["guilds"]["sanitized"][0]
@@ -160,7 +201,9 @@ declare global {
   };
 
   type APICallbackProcessedResponse = Awaited<
-    ReturnType<typeof import("./server/utils/internals")["postCallbackActions"]>
+    ReturnType<
+      typeof import("./server/api/callback.get")["postCallbackActions"]
+    >
   >;
 
   type APIFriendsResponse = InternalApi["/api/friends"]["get"];

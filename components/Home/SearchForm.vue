@@ -98,7 +98,7 @@ const searchForAccount = async (snowflake: string) => {
       >
       <div class="flex flex-col gap-4 md:flex-row">
         <div class="flex items-center gap-x-2">
-          <UIIcon name="snow" type="large" />
+          <UIIcon name="snow" type="large" class="text-blurple" />
           <UIInput
             type="text"
             placeholder="Snowflake ID"
