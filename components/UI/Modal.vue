@@ -139,7 +139,7 @@ const postLazyLoad = () => (isImageLoading.value = false);
           </div>
         </div>
       </template>
-      <LazyContentDoc :path="`/${content}`" id="contents" />
+      <LazyContentDoc :path="`/${content}`" id="contents" v-else />
     </template>
   </dialog>
 </template>
